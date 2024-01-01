@@ -17,7 +17,7 @@ This is a tactical RPG game inspired by Final Fantasy Tactics. It is a turn-base
 
 - Clone the repository
 ```bash
-git clone
+git clone https://github.com/nurakmaljalil91/FantasyTactics.git
 ```
 - Open the project in CLion 
 - Download GLFW 3.3 from https://www.glfw.org/download.html and extract the files

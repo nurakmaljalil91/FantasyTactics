@@ -4,6 +4,8 @@
 #include <sstream>
 #include "spdlog/spdlog.h"
 #include "glm/glm.hpp"
+#include "spdlog/sinks/basic_file_sink.h"
+#include "spdlog/sinks/stdout_color_sinks.h"
 
 #include "shaderProgram.h"
 
@@ -15,6 +17,8 @@ bool wireframe = false;
 
 bool fullscreen = false;
 
+void logTofile();
+
 void glfw_onKey(GLFWwindow *pWindow, int key, int scancode, int action, int mode);
 
 void showFPS(GLFWwindow *pWwindow);
@@ -24,6 +28,8 @@ void glfw_onFramebufferSize(GLFWwindow *pWindow, int width, int height);
 bool initOpenGL();
 
 int main() {
+
+    logTofile();
 
     spdlog::info("Welcome to Fantasy Tactics!");
 
@@ -107,6 +113,19 @@ int main() {
     // clean up glfw
     glfwTerminate();
     return 0;
+}
+
+// log to file
+// TODO: make this logger class and move it to its own file
+void logTofile(){
+    std::vector<spdlog::sink_ptr> sinks;
+    sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
+    sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/basic.txt", true));
+
+    auto combined_logger = std::make_shared<spdlog::logger>("FT Logger", begin(sinks), end(sinks));
+    spdlog::register_logger(combined_logger);
+
+    combined_logger->info("Welcome to Fantasy Tactics logs!");
 }
 
 // initialize GLFW and OpenGL
