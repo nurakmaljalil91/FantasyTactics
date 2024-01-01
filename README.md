@@ -10,6 +10,7 @@ This is a tactical RPG game inspired by Final Fantasy Tactics. It is a turn-base
 - CMake
 - GLFW 3.3
 - GLAD
+- GLM
 - SPDLOG
 
 ## Installation
@@ -43,3 +44,6 @@ cmake --build _builds --target install
 ```
 
 > NOTE: Change the mingw toolchain in CLion to the one you installed instead of the default one
+
+- Download GLM from https://github.com/g-truc/glm/releases/tag/0.9.9.8
+- Extract the files and copy the glm folder into the project include directory

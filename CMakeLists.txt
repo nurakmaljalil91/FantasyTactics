@@ -16,10 +16,17 @@ if(NOT TARGET spdlog)
     find_package(spdlog REQUIRED)
 endif()
 
+# add assets folder
+file(COPY src/assets DESTINATION ${CMAKE_BINARY_DIR})
+
 # Add source to this project's executable.
-add_executable(FantasyTactics src/main.cpp src/glad.c
+add_executable(
+        FantasyTactics
+        src/main.cpp
+        src/glad.c
         src/shaderProgram.h
-        src/shaderProgram.cpp)
+        src/shaderProgram.cpp
+)
 
 # add link libraries
 #target_link_libraries(FantasyTactics PRIVATE glfw3 opengl32)
