@@ -9,12 +9,15 @@
 
 #include "utilities/logger.h"
 #include "graphics/shader.h"
+#include "graphics/texture_2d.h"
 
 const char *APP_TITLE = "Fantasy Tactics";
 const int windowWidth = 800;
 const int windowHeight = 800;
 GLFWwindow *window = nullptr;
 bool wireframe = false;
+const std::string texture1Filename = "assets/textures/crate.jpg";
+const std::string texture2Filename = "assets/textures/airplane.png";
 
 bool fullscreen = false;
 
@@ -39,23 +42,21 @@ int main() {
 
     initOpenGL(logger);
 
-    // set up the triangles vertex data and attribute pointers
+
+    // Set up an array of vertices for a quad (2 triangls) with an index buffer data
+    // (What is a vertex?)
     GLfloat vertices[] = {
-            -0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // left
-            0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // right
-            0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f,  // top
-            -0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f, // left
-            0.5f / 2, 0.5f * float(sqrt(3)) / 6, 0.0f,  // right
-            0.0f, -0.5f * float(sqrt(3)) / 3, 0.0f   // bottom
+            // position			 // tex coords
+            -0.5f,  0.5f, 0.0f,	 0.0f, 1.0f,		// Top left
+            0.5f,  0.5f, 0.0f,	 1.0f, 1.0f,		// Top right
+            0.5f, -0.5f, 0.0f,	 1.0f, 0.0f,		// Bottom right
+            -0.5f, -0.5f, 0.0f,	 0.0f, 0.0f			// Bottom left
     };
 
-    // indices for the triangles
     GLuint indices[] = {
-            0, 3, 5, // lower left triangle
-            3, 2, 4, // lower right triangle
-            5, 4, 1  // upper triangle
+            0, 1, 2,  // First Triangle
+            0, 2, 3   // Second Triangle
     };
-
 
     // Set up buffers on the GPU
     GLuint VBO, VAO, EBO;
@@ -68,11 +69,16 @@ int main() {
 
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void *) 0);
-    // enable the vertex attribute
-    glEnableVertexAttribArray(0);
 
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0));	// Define a layout for the first vertex buffer "0"
+    glEnableVertexAttribArray(0);			// Enable the first attribute or attribute "0"
+
+    // Texture Coord attribute
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(1);
+
+    // set up element buffer object
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
@@ -82,31 +88,48 @@ int main() {
     glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+    // load shaders
     shader shaderProgram(logger);
     shaderProgram.loadShaders("assets/shaders/default.vert", "assets/shaders/default.frag");
 
+    // load textures
+    texture_2d texture1(logger);
+    texture1.loadTexture(texture1Filename, true);
 
-    // Swap the back buffer with the front buffer
-    glfwSwapBuffers(window);
+    texture_2d texture2(logger);
+    texture2.loadTexture(texture2Filename, true);
 
     // loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
         showFPS(window);
-        // render here
-        glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+
+        // poll for and process events
+        glfwPollEvents();
+
         // Clean the back buffer and assign the new color to it
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // render the quad
+        // Must be called BEFORE setting uniforms because setting uniforms is done
+        // on the currently active shader program.
         shaderProgram.use();
 
+        // set texture units
+        texture1.bind(0);
+        texture2.bind(1);
+
+        // set uniforms
+        glUniform1i(glGetUniformLocation(shaderProgram.getProgram(), "texture1"), 0);
+        glUniform1i(glGetUniformLocation(shaderProgram.getProgram(), "texture2"), 1);
+
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 
         // swap front and back buffers
         glfwSwapBuffers(window);
 
-        // poll for and process events
-        glfwPollEvents();
+
     }
 
     // de-allocate all resources once they've outlived their purpose
@@ -201,6 +224,14 @@ bool initOpenGL(std::shared_ptr<spdlog::logger> pLogger) {
 void glfw_onKey(GLFWwindow *pWindow, int key, int scancode, int action, int mode) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
         glfwSetWindowShouldClose(pWindow, GLFW_TRUE);
+    if (key == GLFW_KEY_W && action == GLFW_PRESS)
+    {
+        wireframe = !wireframe;
+        if (wireframe)
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        else
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
 }
 
 // Code computes the average frames per second, and also the average time it takes

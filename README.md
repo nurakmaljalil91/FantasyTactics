@@ -12,6 +12,7 @@ This is a tactical RPG game inspired by Final Fantasy Tactics. It is a turn-base
 - GLAD
 - GLM
 - SPDLOG
+- STB_IMAGE
 
 ## Installation
 
@@ -47,3 +48,11 @@ cmake --build _builds --target install
 
 - Download GLM from https://github.com/g-truc/glm/releases/tag/0.9.9.8
 - Extract the files and copy the glm folder into the project include directory
+- Git clone STB_IMAGE from
+
+```bash
+git clone https://github.com/nothings/stb.git
+```
+
+- Copy the stb_image.h file into the project include directory
+- You do not need other header files from the stb repository

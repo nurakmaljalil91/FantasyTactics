@@ -28,6 +28,8 @@ add_executable(
         src/graphics/shader.cpp
         src/utilities/logger.cpp
         src/utilities/logger.h
+        src/graphics/texture_2d.cpp
+        src/graphics/texture_2d.h
 )
 
 # add link libraries
