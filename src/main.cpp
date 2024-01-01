@@ -15,20 +15,6 @@ bool wireframe = false;
 
 bool fullscreen = false;
 
-const char *vertexShaderSrc = "#version 330 core\n"
-                              "layout (location = 0) in vec3 aPos;\n"
-                              "void main()\n"
-                              "{\n"
-                              "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                              "}\0";
-
-const char *fragmentShaderSrc = "#version 330 core\n"
-                                "out vec4 FragColor;\n"
-                                "void main()\n"
-                                "{\n"
-                                "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                "}\n\0";
-
 void glfw_onKey(GLFWwindow *pWindow, int key, int scancode, int action, int mode);
 
 void showFPS(GLFWwindow *pWwindow);
@@ -118,13 +104,12 @@ int main() {
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
 
-
     // clean up glfw
     glfwTerminate();
     return 0;
 }
 
-
+// initialize GLFW and OpenGL
 bool initOpenGL() {
     // initialize GLFW
     if (!glfwInit()) {
@@ -151,7 +136,7 @@ bool initOpenGL() {
         GLFWmonitor *monitor = glfwGetPrimaryMonitor();
         const GLFWvidmode *vMode = glfwGetVideoMode(monitor);
         if (vMode) {
-            window = glfwCreateWindow(vMode->width, vMode->height, APP_TITLE, monitor, NULL);
+            window = glfwCreateWindow(vMode->width, vMode->height, APP_TITLE, monitor, nullptr);
             if (!window) {
                 spdlog::error("Failed to create GLFW window");
                 glfwTerminate();
