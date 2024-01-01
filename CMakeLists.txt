@@ -17,7 +17,9 @@ if(NOT TARGET spdlog)
 endif()
 
 # Add source to this project's executable.
-add_executable(FantasyTactics src/main.cpp src/glad.c)
+add_executable(FantasyTactics src/main.cpp src/glad.c
+        src/shaderProgram.h
+        src/shaderProgram.cpp)
 
 # add link libraries
 #target_link_libraries(FantasyTactics PRIVATE glfw3 opengl32)

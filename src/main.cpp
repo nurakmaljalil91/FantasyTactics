@@ -1,11 +1,13 @@
 #include <iostream>
 #include <glad/glad.h> // must be included before GLFW
 #include <GLFW/glfw3.h>
+#include <sstream>
 #include "spdlog/spdlog.h"
 
 const char *APP_TITLE = "Fantasy Tactics";
-const int gWindowWidth = 800;
-const int gWindowHeight = 800;
+const int windowWidth = 800;
+const int windowHeight = 800;
+bool fullscreen = false;
 
 const char *vertexShaderSrc = "#version 330 core\n"
                               "layout (location = 0) in vec3 aPos;\n"
@@ -20,6 +22,39 @@ const char *fragmentShaderSrc = "#version 330 core\n"
                                 "{\n"
                                 "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
                                 "}\n\0";
+
+void glfw_onKey(GLFWwindow *window, int key, int scancode, int action, int mode) {
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
+}
+
+void showFPS(GLFWwindow *window) {
+    static double previousSeconds = 0.0;
+    static int frameCount = 0;
+    double elapsedSeconds;
+    double currentSeconds = glfwGetTime(); // returns number of seconds since GLFW started, as double float
+    elapsedSeconds = currentSeconds - previousSeconds;
+    // limit text updates to 4 times per second
+    if (elapsedSeconds > 0.25) {
+        previousSeconds = currentSeconds;
+        double fps = (double) frameCount / elapsedSeconds;
+        double msPerFrame = 1000.0 / fps;
+        std::ostringstream outs;
+        outs.precision(3); // decimal places
+        outs << std::fixed
+             << APP_TITLE << "    "
+             << "FPS: " << fps << "    "
+             << "Frame Time: " << msPerFrame << " (ms)";
+        glfwSetWindowTitle(window, outs.str().c_str());
+        frameCount = 0;
+    }
+    frameCount++;
+}
+
+void glfw_onFramebufferSize(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
 
 int main() {
 
@@ -59,22 +94,46 @@ int main() {
     };
 
     // create a windowed mode window and its OpenGL context
-    GLFWwindow *window = glfwCreateWindow(gWindowWidth, gWindowHeight, APP_TITLE, nullptr, nullptr);
-
-    if (!window) {
-        std::cerr << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
+    // Create an OpenGL 3.3 core, forward compatible context full screen application
+    GLFWwindow* window = nullptr;
+    
+    if (fullscreen) {
+        GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+        const GLFWvidmode* vMode = glfwGetVideoMode(monitor);
+        if (vMode)
+        {
+            window = glfwCreateWindow(vMode->width, vMode->height, APP_TITLE, monitor, NULL);
+            if (!window) {
+                std::cerr << "Failed to create GLFW window" << std::endl;
+                glfwTerminate();
+                return -1;
+            }
+        }
+    }
+    else {
+        window = glfwCreateWindow(windowWidth, windowHeight, APP_TITLE, nullptr, nullptr);
     }
 
     // make the window's context current
     glfwMakeContextCurrent(window);
 
+    // Set the required callback functions
+    glfwSetKeyCallback(window, glfw_onKey);
+    glfwSetFramebufferSizeCallback(window, glfw_onFramebufferSize);
+
+
     // initialize GLAD before calling any OpenGL functions
     gladLoadGL();
 
+    // OpenGL version info
+    const GLubyte* renderer = glGetString(GL_RENDERER);
+    const GLubyte* version = glGetString(GL_VERSION);
+    spdlog::info("Renderer: {}", reinterpret_cast<const char *>(renderer));
+    spdlog::info("OpenGL version supported: {}", reinterpret_cast<const char *>(version));
+    spdlog::info("OpenGL Initialization Complete");
+
     // specify the viewport of OpenGL in the window
-    glViewport(0, 0, gWindowWidth, gWindowHeight);
+    glViewport(0, 0, windowWidth, windowHeight);
 
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSrc, nullptr);
@@ -137,6 +196,7 @@ int main() {
 
     // loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
+        showFPS(window);
         // render here
         glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
