@@ -24,8 +24,10 @@ add_executable(
         FantasyTactics
         src/main.cpp
         src/glad.c
-        src/shaderProgram.h
-        src/shaderProgram.cpp
+        src/graphics/shader.h
+        src/graphics/shader.cpp
+        src/utilities/logger.cpp
+        src/utilities/logger.h
 )
 
 # add link libraries

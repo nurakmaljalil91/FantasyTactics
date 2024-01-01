@@ -2,26 +2,27 @@
 // Created by User on 1/1/2024.
 //
 
-#ifndef FANTASYTACTICS_SHADERPROGRAM_H
-#define FANTASYTACTICS_SHADERPROGRAM_H
+#ifndef FANTASYTACTICS_SHADER_H
+#define FANTASYTACTICS_SHADER_H
 
-#include <glad/glad.h>
+#include "glad/glad.h"
 #include <string>
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <cerrno>
-#include "spdlog/spdlog.h"
 #include "glm/glm.hpp"
 #include <map>
 
+#include "../utilities/logger.h"
+
 std::string get_file_contents(const char *filename);
 
-class ShaderProgram {
+class shader {
 public:
 
-    ShaderProgram();
-    ~ShaderProgram();
+    shader(std::shared_ptr<spdlog::logger> pLogger);
+    ~shader();
 
     enum ShaderType
     {
@@ -42,6 +43,7 @@ public:
 
 private:
 
+    std::shared_ptr<spdlog::logger> logger;
     std::string fileToString(const std::string& filename);
     void  checkCompileErrors(GLuint shader, ShaderType type);
     // We are going to speed up looking for uniforms by keeping their locations in a map
@@ -52,4 +54,4 @@ private:
     std::map<std::string, GLint> uniformLocations;
 };
 
-#endif //FANTASYTACTICS_SHADERPROGRAM_H
+#endif //FANTASYTACTICS_SHADER_H

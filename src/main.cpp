@@ -7,7 +7,8 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
-#include "shaderProgram.h"
+#include "utilities/logger.h"
+#include "graphics/shader.h"
 
 const char *APP_TITLE = "Fantasy Tactics";
 const int windowWidth = 800;
@@ -25,15 +26,18 @@ void showFPS(GLFWwindow *pWwindow);
 
 void glfw_onFramebufferSize(GLFWwindow *pWindow, int width, int height);
 
-bool initOpenGL();
+bool initOpenGL(std::shared_ptr<spdlog::logger> pLogger);
 
 int main() {
 
-    logTofile();
+//    logTofile();
+    logger::init();
 
-    spdlog::info("Welcome to Fantasy Tactics!");
+    auto logger = logger::getCoreLogger();
 
-    initOpenGL();
+    logger->info("Welcome to Fantasy Tactics!");
+
+    initOpenGL(logger);
 
     // set up the triangles vertex data and attribute pointers
     GLfloat vertices[] = {
@@ -78,7 +82,7 @@ int main() {
     glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    ShaderProgram shaderProgram;
+    shader shaderProgram(logger);
     shaderProgram.loadShaders("assets/shaders/default.vert", "assets/shaders/default.frag");
 
 
@@ -122,17 +126,17 @@ void logTofile(){
     sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
     sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/basic.txt", true));
 
-    auto combined_logger = std::make_shared<spdlog::logger>("FT Logger", begin(sinks), end(sinks));
+    auto combined_logger = std::make_shared<spdlog::logger>("FT logger", begin(sinks), end(sinks));
     spdlog::register_logger(combined_logger);
 
     combined_logger->info("Welcome to Fantasy Tactics logs!");
 }
 
 // initialize GLFW and OpenGL
-bool initOpenGL() {
+bool initOpenGL(std::shared_ptr<spdlog::logger> pLogger) {
     // initialize GLFW
     if (!glfwInit()) {
-        spdlog::error("Failed to initialize GLFW");
+        pLogger->error("Failed to initialize GLFW");
         return -1;
     }
 
@@ -157,7 +161,7 @@ bool initOpenGL() {
         if (vMode) {
             window = glfwCreateWindow(vMode->width, vMode->height, APP_TITLE, monitor, nullptr);
             if (!window) {
-                spdlog::error("Failed to create GLFW window");
+                pLogger->error("Failed to create GLFW window");
                 glfwTerminate();
                 return -1;
             }
@@ -179,9 +183,9 @@ bool initOpenGL() {
     // OpenGL version info
     const GLubyte *renderer = glGetString(GL_RENDERER);
     const GLubyte *version = glGetString(GL_VERSION);
-    spdlog::info("Renderer: {}", reinterpret_cast<const char *>(renderer));
-    spdlog::info("OpenGL version supported: {}", reinterpret_cast<const char *>(version));
-    spdlog::info("OpenGL Initialization Complete");
+    pLogger->info("Renderer: {}", reinterpret_cast<const char *>(renderer));
+    pLogger->info("OpenGL version supported: {}", reinterpret_cast<const char *>(version));
+    pLogger->info("OpenGL Initialization Complete");
 
     // specify the color of the background
     glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
