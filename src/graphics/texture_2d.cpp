@@ -4,7 +4,7 @@
 
 #include "texture_2d.h"
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
+#include "stb-master/stb_image.h"
 
 // constructor
 texture_2d::texture_2d(std::shared_ptr<spdlog::logger> pLogger)
