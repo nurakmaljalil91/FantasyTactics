@@ -4,10 +4,10 @@
   "description": "Fantasy Tactics",
   "main": "main.cpp",
   "scripts": {
-    "build": "cmake -S . -B build -G \"Visual Studio 16 2019\" -A x64 -DCMAKE_BUILD_TYPE=Debug && cmake --build build --config Debug",
+    "build": "cmake -DCMAKE_BUILD_TYPE=Debug ninja -G Ninja -S . -B cmake-build-debug",
     "run": "cmake-build-debug\\FantasyTactics.exe"
   },
-  "author": "Karl",
+  "author": "Nur Akmal Jalil",
   "license": "MIT",
   "libraries": {
     "all": "https://download1324.mediafire.com/18huqq196gmgk7n0HioTZMzX5rJcdlq5WHwwYThlcSXRiJn4Ui10OEhT6a3YDPn2YsdpoHY1m50tgv6i1_pGawozIOoJwXmvMWTyD-u202ACbl5CIHrid8M7spEvvs_hpyhYOJpx0AQ7ZfFIEtIK0COEN2yB_pl4hfiRUPdFNj86HQ/ubut25a5r29rv9j/fantasy_tactics_packages.zip",

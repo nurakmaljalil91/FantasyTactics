@@ -7,7 +7,11 @@ This is a tactical RPG game inspired by Final Fantasy Tactics. It is a turn-base
 ## Prerequisites
 
 - JetBrains CLion as main IDE
-- CMake
+- CMake 3.17.3 as build system
+- MinGW 8.1.0 as compiler
+- Ninja 1.10.0 as build tool
+- Python 3.8.3 as scripting language
+- Git 2.27.0 as version control system
 - GLFW 3.3
 - GLAD
 - GLM
