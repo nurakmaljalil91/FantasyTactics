@@ -1,0 +1,20 @@
+{
+  "name": "fantasy-tactics",
+  "version": "0.1.0",
+  "description": "Fantasy Tactics",
+  "main": "main.cpp",
+  "scripts": {
+    "build": "cmake -S . -B build -G \"Visual Studio 16 2019\" -A x64 -DCMAKE_BUILD_TYPE=Debug && cmake --build build --config Debug",
+    "run": "cmake-build-debug\\FantasyTactics.exe"
+  },
+  "author": "Karl",
+  "license": "MIT",
+  "libraries": {
+    "all": "https://download1324.mediafire.com/18huqq196gmgk7n0HioTZMzX5rJcdlq5WHwwYThlcSXRiJn4Ui10OEhT6a3YDPn2YsdpoHY1m50tgv6i1_pGawozIOoJwXmvMWTyD-u202ACbl5CIHrid8M7spEvvs_hpyhYOJpx0AQ7ZfFIEtIK0COEN2yB_pl4hfiRUPdFNj86HQ/ubut25a5r29rv9j/fantasy_tactics_packages.zip",
+    "glfw@3.3.9": "https://github.com/glfw/glfw/releases/download/3.3.9/glfw-3.3.9.bin.WIN64.zip",
+    "glad@0.1.36": "https://glad.dav1d.de/#language=c&specification=gl&api=gl%3D3.3&api=gles1%3Dnone&api=gles2%3Dnone&api=glsc2%3Dnone&profile=compatibility&loader=on",
+    "glm@0.9.9.8": "https://github.com/g-truc/glm/releases/download/0.9.9.8/glm-0.9.9.8.zip",
+    "stb@0.0.0": "https://github.com/nothings/stb/blob/master/stb_image.h",
+    "spdlog@1.12.0": "https://github.com/gabime/spdlog/archive/refs/tags/v1.12.0.zip"
+  }
+}

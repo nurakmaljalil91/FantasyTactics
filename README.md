@@ -6,7 +6,7 @@ This is a tactical RPG game inspired by Final Fantasy Tactics. It is a turn-base
 
 ## Prerequisites
 
-- CLion
+- JetBrains CLion as main IDE
 - CMake
 - GLFW 3.3
 - GLAD
