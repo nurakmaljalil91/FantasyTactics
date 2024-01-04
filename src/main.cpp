@@ -239,14 +239,12 @@ void glfw_onKey(GLFWwindow *pWindow, int key, int scancode, int action, int mode
 void showFPS(GLFWwindow *pWwindow) {
     static double previousSeconds = 0.0;
     static int frameCount = 0;
-    double elapsedSeconds;
-    double currentSeconds = glfwGetTime(); // returns number of seconds since GLFW started, as double float
-    elapsedSeconds = currentSeconds - previousSeconds;
+    const double currentSeconds = glfwGetTime(); // returns number of seconds since GLFW started, as double float
     // limit text updates to 4 times per second
-    if (elapsedSeconds > 0.25) {
+    if (const double elapsedSeconds = currentSeconds - previousSeconds; elapsedSeconds > 0.25) {
         previousSeconds = currentSeconds;
-        double fps = (double) frameCount / elapsedSeconds;
-        double msPerFrame = 1000.0 / fps;
+        const double fps = static_cast<double>(frameCount) / elapsedSeconds;
+        const double msPerFrame = 1000.0 / fps;
         std::ostringstream outs;
         outs.precision(3); // decimal places
         outs << std::fixed
