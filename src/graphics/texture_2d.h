@@ -11,38 +11,41 @@
 #include <cassert>
 
 
-
 #include "../utilities/logger.h"
 
 class texture_2d {
 public:
+    texture_2d();
 
-    texture_2d(std::shared_ptr<spdlog::logger> pLogger);
     ~texture_2d();
 
-    bool loadTexture(const std::string& filename, bool generateMipMaps = true);
+    bool loadTexture(const std::string &filename, bool generateMipMaps = true);
+
     void bind(GLuint texUnit = 0);
 
-//    void setWrap(GLint wrapModeHorizontal, GLint wrapModeVertical);
-//    void setMinFilter(GLint minFilter);
-//    void setMagFilter(GLint magFilter);
+    //    void setWrap(GLint wrapModeHorizontal, GLint wrapModeVertical);
+    //    void setMinFilter(GLint minFilter);
+    //    void setMagFilter(GLint magFilter);
 
-//    int getWidth() const { return width; }
-//    int getHeight() const { return height; }
-//    int getNumComponents() const { return numComponents; }
+    //    int getWidth() const { return width; }
+    //    int getHeight() const { return height; }
+    //    int getNumComponents() const { return numComponents; }
 
 private:
-        texture_2d(const texture_2d& rhs) {}
-        texture_2d& operator=(const texture_2d& rhs) {}
+    texture_2d(const texture_2d &rhs) {
+    }
 
-        std::shared_ptr<spdlog::logger> logger;
-//        std::string fileToString(const std::string& filename);
-//        void checkTextureErrors(GLuint texture);
+    texture_2d &operator=(const texture_2d &rhs) {
+    }
 
-        GLuint texture;
-//        int width;
-//        int height;
-//        int numComponents;
+
+    //        std::string fileToString(const std::string& filename);
+    //        void checkTextureErrors(GLuint texture);
+
+    GLuint texture;
+    //        int width;
+    //        int height;
+    //        int numComponents;
 };
 
 

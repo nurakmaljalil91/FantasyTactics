@@ -12,8 +12,8 @@
 #include "graphics/texture_2d.h"
 
 const char *APP_TITLE = "Fantasy Tactics";
-const int windowWidth = 800;
-const int windowHeight = 800;
+constexpr int windowWidth = 800;
+constexpr int windowHeight = 800;
 GLFWwindow *window = nullptr;
 bool wireframe = false;
 const std::string texture1Filename = "assets/textures/crate.jpg";
@@ -29,33 +29,33 @@ void showFPS(GLFWwindow *pWwindow);
 
 void glfw_onFramebufferSize(GLFWwindow *pWindow, int width, int height);
 
-bool initOpenGL(std::shared_ptr<spdlog::logger> pLogger);
+bool initOpenGL();
 
 int main() {
+    //initialize logger
+    logger::get().initialize();
 
-//    logTofile();
-    logger::init();
+    logger::log()->info("Welcome to Cbit Game Engines!");
 
-    auto logger = logger::getCoreLogger();
 
-    logger->info("Welcome to Fantasy Tactics!");
+    logger::log()->info("Welcome to Fantasy Tactics!");
 
-    initOpenGL(logger);
+    initOpenGL();
 
 
     // Set up an array of vertices for a quad (2 triangls) with an index buffer data
     // (What is a vertex?)
-    GLfloat vertices[] = {
-            // position			 // tex coords
-            -0.5f,  0.5f, 0.0f,	 0.0f, 1.0f,		// Top left
-            0.5f,  0.5f, 0.0f,	 1.0f, 1.0f,		// Top right
-            0.5f, -0.5f, 0.0f,	 1.0f, 0.0f,		// Bottom right
-            -0.5f, -0.5f, 0.0f,	 0.0f, 0.0f			// Bottom left
+    constexpr GLfloat vertices[] = {
+        // position			 // tex coords
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, // Top left
+        0.5f, 0.5f, 0.0f, 1.0f, 1.0f, // Top right
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // Bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f // Bottom left
     };
 
-    GLuint indices[] = {
-            0, 1, 2,  // First Triangle
-            0, 2, 3   // Second Triangle
+    const GLuint indices[] = {
+        0, 1, 2, // First Triangle
+        0, 2, 3 // Second Triangle
     };
 
     // Set up buffers on the GPU
@@ -71,11 +71,12 @@ int main() {
     glBindVertexArray(VAO);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(0));	// Define a layout for the first vertex buffer "0"
-    glEnableVertexAttribArray(0);			// Enable the first attribute or attribute "0"
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), nullptr);
+    // Define a layout for the first vertex buffer "0"
+    glEnableVertexAttribArray(0); // Enable the first attribute or attribute "0"
 
     // Texture Coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *) (3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(1);
 
     // set up element buffer object
@@ -89,14 +90,14 @@ int main() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     // load shaders
-    shader shaderProgram(logger);
+    shader shaderProgram;
     shaderProgram.loadShaders("assets/shaders/default.vert", "assets/shaders/default.frag");
 
     // load textures
-    texture_2d texture1(logger);
+    texture_2d texture1;
     texture1.loadTexture(texture1Filename, true);
 
-    texture_2d texture2(logger);
+    texture_2d texture2;
     texture2.loadTexture(texture2Filename, true);
 
     // loop until the user closes the window
@@ -123,13 +124,11 @@ int main() {
         glUniform1i(glGetUniformLocation(shaderProgram.getProgram(), "texture2"), 1);
 
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         glBindVertexArray(0);
 
         // swap front and back buffers
         glfwSwapBuffers(window);
-
-
     }
 
     // de-allocate all resources once they've outlived their purpose
@@ -144,23 +143,23 @@ int main() {
 
 // log to file
 // TODO: make this logger class and move it to its own file
-void logTofile(){
+void logTofile() {
     std::vector<spdlog::sink_ptr> sinks;
     sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
     sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/basic.txt", true));
 
-    auto combined_logger = std::make_shared<spdlog::logger>("FT logger", begin(sinks), end(sinks));
+    const auto combined_logger = std::make_shared<spdlog::logger>("FT logger", begin(sinks), end(sinks));
     spdlog::register_logger(combined_logger);
 
     combined_logger->info("Welcome to Fantasy Tactics logs!");
 }
 
 // initialize GLFW and OpenGL
-bool initOpenGL(std::shared_ptr<spdlog::logger> pLogger) {
+bool initOpenGL() {
     // initialize GLFW
     if (!glfwInit()) {
-        pLogger->error("Failed to initialize GLFW");
-        return -1;
+        logger::log()->error("Failed to initialize GLFW");
+        return true;
     }
 
     // Tell GLFW what version of OpenGL we are using
@@ -172,21 +171,20 @@ bool initOpenGL(std::shared_ptr<spdlog::logger> pLogger) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     // required for Mac OS X (https://stackoverflow.com/questions/23706187/opengl-3-2-context-in-osx-with-glfw3
     glfwWindowHint(
-            GLFW_OPENGL_FORWARD_COMPAT,
-            GL_TRUE);
+        GLFW_OPENGL_FORWARD_COMPAT,
+        GL_TRUE);
 
 
     // create a windowed mode window and its OpenGL context
     // Create an OpenGL 3.3 core, forward compatible context full screen application
     if (fullscreen) {
         GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-        const GLFWvidmode *vMode = glfwGetVideoMode(monitor);
-        if (vMode) {
+        if (const GLFWvidmode *vMode = glfwGetVideoMode(monitor)) {
             window = glfwCreateWindow(vMode->width, vMode->height, APP_TITLE, monitor, nullptr);
             if (!window) {
-                pLogger->error("Failed to create GLFW window");
+                logger::log()->error("Failed to create GLFW window");
                 glfwTerminate();
-                return -1;
+                return true;
             }
         }
     } else {
@@ -206,9 +204,9 @@ bool initOpenGL(std::shared_ptr<spdlog::logger> pLogger) {
     // OpenGL version info
     const GLubyte *renderer = glGetString(GL_RENDERER);
     const GLubyte *version = glGetString(GL_VERSION);
-    pLogger->info("Renderer: {}", reinterpret_cast<const char *>(renderer));
-    pLogger->info("OpenGL version supported: {}", reinterpret_cast<const char *>(version));
-    pLogger->info("OpenGL Initialization Complete");
+    logger::log()->info("Renderer: {}", reinterpret_cast<const char *>(renderer));
+    logger::log()->info("OpenGL version supported: {}", reinterpret_cast<const char *>(version));
+    logger::log()->info("OpenGL Initialization Complete");
 
     // specify the color of the background
     glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
@@ -217,15 +215,13 @@ bool initOpenGL(std::shared_ptr<spdlog::logger> pLogger) {
     glViewport(0, 0, windowWidth, windowHeight);
 
     return true;
-
 }
 
 // Is called whenever a key is pressed/released via GLFW
 void glfw_onKey(GLFWwindow *pWindow, int key, int scancode, int action, int mode) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
         glfwSetWindowShouldClose(pWindow, GLFW_TRUE);
-    if (key == GLFW_KEY_W && action == GLFW_PRESS)
-    {
+    if (key == GLFW_KEY_W && action == GLFW_PRESS) {
         wireframe = !wireframe;
         if (wireframe)
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -248,9 +244,9 @@ void showFPS(GLFWwindow *pWwindow) {
         std::ostringstream outs;
         outs.precision(3); // decimal places
         outs << std::fixed
-             << APP_TITLE << "    "
-             << "FPS: " << fps << "    "
-             << "Frame Time: " << msPerFrame << " (ms)";
+                << APP_TITLE << "    "
+                << "FPS: " << fps << "    "
+                << "Frame Time: " << msPerFrame << " (ms)";
         glfwSetWindowTitle(pWwindow, outs.str().c_str());
         frameCount = 0;
     }

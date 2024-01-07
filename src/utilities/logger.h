@@ -8,14 +8,21 @@
 
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
 
 class logger {
 public:
-    static void init();
+    static logger &get() {
+        static logger instance;
+        return instance;
+    }
 
-    static std::shared_ptr<spdlog::logger> getCoreLogger() { return coreLogger; }
+    static void initialize();
+
+    static std::shared_ptr<spdlog::logger> log() { return coreLogger; }
+
 private:
+    logger() = default;
+
     static std::shared_ptr<spdlog::logger> coreLogger;
 };
 

@@ -45,7 +45,7 @@ file(COPY src/assets DESTINATION ${CMAKE_BINARY_DIR})
 add_executable(
         FantasyTactics
         src/main.cpp
-        src/glad.c
+        ${GLAD_PATH}/src/glad.c
         src/graphics/shader.h
         src/graphics/shader.cpp
         src/utilities/logger.cpp
