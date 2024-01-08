@@ -4,6 +4,10 @@
 
 ## [0.1.0] 
 
+### Added - 2024-01-08
+
+- Add Cube in the grid scene
+
 ### Fixed - 2024-01-08
 
 - Change the C++ Naming Convention to CamelCase

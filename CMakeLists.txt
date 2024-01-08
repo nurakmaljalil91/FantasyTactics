@@ -38,8 +38,8 @@ include_directories(${RAPIDJSON_PATH}/include)
 set(STB_IMAGE_PATH vendors/stb)
 include_directories(${STB_IMAGE_PATH})
 
-# add assets folder
-file(COPY src/assets DESTINATION ${CMAKE_BINARY_DIR})
+# add resources folder
+file(COPY src/resources DESTINATION ${CMAKE_BINARY_DIR})
 
 # Add source to this project's executable.
 add_executable(
@@ -52,6 +52,8 @@ add_executable(
         src/graphics/Camera.cpp
         src/graphics/FPSCamera.cpp
         src/graphics/FPSCamera.h
+        src/graphics/OrbitCamera.cpp
+        src/graphics/OrbitCamera.h
 )
 
 # add link libraries

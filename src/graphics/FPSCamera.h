@@ -14,13 +14,13 @@ public:
     // (yaw) initial angle faces -Z
     FPSCamera(glm::vec3 position, glm::vec3 target);
 
-    virtual void setPosition(const glm::vec3 &position);
+    virtual void SetPosition(const glm::vec3 &position);
 
-    virtual void rotate(float yaw, float pitch); // in degrees
-    virtual void move(const glm::vec3 &offsetPos);
+    virtual void Rotate(float yaw, float pitch); // in degrees
+    virtual void Move(const glm::vec3 &offsetPos);
 
 private:
-    void updateCameraVectors();
+    void UpdateCameraVectors();
 };
 
 

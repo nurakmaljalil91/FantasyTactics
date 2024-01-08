@@ -1,9 +1,11 @@
-#include <iostream>
 #include <glad/glad.h> // must be included before GLFW
 #include <GLFW/glfw3.h>
 #include <sstream>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/ext/matrix_transform.hpp>
+
+#include "graphics/FPSCamera.h"
 #include "spdlog/spdlog.h"
-#include "glm/glm.hpp"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
@@ -16,10 +18,15 @@ constexpr int windowWidth = 800;
 constexpr int windowHeight = 800;
 GLFWwindow *window = nullptr;
 bool wireframe = false;
-const std::string texture1Filename = "assets/textures/crate.jpg";
-const std::string texture2Filename = "assets/textures/airplane.png";
+const std::string crateImage = "resources/textures/wooden_crate.jpg";
+const std::string gridImage = "resources/textures/grid.jpg";
 
 bool fullscreen = false;
+
+FPSCamera fpsCamera(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(1.0, 1.0, 1.0));
+constexpr double ZOOM_SENSITIVITY = -3.0;
+constexpr float MOVE_SPEED = 5.0; // units per second
+constexpr float MOUSE_SENSITIVITY = 0.1f;
 
 void logTofile();
 
@@ -29,7 +36,11 @@ void showFPS(GLFWwindow *pWwindow);
 
 void glfw_onFramebufferSize(GLFWwindow *pWindow, int width, int height);
 
+void glfw_onMouseScroll(GLFWwindow *pWindow, double deltaX, double deltaY);
+
 bool initOpenGL();
+
+void update(double elapsedTime);
 
 int main() {
     //initialize logger
@@ -45,27 +56,72 @@ int main() {
 
     // Set up an array of vertices for a quad (2 triangls) with an index buffer data
     // (What is a vertex?)
-    constexpr GLfloat vertices[] = {
-        // position			 // tex coords
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, // Top left
-        0.5f, 0.5f, 0.0f, 1.0f, 1.0f, // Top right
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // Bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f // Bottom left
+    constexpr GLfloat cubeVertices[] = {
+        // position		 // tex coords
+
+        // front face
+        -1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, -1.0f, 1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
+        1.0f, -1.0f, 1.0f, 1.0f, 0.0f,
+
+        // back face
+        -1.0f, 1.0f, -1.0f, 0.0f, 1.0f,
+        1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f, -1.0f, 0.0f, 1.0f,
+        -1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
+        1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
+
+        // left face
+        -1.0f, 1.0f, -1.0f, 0.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f, 1.0f, 0.0f,
+        -1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f, -1.0f, 0.0f, 1.0f,
+        -1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
+        -1.0f, -1.0f, 1.0f, 1.0f, 0.0f,
+
+        // right face
+        1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
+        1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
+
+        // top face
+        -1.0f, 1.0f, -1.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f, -1.0f, 0.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+
+        // bottom face
+        -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
+        1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
+        -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
+        -1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
+        1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
     };
 
-    const GLuint indices[] = {
-        0, 1, 2, // First Triangle
-        0, 2, 3 // Second Triangle
-    };
+
+    // Cube and floor positions
+    glm::vec3 cubePos = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 floorPos = glm::vec3(0.0f, -1.0f, 0.0f);
+
 
     // Set up buffers on the GPU
-    GLuint VBO, VAO, EBO;
+    GLuint VBO, VAO;
     // create vertex array object to store all the vertex attribute state
     // VAO are used to store which VBOs are associated with which attributes
     // VAO must be before VBO
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
 
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -79,62 +135,87 @@ int main() {
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *) (3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(1);
 
-    // set up element buffer object
-    glGenBuffers(1, &EBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
-    // unbind the VBO and VAO
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     // load shaders
     Shader shaderProgram;
-    shaderProgram.LoadShaders("assets/shaders/default.vert", "assets/shaders/default.frag");
+    shaderProgram.LoadShaders("resources/shaders/basic.vert", "resources/shaders/basic.frag");
 
     // load textures
-    Texture2D texture1;
-    texture1.LoadTexture(texture1Filename, true);
+    Texture2D texture;
+    texture.LoadTexture(crateImage, true);
 
-    Texture2D texture2;
-    texture2.LoadTexture(texture2Filename, true);
+    Texture2D floorTexture;
+    floorTexture.LoadTexture(gridImage, true);
+
+    double lastTime = glfwGetTime();
 
     // loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
         showFPS(window);
 
+        double currentTime = glfwGetTime();
+        double deltaTime = currentTime - lastTime;
+
         // poll for and process events
         glfwPollEvents();
 
+        update(deltaTime);
         // Clean the back buffer and assign the new color to it
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // render the quad
+        // set texture units
+        texture.Bind(0);
+        glm::mat4 model(1.0), view(1.0), projection(1.0);
+
+        // Update the cube position (don't really need to do this every frame because it isn't changing)
+        model = glm::translate(model, cubePos);
+
+        // Create the View matrix
+        view = fpsCamera.GetViewMatrix();
+
+        // Create the projection matrix
+        projection = glm::perspective(glm::radians(fpsCamera.GetFOV()), (float) windowWidth / (float) windowHeight,
+                                      0.1f, 100.0f);
+
+        // Render the scene
         // Must be called BEFORE setting uniforms because setting uniforms is done
         // on the currently active shader program.
         shaderProgram.Use();
 
-        // set texture units
-        texture1.Bind(0);
-        texture2.Bind(1);
-
-        // set uniforms
-        glUniform1i(glGetUniformLocation(shaderProgram.GetProgram(), "texture1"), 0);
-        glUniform1i(glGetUniformLocation(shaderProgram.GetProgram(), "texture2"), 1);
+        // Pass the matrices to the shader
+        shaderProgram.SetUniform("model", model);
+        shaderProgram.SetUniform("view", view);
+        shaderProgram.SetUniform("projection", projection);
 
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+
+        // Draw the crate
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        // Position and render the floor (a squashed and scaled cube!)
+        // Make the floor texture "active" in the shaders
+        floorTexture.Bind(0);
+
+        model = glm::translate(model, floorPos) * glm::scale(model, glm::vec3(10.0f, 0.01f, 10.0f));
+
+        // Send the model matrix for the floor to the vertex shader
+        shaderProgram.SetUniform("model", model);
+
+        // Draw the floor
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
         glBindVertexArray(0);
 
         // swap front and back buffers
         glfwSwapBuffers(window);
+
+        lastTime = currentTime;
     }
 
     // de-allocate all resources once they've outlived their purpose
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
 
     // clean up glfw
     glfwTerminate();
@@ -200,6 +281,7 @@ bool initOpenGL() {
     // Set the required callback functions
     glfwSetKeyCallback(window, glfw_onKey);
     glfwSetFramebufferSizeCallback(window, glfw_onFramebufferSize);
+    glfwSetScrollCallback(window, glfw_onMouseScroll);
 
     // OpenGL version info
     const GLubyte *renderer = glGetString(GL_RENDERER);
@@ -208,11 +290,18 @@ bool initOpenGL() {
     Logger::Log()->info("OpenGL version supported: {}", reinterpret_cast<const char *>(version));
     Logger::Log()->info("OpenGL Initialization Complete");
 
+
+    // Hides and grabs cursor, unlimited movement
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPos(window, windowWidth / 2.0, windowHeight / 2.0);
+
+
     // specify the color of the background
-    glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+    glClearColor(0.23f, 0.38f, 0.47f, 1.0f);
 
     // specify the viewport of OpenGL in the window
     glViewport(0, 0, windowWidth, windowHeight);
+    glEnable(GL_DEPTH_TEST);
 
     return true;
 }
@@ -221,7 +310,7 @@ bool initOpenGL() {
 void glfw_onKey(GLFWwindow *pWindow, int key, int scancode, int action, int mode) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
         glfwSetWindowShouldClose(pWindow, GLFW_TRUE);
-    if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+    if (key == GLFW_KEY_F1 && action == GLFW_PRESS) {
         wireframe = !wireframe;
         if (wireframe)
             glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -256,4 +345,49 @@ void showFPS(GLFWwindow *pWwindow) {
 // Is called when the pWindow is resized
 void glfw_onFramebufferSize(GLFWwindow *pWindow, int width, int height) {
     glViewport(0, 0, width, height);
+}
+
+void glfw_onMouseScroll(GLFWwindow *pWindow, double deltaX, double deltaY) {
+    double fov = fpsCamera.GetFOV() + deltaY * ZOOM_SENSITIVITY;
+
+    fov = glm::clamp(fov, 1.0, 120.0);
+
+    fpsCamera.SetFOV((float) fov);
+}
+
+
+// Update stuff every frame
+void update(double elapsedTime) {
+    // Camera orientation
+    double mouseX, mouseY;
+
+    // Get the current mouse cursor position delta
+    glfwGetCursorPos(window, &mouseX, &mouseY);
+
+    // Rotate the camera the difference in mouse distance from the center screen.  Multiply this delta by a speed scaler
+    fpsCamera.Rotate((float) (windowWidth / 2.0 - mouseX) * MOUSE_SENSITIVITY,
+                     (float) (windowHeight / 2.0 - mouseY) * MOUSE_SENSITIVITY);
+
+    // Clamp mouse cursor to center of screen
+    glfwSetCursorPos(window, windowWidth / 2.0, windowHeight / 2.0);
+
+    // Camera FPS movement
+
+    // Forward/backward
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * fpsCamera.GetLook());
+    else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * -fpsCamera.GetLook());
+
+    // Strafe left/right
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * -fpsCamera.GetRight());
+    else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * fpsCamera.GetRight());
+
+    // Up/down
+    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
+        fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * fpsCamera.GetUp());
+    else if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
+        fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * -fpsCamera.GetUp());
 }

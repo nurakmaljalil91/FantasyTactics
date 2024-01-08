@@ -2,6 +2,7 @@
 // Created by User on 1/1/2024.
 //
 #include "shader.h"
+#include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader()
     : mHandle(0) {
@@ -125,6 +126,19 @@ void Shader::SetUniform(const GLchar *name, const glm::vec3 &v) {
 void Shader::SetUniform(const GLchar *name, const glm::vec4 &v) {
     GLint loc = GetUniformLocation(name);
     glUniform4f(loc, v.x, v.y, v.z, v.w);
+}
+
+// Sets a glm::mat4 shader uniform
+//-----------------------------------------------------------------------------
+void Shader::SetUniform(const GLchar* name, const glm::mat4& m)
+{
+    GLint loc = GetUniformLocation(name);
+
+    // loc = location of uniform in shader
+    // count = how many matrices (1 if not an array of mats)
+    // transpose = False for opengl because column major
+    // value = the matrix to set for the uniform
+    glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(m));
 }
 
 // Returns the uniform identifier given it's string name.

@@ -5,9 +5,7 @@
 #include "FPSCamera.h"
 
 
-//-----------------------------------------------------------------------------
 // FPSCamera - Constructor
-//-----------------------------------------------------------------------------
 FPSCamera::FPSCamera(glm::vec3 position, float yaw, float pitch)
 {
 	mPosition = position;
@@ -15,10 +13,8 @@ FPSCamera::FPSCamera(glm::vec3 position, float yaw, float pitch)
 	mPitch = glm::radians(pitch);
 }
 
-//-----------------------------------------------------------------------------
 // FPSCamera - Constructor
 // Given camera staring point and starting target point to look at
-//-----------------------------------------------------------------------------
 FPSCamera::FPSCamera(glm::vec3 position, glm::vec3 target)
 {
 	mPosition = position;
@@ -32,27 +28,21 @@ FPSCamera::FPSCamera(glm::vec3 position, glm::vec3 target)
 	mYaw = atan2(lookDir.x, lookDir.z) + glm::pi<float>();
 }
 
-//-----------------------------------------------------------------------------
 // FPSCamera - Sets the camera position in world space
-//-----------------------------------------------------------------------------
-void FPSCamera::setPosition(const glm::vec3& position)
+void FPSCamera::SetPosition(const glm::vec3& position)
 {
 	mPosition = position;
 }
 
-//-----------------------------------------------------------------------------
 // FPSCamera - Sets the incremental position of the camera in world space
-//-----------------------------------------------------------------------------
-void FPSCamera::move(const glm::vec3& offsetPos)
+void FPSCamera::Move(const glm::vec3& offsetPos)
 {
 	mPosition += offsetPos;
-	updateCameraVectors();
+	UpdateCameraVectors();
 }
 
-//-----------------------------------------------------------------------------
 // FPSCamera - Sets the incremental orientation of the camera
-//-----------------------------------------------------------------------------
-void FPSCamera::rotate(float yaw, float pitch)
+void FPSCamera::Rotate(float yaw, float pitch)
 {
 	mYaw += glm::radians(yaw);
 	mPitch += glm::radians(pitch);
@@ -70,13 +60,11 @@ void FPSCamera::rotate(float yaw, float pitch)
 
 	//std::cout << glm::degrees(mPitch) << " " << glm::degrees(mYaw) << std::endl;
 
-	updateCameraVectors();
+	UpdateCameraVectors();
 }
 
-//-----------------------------------------------------------------------------
 // FPSCamera - Calculates the front vector from the Camera's (updated) Euler Angles
-//-----------------------------------------------------------------------------
-void FPSCamera::updateCameraVectors()
+void FPSCamera::UpdateCameraVectors()
 {
 	// Spherical to Cartesian coordinates
 	// https://en.wikipedia.org/wiki/Spherical_coordinate_system (NOTE: Our coordinate sys has Y up not Z)

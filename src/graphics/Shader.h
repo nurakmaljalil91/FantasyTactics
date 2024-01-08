@@ -43,6 +43,8 @@ public:
 
     void SetUniform(const GLchar *name, const glm::vec4 &v);
 
+    void SetUniform(const GLchar *name, const glm::mat4 &m);
+
 private:
     std::string FileToString(const std::string &filename);
 
