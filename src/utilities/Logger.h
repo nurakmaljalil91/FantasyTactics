@@ -9,21 +9,21 @@
 #include <spdlog/spdlog.h>
 #include <spdlog/sinks/basic_file_sink.h>
 
-class logger {
+class Logger {
 public:
-    static logger &get() {
-        static logger instance;
+    static Logger &Get() {
+        static Logger instance;
         return instance;
     }
 
-    static void initialize();
+    static void Initialize();
 
-    static std::shared_ptr<spdlog::logger> log() { return coreLogger; }
+    static std::shared_ptr<spdlog::logger> Log() { return mLogger; }
 
 private:
-    logger() = default;
+    Logger() = default;
 
-    static std::shared_ptr<spdlog::logger> coreLogger;
+    static std::shared_ptr<spdlog::logger> mLogger;
 };
 
 

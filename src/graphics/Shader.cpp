@@ -3,18 +3,18 @@
 //
 #include "shader.h"
 
-shader::shader()
-    : handle(0) {
+Shader::Shader()
+    : mHandle(0) {
 }
 
-shader::~shader() {
-    glDeleteProgram(handle);
+Shader::~Shader() {
+    glDeleteProgram(mHandle);
 }
 
 // Loads vertex and fragment shaders
-bool shader::loadShaders(const char *vsFilename, const char *fsFilename) {
-    std::string vsString = fileToString(vsFilename);
-    std::string fsString = fileToString(fsFilename);
+bool Shader::LoadShaders(const char *vsFilename, const char *fsFilename) {
+    std::string vsString = FileToString(vsFilename);
+    std::string fsString = FileToString(fsFilename);
 
     const GLchar *vsSourcePtr = vsString.c_str();
     const GLchar *fsSourcePtr = fsString.c_str();
@@ -26,35 +26,35 @@ bool shader::loadShaders(const char *vsFilename, const char *fsFilename) {
     glShaderSource(fs, 1, &fsSourcePtr, nullptr);
 
     glCompileShader(vs);
-    checkCompileErrors(vs, VERTEX);
+    CheckCompileErrors(vs, VERTEX);
 
     glCompileShader(fs);
-    checkCompileErrors(fs, FRAGMENT);
+    CheckCompileErrors(fs, FRAGMENT);
 
-    handle = glCreateProgram();
-    if (handle == 0) {
-        logger::log()->error("Unable to create shader program!");
+    mHandle = glCreateProgram();
+    if (mHandle == 0) {
+        Logger::Log()->error("Unable to create shader program!");
         return false;
     }
 
-    glAttachShader(handle, vs);
-    glAttachShader(handle, fs);
+    glAttachShader(mHandle, vs);
+    glAttachShader(mHandle, fs);
 
-    glLinkProgram(handle);
+    glLinkProgram(mHandle);
 
     glDeleteShader(vs);
     glDeleteShader(fs);
 
-    uniformLocations.clear();
+    mUniformLocations.clear();
 
-    checkCompileErrors(handle, PROGRAM);
+    CheckCompileErrors(mHandle, PROGRAM);
 
     return true;
 }
 
 // Opens and reads contents of ASCII file to a string.  Returns the string.
 // Not good for very large files.
-std::string shader::fileToString(const std::string &filename) {
+std::string Shader::FileToString(const std::string &filename) {
     std::stringstream ss;
     std::ifstream file;
 
@@ -67,21 +67,21 @@ std::string shader::fileToString(const std::string &filename) {
 
         file.close();
     } catch (std::exception ex) {
-        logger::log()->error("Error reading shader filename: {}", filename);
+        Logger::Log()->error("Error reading shader filename: {}", filename);
     }
 
     return ss.str();
 }
 
 // Activate the shader program
-void shader::use() {
-    if (handle > 0) {
-        glUseProgram(handle);
+void Shader::Use() {
+    if (mHandle > 0) {
+        glUseProgram(mHandle);
     }
 }
 
 // Checks for shader compiler errors
-void shader::checkCompileErrors(GLuint shader, shader::ShaderType type) {
+void Shader::CheckCompileErrors(GLuint shader, Shader::ShaderType type) {
     GLint status = 0;
     if (type == PROGRAM) {
         glGetProgramiv(shader, GL_LINK_STATUS, &status);
@@ -90,7 +90,7 @@ void shader::checkCompileErrors(GLuint shader, shader::ShaderType type) {
             glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &length);
             std::string errorLog(length, ' ');
             glGetProgramInfoLog(shader, length, &length, &errorLog[0]);
-            logger::log()->error("Error! Program failed to link. {}", errorLog);
+            Logger::Log()->error("Error! Program failed to link. {}", errorLog);
         }
     } else {
         glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
@@ -99,45 +99,45 @@ void shader::checkCompileErrors(GLuint shader, shader::ShaderType type) {
             glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
             std::string errorLog(length, ' ');
             glGetShaderInfoLog(shader, length, &length, &errorLog[0]);
-            logger::log()->error("Error! shader failed to compile. {}", errorLog);
+            Logger::Log()->error("Error! shader failed to compile. {}", errorLog);
         }
     }
 }
 
 // Returns the active shader program
-GLuint shader::getProgram() const {
-    return handle;
+GLuint Shader::GetProgram() const {
+    return mHandle;
 }
 
 // Sets a glm::vec2 shader uniform
-void shader::setUniform(const GLchar *name, const glm::vec2 &v) {
-    GLint loc = getUniformLocation(name);
+void Shader::SetUniform(const GLchar *name, const glm::vec2 &v) {
+    GLint loc = GetUniformLocation(name);
     glUniform2f(loc, v.x, v.y);
 }
 
 // Sets a glm::vec3 shader uniform
-void shader::setUniform(const GLchar *name, const glm::vec3 &v) {
-    GLint loc = getUniformLocation(name);
+void Shader::SetUniform(const GLchar *name, const glm::vec3 &v) {
+    GLint loc = GetUniformLocation(name);
     glUniform3f(loc, v.x, v.y, v.z);
 }
 
 // Sets a glm::vec4 shader uniform
-void shader::setUniform(const GLchar *name, const glm::vec4 &v) {
-    GLint loc = getUniformLocation(name);
+void Shader::SetUniform(const GLchar *name, const glm::vec4 &v) {
+    GLint loc = GetUniformLocation(name);
     glUniform4f(loc, v.x, v.y, v.z, v.w);
 }
 
 // Returns the uniform identifier given it's string name.
 // NOTE: shader must be currently active first.
-GLint shader::getUniformLocation(const GLchar *name) {
-    std::map<std::string, GLint>::iterator it = uniformLocations.find(name);
+GLint Shader::GetUniformLocation(const GLchar *name) {
+    std::map<std::string, GLint>::iterator it = mUniformLocations.find(name);
 
     // Only need to query the shader program IF it doesn't already exist.
-    if (it == uniformLocations.end()) {
+    if (it == mUniformLocations.end()) {
         // Find it and add it to the map
-        uniformLocations[name] = glGetUniformLocation(handle, name);
+        mUniformLocations[name] = glGetUniformLocation(mHandle, name);
     }
 
     // Return it
-    return uniformLocations[name];
+    return mUniformLocations[name];
 }

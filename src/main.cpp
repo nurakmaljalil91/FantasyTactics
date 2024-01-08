@@ -9,7 +9,7 @@
 
 #include "utilities/logger.h"
 #include "graphics/shader.h"
-#include "graphics/texture_2d.h"
+#include "graphics/Texture2D.h"
 
 const char *APP_TITLE = "Fantasy Tactics";
 constexpr int windowWidth = 800;
@@ -33,12 +33,12 @@ bool initOpenGL();
 
 int main() {
     //initialize logger
-    logger::get().initialize();
+    Logger::Get().Initialize();
 
-    logger::log()->info("Welcome to Cbit Game Engines!");
+    Logger::Log()->info("Welcome to Cbit Game Engines!");
 
 
-    logger::log()->info("Welcome to Fantasy Tactics!");
+    Logger::Log()->info("Welcome to Fantasy Tactics!");
 
     initOpenGL();
 
@@ -90,15 +90,15 @@ int main() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     // load shaders
-    shader shaderProgram;
-    shaderProgram.loadShaders("assets/shaders/default.vert", "assets/shaders/default.frag");
+    Shader shaderProgram;
+    shaderProgram.LoadShaders("assets/shaders/default.vert", "assets/shaders/default.frag");
 
     // load textures
-    texture_2d texture1;
-    texture1.loadTexture(texture1Filename, true);
+    Texture2D texture1;
+    texture1.LoadTexture(texture1Filename, true);
 
-    texture_2d texture2;
-    texture2.loadTexture(texture2Filename, true);
+    Texture2D texture2;
+    texture2.LoadTexture(texture2Filename, true);
 
     // loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
@@ -113,15 +113,15 @@ int main() {
         // render the quad
         // Must be called BEFORE setting uniforms because setting uniforms is done
         // on the currently active shader program.
-        shaderProgram.use();
+        shaderProgram.Use();
 
         // set texture units
-        texture1.bind(0);
-        texture2.bind(1);
+        texture1.Bind(0);
+        texture2.Bind(1);
 
         // set uniforms
-        glUniform1i(glGetUniformLocation(shaderProgram.getProgram(), "texture1"), 0);
-        glUniform1i(glGetUniformLocation(shaderProgram.getProgram(), "texture2"), 1);
+        glUniform1i(glGetUniformLocation(shaderProgram.GetProgram(), "texture1"), 0);
+        glUniform1i(glGetUniformLocation(shaderProgram.GetProgram(), "texture2"), 1);
 
         glBindVertexArray(VAO);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
@@ -158,7 +158,7 @@ void logTofile() {
 bool initOpenGL() {
     // initialize GLFW
     if (!glfwInit()) {
-        logger::log()->error("Failed to initialize GLFW");
+        Logger::Log()->error("Failed to initialize GLFW");
         return true;
     }
 
@@ -182,7 +182,7 @@ bool initOpenGL() {
         if (const GLFWvidmode *vMode = glfwGetVideoMode(monitor)) {
             window = glfwCreateWindow(vMode->width, vMode->height, APP_TITLE, monitor, nullptr);
             if (!window) {
-                logger::log()->error("Failed to create GLFW window");
+                Logger::Log()->error("Failed to create GLFW window");
                 glfwTerminate();
                 return true;
             }
@@ -204,9 +204,9 @@ bool initOpenGL() {
     // OpenGL version info
     const GLubyte *renderer = glGetString(GL_RENDERER);
     const GLubyte *version = glGetString(GL_VERSION);
-    logger::log()->info("Renderer: {}", reinterpret_cast<const char *>(renderer));
-    logger::log()->info("OpenGL version supported: {}", reinterpret_cast<const char *>(version));
-    logger::log()->info("OpenGL Initialization Complete");
+    Logger::Log()->info("Renderer: {}", reinterpret_cast<const char *>(renderer));
+    Logger::Log()->info("OpenGL version supported: {}", reinterpret_cast<const char *>(version));
+    Logger::Log()->info("OpenGL Initialization Complete");
 
     // specify the color of the background
     glClearColor(0.07f, 0.13f, 0.17f, 1.0f);

@@ -13,15 +13,15 @@
 
 #include "../utilities/logger.h"
 
-class texture_2d {
+class Texture2D {
 public:
-    texture_2d();
+    Texture2D();
 
-    ~texture_2d();
+    ~Texture2D();
 
-    bool loadTexture(const std::string &filename, bool generateMipMaps = true);
+    bool LoadTexture(const std::string &filename, bool generateMipMaps = true);
 
-    void bind(GLuint texUnit = 0);
+    void Bind(GLuint texUnit = 0);
 
     //    void setWrap(GLint wrapModeHorizontal, GLint wrapModeVertical);
     //    void setMinFilter(GLint minFilter);
@@ -32,17 +32,17 @@ public:
     //    int getNumComponents() const { return numComponents; }
 
 private:
-    texture_2d(const texture_2d &rhs) {
+    Texture2D(const Texture2D &rhs) {
     }
 
-    texture_2d &operator=(const texture_2d &rhs) {
+    Texture2D &operator=(const Texture2D &rhs) {
     }
 
 
     //        std::string fileToString(const std::string& filename);
     //        void checkTextureErrors(GLuint texture);
 
-    GLuint texture;
+    GLuint mTexture;
     //        int width;
     //        int height;
     //        int numComponents;

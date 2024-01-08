@@ -2,28 +2,28 @@
 // Created by User on 1/1/2024.
 //
 
-#include "texture_2d.h"
+#include "Texture2D.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb-master/stb_image.h"
 
 // constructor
-texture_2d::texture_2d() {
+Texture2D::Texture2D() {
 }
 
 // destructor
-texture_2d::~texture_2d() {
-    glDeleteTextures(1, &texture);
+Texture2D::~Texture2D() {
+    glDeleteTextures(1, &mTexture);
 }
 
 // Loads texture from file
 // http://nothings.org/stb_image.h
 // Creates mip maps if generateMipMaps is true.
-bool texture_2d::loadTexture(const std::string &filename, bool generateMipMaps) {
+bool Texture2D::LoadTexture(const std::string &filename, bool generateMipMaps) {
     int width, height, components;
     unsigned char *imageData = stbi_load(filename.c_str(), &width, &height, &components, 4);
 
     if (imageData == nullptr) {
-        logger::log()->error("Texture loading failed for texture: {}", filename);
+        Logger::Log()->error("Texture loading failed for texture: {}", filename);
         return false;
     }
 
@@ -47,8 +47,8 @@ bool texture_2d::loadTexture(const std::string &filename, bool generateMipMaps) 
         }
     }
 
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glGenTextures(1, &mTexture);
+    glBindTexture(GL_TEXTURE_2D, mTexture);
     // all upcoming GL_TEXTURE_2D operations will affect our texture object (mTexture)
 
     // set texture parameters
@@ -86,9 +86,9 @@ bool texture_2d::loadTexture(const std::string &filename, bool generateMipMaps) 
 }
 
 // Binds texture to texture unit
-void texture_2d::bind(GLuint texUnit) {
+void Texture2D::Bind(GLuint texUnit) {
     assert(texUnit >= 0 && texUnit <= 31);
 
     glActiveTexture(GL_TEXTURE0 + texUnit);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, mTexture);
 }

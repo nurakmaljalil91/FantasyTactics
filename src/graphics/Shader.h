@@ -18,11 +18,11 @@
 
 std::string get_file_contents(const char *filename);
 
-class shader {
+class Shader {
 public:
-    shader();
+    Shader();
 
-    ~shader();
+    ~Shader();
 
     enum ShaderType {
         VERTEX,
@@ -31,29 +31,29 @@ public:
     };
 
     // Only supports vertex and fragment (this series will only have those two)
-    bool loadShaders(const char *vsFilename, const char *fsFilename);
+    bool LoadShaders(const char *vsFilename, const char *fsFilename);
 
-    void use();
+    void Use();
 
-    GLuint getProgram() const;
+    GLuint GetProgram() const;
 
-    void setUniform(const GLchar *name, const glm::vec2 &v);
+    void SetUniform(const GLchar *name, const glm::vec2 &v);
 
-    void setUniform(const GLchar *name, const glm::vec3 &v);
+    void SetUniform(const GLchar *name, const glm::vec3 &v);
 
-    void setUniform(const GLchar *name, const glm::vec4 &v);
+    void SetUniform(const GLchar *name, const glm::vec4 &v);
 
 private:
-    std::string fileToString(const std::string &filename);
+    std::string FileToString(const std::string &filename);
 
-    void checkCompileErrors(GLuint shader, ShaderType type);
+    void CheckCompileErrors(GLuint shader, ShaderType type);
 
     // We are going to speed up looking for uniforms by keeping their locations in a map
-    GLint getUniformLocation(const GLchar *name);
+    GLint GetUniformLocation(const GLchar *name);
 
 
-    GLuint handle;
-    std::map<std::string, GLint> uniformLocations;
+    GLuint mHandle;
+    std::map<std::string, GLint> mUniformLocations;
 };
 
 #endif //FANTASYTACTICS_SHADER_H

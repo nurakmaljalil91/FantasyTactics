@@ -12,11 +12,11 @@ This is a tactical RPG game inspired by Final Fantasy Tactics. It is a turn-base
 - Ninja 1.10.0 as build tool
 - Python 3.8.3 as scripting language
 - Git 2.27.0 as version control system
-- GLFW 3.3
-- GLAD
-- GLM
-- SPDLOG
-- STB_IMAGE
+- GLFW 3.3 as windowing library
+- GLAD as OpenGL loader
+- GLM as OpenGL mathematics library
+- SPDLOG as logging library
+- STB_IMAGE as image loading library
 
 ## Installation
 

@@ -46,12 +46,12 @@ add_executable(
         FantasyTactics
         src/main.cpp
         ${GLAD_PATH}/src/glad.c
-        src/graphics/shader.h
-        src/graphics/shader.cpp
-        src/utilities/logger.cpp
-        src/utilities/logger.h
-        src/graphics/texture_2d.cpp
-        src/graphics/texture_2d.h
+        src/graphics/Shader.cpp
+        src/utilities/Logger.cpp
+        src/graphics/Texture2D.cpp
+        src/graphics/Camera.cpp
+        src/graphics/FPSCamera.cpp
+        src/graphics/FPSCamera.h
 )
 
 # add link libraries
