@@ -87,8 +87,16 @@ bool Texture2D::LoadTexture(const std::string &filename, bool generateMipMaps) {
 
 // Binds texture to texture unit
 void Texture2D::Bind(GLuint texUnit) {
-    assert(texUnit >= 0 && texUnit <= 31);
+    assert(texUnit >= 0 && texUnit <= 32);
 
     glActiveTexture(GL_TEXTURE0 + texUnit);
     glBindTexture(GL_TEXTURE_2D, mTexture);
+}
+
+// Unbinds texture
+void Texture2D::Unbind(GLuint texUnit) {
+    // assert(texUnit >= 0 && texUnit <= 31);
+
+    glActiveTexture(GL_TEXTURE0 + texUnit);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }

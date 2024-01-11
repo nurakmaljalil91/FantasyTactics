@@ -5,6 +5,7 @@
 #include <glm/ext/matrix_transform.hpp>
 
 #include "graphics/FPSCamera.h"
+#include "graphics/Mesh.h"
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
@@ -18,12 +19,10 @@ constexpr int windowWidth = 800;
 constexpr int windowHeight = 800;
 GLFWwindow *window = nullptr;
 bool wireframe = false;
-const std::string crateImage = "resources/textures/wooden_crate.jpg";
-const std::string gridImage = "resources/textures/grid.jpg";
 
 bool fullscreen = false;
 
-FPSCamera fpsCamera(glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3(1.0, 1.0, 1.0));
+FPSCamera fpsCamera(glm::vec3(0.0f, 3.0f, 10.0f), glm::vec3(1.0, 1.0, 1.0));
 constexpr double ZOOM_SENSITIVITY = -3.0;
 constexpr float MOVE_SPEED = 5.0; // units per second
 constexpr float MOUSE_SENSITIVITY = 0.1f;
@@ -53,101 +52,41 @@ int main() {
 
     initOpenGL();
 
-
-    // Set up an array of vertices for a quad (2 triangls) with an index buffer data
-    // (What is a vertex?)
-    constexpr GLfloat cubeVertices[] = {
-        // position		 // tex coords
-
-        // front face
-        -1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, -1.0f, 1.0f, 1.0f, 0.0f,
-        1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
-        1.0f, -1.0f, 1.0f, 1.0f, 0.0f,
-
-        // back face
-        -1.0f, 1.0f, -1.0f, 0.0f, 1.0f,
-        1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
-        1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, -1.0f, 0.0f, 1.0f,
-        -1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
-        1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
-
-        // left face
-        -1.0f, 1.0f, -1.0f, 0.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f, 1.0f, 0.0f,
-        -1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, -1.0f, 0.0f, 1.0f,
-        -1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
-        -1.0f, -1.0f, 1.0f, 1.0f, 0.0f,
-
-        // right face
-        1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
-        1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, -1.0f, 1.0f, 0.0f, 0.0f,
-        1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
-
-        // top face
-        -1.0f, 1.0f, -1.0f, 0.0f, 1.0f,
-        1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        1.0f, 1.0f, -1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, -1.0f, 0.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-        1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-
-        // bottom face
-        -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
-        1.0f, -1.0f, 1.0f, 1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f, 0.0f, 1.0f,
-        -1.0f, -1.0f, -1.0f, 0.0f, 0.0f,
-        1.0f, -1.0f, -1.0f, 1.0f, 0.0f,
-    };
-
-
-    // Cube and floor positions
-    glm::vec3 cubePos = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 floorPos = glm::vec3(0.0f, -1.0f, 0.0f);
-
-
-    // Set up buffers on the GPU
-    GLuint VBO, VAO;
-    // create vertex array object to store all the vertex attribute state
-    // VAO are used to store which VBOs are associated with which attributes
-    // VAO must be before VBO
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), cubeVertices, GL_STATIC_DRAW);
-
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), nullptr);
-    // Define a layout for the first vertex buffer "0"
-    glEnableVertexAttribArray(0); // Enable the first attribute or attribute "0"
-
-    // Texture Coord attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid *) (3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(1);
-
-    glBindVertexArray(0);
-
     // load shaders
     Shader shaderProgram;
     shaderProgram.LoadShaders("resources/shaders/basic.vert", "resources/shaders/basic.frag");
 
-    // load textures
-    Texture2D texture;
-    texture.LoadTexture(crateImage, true);
+    // Load meshes
+    const int numModels = 4;
+    Mesh mesh[numModels];
 
-    Texture2D floorTexture;
-    floorTexture.LoadTexture(gridImage, true);
+    Texture2D texture[numModels];
 
+    mesh[0].LoadObj("resources/models/crate.obj");
+    mesh[1].LoadObj("resources/models/woodcrate.obj");
+    mesh[2].LoadObj("resources/models/robot.obj");
+    mesh[3].LoadObj("resources/models/floor.obj");
+
+    texture[0].LoadTexture("resources/textures/crate.jpg", true);
+    texture[1].LoadTexture("resources/textures/woodcrate_diffuse.jpg", true);
+    texture[2].LoadTexture("resources/textures/robot_diffuse.jpg", true);
+    texture[3].LoadTexture("resources/textures/tile_floor.jpg", true);
+
+    // Model positions
+    glm::vec3 modelPos[] = {
+        glm::vec3(-2.5f, 1.0f, 0.0f), // crate1
+        glm::vec3(2.5f, 1.0f, 0.0f), // crate2
+        glm::vec3(0.0f, 0.0f, -2.0f), // robot
+        glm::vec3(0.0f, 0.0f, 0.0f) // floor
+    };
+
+    // Model scale
+    glm::vec3 modelScale[] = {
+        glm::vec3(1.0f, 1.0f, 1.0f), // crate1
+        glm::vec3(1.0f, 1.0f, 1.0f), // crate2
+        glm::vec3(1.0f, 1.0f, 1.0f), // robot
+        glm::vec3(10.0f, 1.0f, 10.0f) // floor
+    };
     double lastTime = glfwGetTime();
 
     // loop until the user closes the window
@@ -164,12 +103,7 @@ int main() {
         // Clean the back buffer and assign the new color to it
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // set texture units
-        texture.Bind(0);
         glm::mat4 model(1.0), view(1.0), projection(1.0);
-
-        // Update the cube position (don't really need to do this every frame because it isn't changing)
-        model = glm::translate(model, cubePos);
 
         // Create the View matrix
         view = fpsCamera.GetViewMatrix();
@@ -184,38 +118,39 @@ int main() {
         shaderProgram.Use();
 
         // Pass the matrices to the shader
-        shaderProgram.SetUniform("model", model);
+        // shaderProgram.SetUniform("model", model);
         shaderProgram.SetUniform("view", view);
         shaderProgram.SetUniform("projection", projection);
 
-        glBindVertexArray(VAO);
 
-        // Draw the crate
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        // Render the scene
+        for (int i = 0; i < numModels; i++) {
+            // Reset the model matrix
+            model = glm::mat4(1.0);
 
-        // Position and render the floor (a squashed and scaled cube!)
-        // Make the floor texture "active" in the shaders
-        floorTexture.Bind(0);
+            // Scale the model
+            model = glm::scale(model, modelScale[i]);
 
-        model = glm::translate(model, floorPos) * glm::scale(model, glm::vec3(10.0f, 0.01f, 10.0f));
+            // Position the model
+            model = glm::translate(model, modelPos[i]);
 
-        // Send the model matrix for the floor to the vertex shader
-        shaderProgram.SetUniform("model", model);
+            // Set the model matrix
+            shaderProgram.SetUniform("model", model);
 
-        // Draw the floor
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+            // Set the texture
+            texture[i].Bind(0);
 
-        glBindVertexArray(0);
+            // Draw the mesh
+            mesh[i].Draw();
+
+            texture[i].Unbind(0);
+        }
 
         // swap front and back buffers
         glfwSwapBuffers(window);
 
         lastTime = currentTime;
     }
-
-    // de-allocate all resources once they've outlived their purpose
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
 
     // clean up glfw
     glfwTerminate();

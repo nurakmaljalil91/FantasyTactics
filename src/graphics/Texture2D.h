@@ -22,6 +22,7 @@ public:
     bool LoadTexture(const std::string &filename, bool generateMipMaps = true);
 
     void Bind(GLuint texUnit = 0);
+    void Unbind(GLuint texUnit = 0);
 
     //    void setWrap(GLint wrapModeHorizontal, GLint wrapModeVertical);
     //    void setMinFilter(GLint minFilter);
@@ -32,11 +33,9 @@ public:
     //    int getNumComponents() const { return numComponents; }
 
 private:
-    Texture2D(const Texture2D &rhs) {
-    }
+    Texture2D(const Texture2D &rhs);
 
-    Texture2D &operator=(const Texture2D &rhs) {
-    }
+    Texture2D &operator=(const Texture2D &rhs);
 
 
     //        std::string fileToString(const std::string& filename);

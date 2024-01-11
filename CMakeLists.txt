@@ -54,6 +54,8 @@ add_executable(
         src/graphics/FPSCamera.h
         src/graphics/OrbitCamera.cpp
         src/graphics/OrbitCamera.h
+        src/graphics/Mesh.cpp
+        src/graphics/Mesh.h
 )
 
 # add link libraries

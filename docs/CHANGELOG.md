@@ -4,6 +4,10 @@
 
 ## [0.1.0] 
 
+### Added - 2024-01-11
+
+- Add Mesh class to load obj file
+
 ### Added - 2024-01-08
 
 - Add Cube in the grid scene
