@@ -7,6 +7,7 @@
 ### Added - 2024-01-11
 
 - Add Mesh class to load obj file
+- Add Lighting
 
 ### Added - 2024-01-08
 

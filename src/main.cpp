@@ -19,10 +19,10 @@ constexpr int windowWidth = 800;
 constexpr int windowHeight = 800;
 GLFWwindow *window = nullptr;
 bool wireframe = false;
-
+glm::vec4 gClearColor(0.23f, 0.38f, 0.47f, 1.0f);
 bool fullscreen = false;
 
-FPSCamera fpsCamera(glm::vec3(0.0f, 3.0f, 10.0f), glm::vec3(1.0, 1.0, 1.0));
+FPSCamera fpsCamera(glm::vec3(0.0f, 2.0f, 10.0f));
 constexpr double ZOOM_SENSITIVITY = -3.0;
 constexpr float MOVE_SPEED = 5.0; // units per second
 constexpr float MOUSE_SENSITIVITY = 0.1f;
@@ -54,8 +54,11 @@ int main() {
 
     // load shaders
     Shader shaderProgram;
-    shaderProgram.LoadShaders("resources/shaders/basic.vert", "resources/shaders/basic.frag");
+    shaderProgram.LoadShaders("resources/shaders/lighting_phong_materials.vert",
+                              "resources/shaders/lighting_phong_materials.frag");
 
+    Shader lightShader;
+    lightShader.LoadShaders("resources/shaders/bulb.vert", "resources/shaders/bulb.frag");
     // Load meshes
     const int numModels = 4;
     Mesh mesh[numModels];
@@ -72,6 +75,9 @@ int main() {
     texture[2].LoadTexture("resources/textures/robot_diffuse.jpg", true);
     texture[3].LoadTexture("resources/textures/tile_floor.jpg", true);
 
+    Mesh lightMesh;
+    lightMesh.LoadObj("resources/models/light.obj");
+
     // Model positions
     glm::vec3 modelPos[] = {
         glm::vec3(-2.5f, 1.0f, 0.0f), // crate1
@@ -87,7 +93,9 @@ int main() {
         glm::vec3(1.0f, 1.0f, 1.0f), // robot
         glm::vec3(10.0f, 1.0f, 10.0f) // floor
     };
+
     double lastTime = glfwGetTime();
+    float angle = 0.0f;
 
     // loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
@@ -110,17 +118,33 @@ int main() {
 
         // Create the projection matrix
         projection = glm::perspective(glm::radians(fpsCamera.GetFOV()), (float) windowWidth / (float) windowHeight,
-                                      0.1f, 100.0f);
+                                      0.1f, 200.0f);
 
-        // Render the scene
-        // Must be called BEFORE setting uniforms because setting uniforms is done
-        // on the currently active shader program.
+        // update the view (camera) position
+        glm::vec3 viewPos;
+        viewPos.x = fpsCamera.GetPosition().x;
+        viewPos.y = fpsCamera.GetPosition().y;
+        viewPos.z = fpsCamera.GetPosition().z;
+
+        // The Light
+        glm::vec3 lightPos(0.0f, 1.0f, 10.0f);
+        glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
+
+        // Move the light
+        angle += (float)deltaTime * 50.0f;
+        lightPos.x = 8.0f * sinf(glm::radians(angle));  // slide back and forth
+
+        // Must be called BEFORE setting uniforms because setting uniforms is done on the currently active shader program.
         shaderProgram.Use();
 
-        // Pass the matrices to the shader
-        // shaderProgram.SetUniform("model", model);
+        // Simple light
         shaderProgram.SetUniform("view", view);
         shaderProgram.SetUniform("projection", projection);
+        shaderProgram.SetUniform("viewPos", viewPos);
+        shaderProgram.SetUniform("light.position", lightPos);
+        shaderProgram.SetUniform("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+        shaderProgram.SetUniform("light.diffuse", lightColor);
+        shaderProgram.SetUniform("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
 
 
         // Render the scene
@@ -137,6 +161,12 @@ int main() {
             // Set the model matrix
             shaderProgram.SetUniform("model", model);
 
+            // Set material properties
+            shaderProgram.SetUniform("material.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
+            shaderProgram.SetUniformSampler("material.diffuseMap", 0);
+            shaderProgram.SetUniform("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+            shaderProgram.SetUniform("material.shininess", 32.0f);
+
             // Set the texture
             texture[i].Bind(0);
 
@@ -146,11 +176,22 @@ int main() {
             texture[i].Unbind(0);
         }
 
+        // Render the light bulb geometry
+        model = glm::translate(glm::mat4(1.0), lightPos);
+        lightShader.Use();
+        lightShader.SetUniform("lightColor", lightColor);
+        lightShader.SetUniform("model", model);
+        lightShader.SetUniform("view", view);
+        lightShader.SetUniform("projection", projection);
+        lightMesh.Draw();
+
         // swap front and back buffers
         glfwSwapBuffers(window);
 
         lastTime = currentTime;
     }
+
+
 
     // clean up glfw
     glfwTerminate();

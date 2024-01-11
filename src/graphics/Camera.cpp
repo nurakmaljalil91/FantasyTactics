@@ -54,3 +54,11 @@ const glm::vec3& Camera::GetUp() const
 {
     return mUp;
 }
+
+
+// Base Camera - Returns camera's position
+//------------------------------------------------------------
+const glm::vec3& Camera::GetPosition() const
+{
+    return mPosition;
+}

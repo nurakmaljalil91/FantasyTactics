@@ -45,6 +45,12 @@ public:
 
     void SetUniform(const GLchar *name, const glm::mat4 &m);
 
+    void SetUniform(const GLchar *name, const GLfloat f);
+
+    void SetUniform(const GLchar *name, const GLint v);
+
+    void SetUniformSampler(const GLchar *name, const GLint &slot);
+
 private:
     std::string FileToString(const std::string &filename);
 

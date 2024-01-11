@@ -130,8 +130,7 @@ void Shader::SetUniform(const GLchar *name, const glm::vec4 &v) {
 
 // Sets a glm::mat4 shader uniform
 //-----------------------------------------------------------------------------
-void Shader::SetUniform(const GLchar* name, const glm::mat4& m)
-{
+void Shader::SetUniform(const GLchar *name, const glm::mat4 &m) {
     GLint loc = GetUniformLocation(name);
 
     // loc = location of uniform in shader
@@ -139,6 +138,31 @@ void Shader::SetUniform(const GLchar* name, const glm::mat4& m)
     // transpose = False for opengl because column major
     // value = the matrix to set for the uniform
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(m));
+}
+
+// Sets a GLfloat shader uniform
+//-----------------------------------------------------------------------------
+void Shader::SetUniform(const GLchar *name, const GLfloat f) {
+    GLint loc = GetUniformLocation(name);
+    glUniform1f(loc, f);
+}
+
+//-----------------------------------------------------------------------------
+// Sets a GLint shader uniform
+//-----------------------------------------------------------------------------
+void Shader::SetUniform(const GLchar *name, const GLint v) {
+    GLint loc = GetUniformLocation(name);
+    glUniform1i(loc, v);
+}
+
+//-----------------------------------------------------------------------------
+// Sets a GLint shader uniform that is specific to a texture unit
+//-----------------------------------------------------------------------------
+void Shader::SetUniformSampler(const GLchar *name, const GLint &slot) {
+    glActiveTexture(GL_TEXTURE0 + slot);
+
+    GLint loc = GetUniformLocation(name);
+    glUniform1i(loc, slot);
 }
 
 // Returns the uniform identifier given it's string name.
