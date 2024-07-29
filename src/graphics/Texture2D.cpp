@@ -4,7 +4,7 @@
 
 #include "Texture2D.h"
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb-master/stb_image.h"
+#include "stb_image.h"
 
 // constructor
 Texture2D::Texture2D() {

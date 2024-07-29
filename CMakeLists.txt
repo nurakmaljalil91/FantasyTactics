@@ -11,27 +11,30 @@ set(CMAKE_CXX_STANDARD 17)
 #file(COPY ${SDL2_PATH}/bin/SDL2.dll DESTINATION ${CMAKE_BINARY_DIR})
 
 # set glfw path
-set(GLFW_PATH vendors/glfw-3.3.9.bin.WIN64)
+set(GLFW_PATH vendors/glfw)
 include_directories(${GLFW_PATH}/include)
-link_directories(${GLFW_PATH}/lib-mingw-w64)
+link_directories(${GLFW_PATH}/lib)
 
-# set glm path
-set(GLM_PATH vendors/glm-0.9.9.8/glm)
-include_directories(${GLM_PATH})
+# set GLM path
+set(GLM_PATH vendors/glm)
+include_directories(${GLM_PATH}/include)
 
 # set spdlog path
-if (NOT TARGET spdlog)
-    # Stand-alone build
-    set(spdlog_DIR vendors/spdlog-1.12.0)
-    find_package(spdlog REQUIRED)
-endif ()
+set(spdlog_PATH vendors/spdlog)
+include_directories(${spdlog_PATH}/include)
+link_directories(${spdlog_PATH}/lib)
+
+# Set CMAKE_PREFIX_PATH to include spdlog_DIR
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${spdlog_PATH})
+
+find_package(spdlog REQUIRED)
 
 # set glad path
 set(GLAD_PATH vendors/glad)
 include_directories(${GLAD_PATH}/include)
 
 # set rapidjson path
-set(RAPIDJSON_PATH vendors/rapidjson-1.1.0)
+set(RAPIDJSON_PATH vendors/rapidjson)
 include_directories(${RAPIDJSON_PATH}/include)
 
 # set stb_image path
