@@ -27,16 +27,6 @@ constexpr double ZOOM_SENSITIVITY = -3.0;
 constexpr float MOVE_SPEED = 5.0; // units per second
 constexpr float MOUSE_SENSITIVITY = 0.1f;
 
-// Lighting
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
-glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
-glm::vec3 objectColor(1.0f, 0.5f, 0.2f);
-
-// Shader and cube objects
-Shader* cubeShader;
-Cube* cube;
-glm::mat4 projection;
-
 void glfw_onKey(GLFWwindow *pWindow, int key, int scancode, int action, int mode);
 
 void showFPS(GLFWwindow *pWindow);
@@ -59,7 +49,6 @@ int main() {
 
     initOpenGL();
 
-   
     double lastTime = glfwGetTime();
 
     // Render loop
@@ -73,10 +62,6 @@ int main() {
         update(deltaTime);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // Render the cube
-        cubeShader->Use();
-        cube->Draw();
 
         glfwSwapBuffers(window);
         lastTime = currentTime;
@@ -151,13 +136,6 @@ bool initOpenGL() {
     // specify the viewport of OpenGL in the window
     glViewport(0, 0, windowWidth, windowHeight);
     glEnable(GL_DEPTH_TEST);
-
-    // Initialize shaders
-    cubeShader = new Shader("resources/shaders/cube.vert", "resources/shaders/cube.frag");
-    cube = new Cube();
-
-    // Set up projection matrix
-    projection = glm::perspective(glm::radians(fpsCamera.GetFOV()), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
 
     return true;
 }
@@ -258,15 +236,5 @@ void update(double elapsedTime) {
         fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * fpsCamera.GetUp());
     else if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
         fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * -fpsCamera.GetUp());
-
-    // Update cube transformations
-    cubeShader->Use();
-    glm::mat4 view = fpsCamera.GetViewMatrix();
-    cubeShader->SetUniform("view", view);
-    cubeShader->SetUniform("projection", projection);
-
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-    cubeShader->SetUniform("model", model);
 }
 
