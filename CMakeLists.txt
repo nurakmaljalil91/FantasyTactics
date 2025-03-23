@@ -59,6 +59,8 @@ add_executable(
         src/graphics/OrbitCamera.h
         src/graphics/Mesh.cpp
         src/graphics/Mesh.h
+        src/graphics/Cube.cpp
+        src/graphics/Cube.h
 )
 
 # add link libraries

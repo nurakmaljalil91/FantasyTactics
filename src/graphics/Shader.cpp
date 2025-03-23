@@ -8,6 +8,11 @@ Shader::Shader()
     : mHandle(0) {
 }
 
+Shader::Shader(const char *vsFilename, const char *fsFilename): mHandle(0) {
+    LoadShaders(vsFilename, fsFilename);
+}
+
+
 Shader::~Shader() {
     glDeleteProgram(mHandle);
 }
@@ -179,3 +184,4 @@ GLint Shader::GetUniformLocation(const GLchar *name) {
     // Return it
     return mUniformLocations[name];
 }
+

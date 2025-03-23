@@ -27,11 +27,13 @@ public:
 
     void Draw();
 
-private:
+protected:
     void InitializeBuffers();
 
-    bool mLoaded;
     std::vector<Vertex> mVertices;
+private:
+
+    bool mLoaded;
     GLuint mVAO;
     GLuint mVBO;
     // GLuint mIBO;

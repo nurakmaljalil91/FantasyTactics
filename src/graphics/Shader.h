@@ -22,6 +22,8 @@ class Shader {
 public:
     Shader();
 
+    Shader(const char *vsFilename, const char *fsFilename);
+
     ~Shader();
 
     enum ShaderType {

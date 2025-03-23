@@ -13,13 +13,13 @@
 #include "utilities/logger.h"
 #include "graphics/shader.h"
 #include "graphics/Texture2D.h"
+#include "graphics/Cube.h"
 
 const char *APP_TITLE = "Fantasy Tactics";
-constexpr int windowWidth = 800;
+constexpr int windowWidth = 1200;
 constexpr int windowHeight = 800;
 GLFWwindow *window = nullptr;
 bool wireframe = false;
-glm::vec4 gClearColor(0.23f, 0.38f, 0.47f, 1.0f);
 bool fullscreen = false;
 
 FPSCamera fpsCamera(glm::vec3(0.0f, 2.0f, 10.0f));
@@ -27,11 +27,19 @@ constexpr double ZOOM_SENSITIVITY = -3.0;
 constexpr float MOVE_SPEED = 5.0; // units per second
 constexpr float MOUSE_SENSITIVITY = 0.1f;
 
-void logTofile();
+// Lighting
+glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
+glm::vec3 objectColor(1.0f, 0.5f, 0.2f);
+
+// Shader and cube objects
+Shader* cubeShader;
+Cube* cube;
+glm::mat4 projection;
 
 void glfw_onKey(GLFWwindow *pWindow, int key, int scancode, int action, int mode);
 
-void showFPS(GLFWwindow *pWwindow);
+void showFPS(GLFWwindow *pWindow);
 
 void glfw_onFramebufferSize(GLFWwindow *pWindow, int width, int height);
 
@@ -47,171 +55,38 @@ int main() {
 
     Logger::Log()->info("Welcome to Cbit Game Engines!");
 
-
     Logger::Log()->info("Welcome to Fantasy Tactics!");
 
     initOpenGL();
 
-    // load shaders
-    Shader shaderProgram;
-    shaderProgram.LoadShaders("resources/shaders/lighting_phong_materials.vert",
-                              "resources/shaders/lighting_phong_materials.frag");
-
-    Shader lightShader;
-    lightShader.LoadShaders("resources/shaders/bulb.vert", "resources/shaders/bulb.frag");
-    // Load meshes
-    const int numModels = 4;
-    Mesh mesh[numModels];
-
-    Texture2D texture[numModels];
-
-    mesh[0].LoadObj("resources/models/crate.obj");
-    mesh[1].LoadObj("resources/models/woodcrate.obj");
-    mesh[2].LoadObj("resources/models/robot.obj");
-    mesh[3].LoadObj("resources/models/floor.obj");
-
-    texture[0].LoadTexture("resources/textures/crate.jpg", true);
-    texture[1].LoadTexture("resources/textures/woodcrate_diffuse.jpg", true);
-    texture[2].LoadTexture("resources/textures/robot_diffuse.jpg", true);
-    texture[3].LoadTexture("resources/textures/tile_floor.jpg", true);
-
-    Mesh lightMesh;
-    lightMesh.LoadObj("resources/models/light.obj");
-
-    // Model positions
-    glm::vec3 modelPos[] = {
-        glm::vec3(-2.5f, 1.0f, 0.0f), // crate1
-        glm::vec3(2.5f, 1.0f, 0.0f), // crate2
-        glm::vec3(0.0f, 0.0f, -2.0f), // robot
-        glm::vec3(0.0f, 0.0f, 0.0f) // floor
-    };
-
-    // Model scale
-    glm::vec3 modelScale[] = {
-        glm::vec3(1.0f, 1.0f, 1.0f), // crate1
-        glm::vec3(1.0f, 1.0f, 1.0f), // crate2
-        glm::vec3(1.0f, 1.0f, 1.0f), // robot
-        glm::vec3(10.0f, 1.0f, 10.0f) // floor
-    };
-
+   
     double lastTime = glfwGetTime();
-    float angle = 0.0f;
 
-    // loop until the user closes the window
+    // Render loop
     while (!glfwWindowShouldClose(window)) {
         showFPS(window);
 
         double currentTime = glfwGetTime();
         double deltaTime = currentTime - lastTime;
 
-        // poll for and process events
         glfwPollEvents();
-
         update(deltaTime);
-        // Clean the back buffer and assign the new color to it
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glm::mat4 model(1.0), view(1.0), projection(1.0);
+        // Render the cube
+        cubeShader->Use();
+        cube->Draw();
 
-        // Create the View matrix
-        view = fpsCamera.GetViewMatrix();
-
-        // Create the projection matrix
-        projection = glm::perspective(glm::radians(fpsCamera.GetFOV()), (float) windowWidth / (float) windowHeight,
-                                      0.1f, 200.0f);
-
-        // update the view (camera) position
-        glm::vec3 viewPos;
-        viewPos.x = fpsCamera.GetPosition().x;
-        viewPos.y = fpsCamera.GetPosition().y;
-        viewPos.z = fpsCamera.GetPosition().z;
-
-        // The Light
-        glm::vec3 lightPos(0.0f, 1.0f, 10.0f);
-        glm::vec3 lightColor(1.0f, 1.0f, 1.0f);
-
-        // Move the light
-        angle += (float)deltaTime * 50.0f;
-        lightPos.x = 8.0f * sinf(glm::radians(angle));  // slide back and forth
-
-        // Must be called BEFORE setting uniforms because setting uniforms is done on the currently active shader program.
-        shaderProgram.Use();
-
-        // Simple light
-        shaderProgram.SetUniform("view", view);
-        shaderProgram.SetUniform("projection", projection);
-        shaderProgram.SetUniform("viewPos", viewPos);
-        shaderProgram.SetUniform("light.position", lightPos);
-        shaderProgram.SetUniform("light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-        shaderProgram.SetUniform("light.diffuse", lightColor);
-        shaderProgram.SetUniform("light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
-
-
-        // Render the scene
-        for (int i = 0; i < numModels; i++) {
-            // Reset the model matrix
-            model = glm::mat4(1.0);
-
-            // Scale the model
-            model = glm::scale(model, modelScale[i]);
-
-            // Position the model
-            model = glm::translate(model, modelPos[i]);
-
-            // Set the model matrix
-            shaderProgram.SetUniform("model", model);
-
-            // Set material properties
-            shaderProgram.SetUniform("material.ambient", glm::vec3(0.1f, 0.1f, 0.1f));
-            shaderProgram.SetUniformSampler("material.diffuseMap", 0);
-            shaderProgram.SetUniform("material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
-            shaderProgram.SetUniform("material.shininess", 32.0f);
-
-            // Set the texture
-            texture[i].Bind(0);
-
-            // Draw the mesh
-            mesh[i].Draw();
-
-            texture[i].Unbind(0);
-        }
-
-        // Render the light bulb geometry
-        model = glm::translate(glm::mat4(1.0), lightPos);
-        lightShader.Use();
-        lightShader.SetUniform("lightColor", lightColor);
-        lightShader.SetUniform("model", model);
-        lightShader.SetUniform("view", view);
-        lightShader.SetUniform("projection", projection);
-        lightMesh.Draw();
-
-        // swap front and back buffers
         glfwSwapBuffers(window);
-
         lastTime = currentTime;
     }
 
-
-
-    // clean up glfw
     glfwTerminate();
     return 0;
 }
 
-// log to file
-// TODO: make this logger class and move it to its own file
-void logTofile() {
-    std::vector<spdlog::sink_ptr> sinks;
-    sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
-    sinks.push_back(std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/basic.txt", true));
-
-    const auto combined_logger = std::make_shared<spdlog::logger>("FT logger", begin(sinks), end(sinks));
-    spdlog::register_logger(combined_logger);
-
-    combined_logger->info("Welcome to Fantasy Tactics logs!");
-}
-
-// initialize GLFW and OpenGL
+// Modify initOpenGL() to enable depth testing
 bool initOpenGL() {
     // initialize GLFW
     if (!glfwInit()) {
@@ -230,8 +105,7 @@ bool initOpenGL() {
     glfwWindowHint(
         GLFW_OPENGL_FORWARD_COMPAT,
         GL_TRUE);
-
-
+    
     // create a windowed mode window and its OpenGL context
     // Create an OpenGL 3.3 core, forward compatible context full screen application
     if (fullscreen) {
@@ -271,13 +145,19 @@ bool initOpenGL() {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(window, windowWidth / 2.0, windowHeight / 2.0);
 
-
     // specify the color of the background
     glClearColor(0.23f, 0.38f, 0.47f, 1.0f);
 
     // specify the viewport of OpenGL in the window
     glViewport(0, 0, windowWidth, windowHeight);
     glEnable(GL_DEPTH_TEST);
+
+    // Initialize shaders
+    cubeShader = new Shader("resources/shaders/cube.vert", "resources/shaders/cube.frag");
+    cube = new Cube();
+
+    // Set up projection matrix
+    projection = glm::perspective(glm::radians(fpsCamera.GetFOV()), (float)windowWidth / (float)windowHeight, 0.1f, 100.0f);
 
     return true;
 }
@@ -293,11 +173,24 @@ void glfw_onKey(GLFWwindow *pWindow, int key, int scancode, int action, int mode
         else
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
+    if (key == GLFW_KEY_F && action == GLFW_PRESS) {
+        fullscreen = !fullscreen;
+        if (fullscreen) {
+            // Get primary monitor
+            GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+            const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+            // Switch to fullscreen
+            glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+        } else {
+            // Switch back to windowed mode
+            glfwSetWindowMonitor(window, nullptr, 100, 100, windowWidth, windowHeight, 0);
+        }
+    }
 }
 
 // Code computes the average frames per second, and also the average time it takes
 // to render one frame.  These stats are appended to the pWwindow caption bar.
-void showFPS(GLFWwindow *pWwindow) {
+void showFPS(GLFWwindow *pWindow) {
     static double previousSeconds = 0.0;
     static int frameCount = 0;
     const double currentSeconds = glfwGetTime(); // returns number of seconds since GLFW started, as double float
@@ -312,7 +205,7 @@ void showFPS(GLFWwindow *pWwindow) {
                 << APP_TITLE << "    "
                 << "FPS: " << fps << "    "
                 << "Frame Time: " << msPerFrame << " (ms)";
-        glfwSetWindowTitle(pWwindow, outs.str().c_str());
+        glfwSetWindowTitle(pWindow, outs.str().c_str());
         frameCount = 0;
     }
     frameCount++;
@@ -330,7 +223,6 @@ void glfw_onMouseScroll(GLFWwindow *pWindow, double deltaX, double deltaY) {
 
     fpsCamera.SetFOV((float) fov);
 }
-
 
 // Update stuff every frame
 void update(double elapsedTime) {
@@ -366,4 +258,15 @@ void update(double elapsedTime) {
         fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * fpsCamera.GetUp());
     else if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
         fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * -fpsCamera.GetUp());
+
+    // Update cube transformations
+    cubeShader->Use();
+    glm::mat4 view = fpsCamera.GetViewMatrix();
+    cubeShader->SetUniform("view", view);
+    cubeShader->SetUniform("projection", projection);
+
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+    cubeShader->SetUniform("model", model);
 }
+
