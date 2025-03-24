@@ -1,39 +1,22 @@
 #include <glad/glad.h> // must be included before GLFW
 #include <GLFW/glfw3.h>
 #include <sstream>
-#include <glm/ext/matrix_clip_space.hpp>
-#include <glm/ext/matrix_transform.hpp>
-
-#include "graphics/FPSCamera.h"
-#include "graphics/Mesh.h"
-#include "spdlog/spdlog.h"
-#include "spdlog/sinks/basic_file_sink.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
-
 #include "utilities/logger.h"
-#include "graphics/shader.h"
-#include "graphics/Texture2D.h"
-#include "graphics/Cube.h"
 
 const char *APP_TITLE = "Fantasy Tactics";
 constexpr int windowWidth = 1200;
 constexpr int windowHeight = 800;
-GLFWwindow *window = nullptr;
+GLFWwindow *glfwWindow = nullptr;
 bool wireframe = false;
 bool fullscreen = false;
 
-FPSCamera fpsCamera(glm::vec3(0.0f, 2.0f, 10.0f));
-constexpr double ZOOM_SENSITIVITY = -3.0;
-constexpr float MOVE_SPEED = 5.0; // units per second
-constexpr float MOUSE_SENSITIVITY = 0.1f;
+void glfw_onKey(GLFWwindow *window, int key, int scancode, int action, int mode);
 
-void glfw_onKey(GLFWwindow *pWindow, int key, int scancode, int action, int mode);
+void showFPS(GLFWwindow *window);
 
-void showFPS(GLFWwindow *pWindow);
+void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
-void glfw_onFramebufferSize(GLFWwindow *pWindow, int width, int height);
-
-void glfw_onMouseScroll(GLFWwindow *pWindow, double deltaX, double deltaY);
+void glfw_onMouseScroll(GLFWwindow *window, double deltaX, double deltaY);
 
 bool initOpenGL();
 
@@ -41,29 +24,36 @@ void update(double elapsedTime);
 
 int main() {
     //initialize logger
-    Logger::Get().Initialize();
+    Logger::initialize();
 
-    Logger::Log()->info("Welcome to Cbit Game Engines!");
+    Logger::log()->info("Welcome to Cbit Game Engines!");
 
-    Logger::Log()->info("Welcome to Fantasy Tactics!");
+    Logger::log()->info("Welcome to Fantasy Tactics!");
 
-    initOpenGL();
+    auto success = initOpenGL();
 
+    if (!success) {
+        Logger::log()->error("Failed to initialize OpenGL");
+    }
     double lastTime = glfwGetTime();
 
     // Render loop
-    while (!glfwWindowShouldClose(window)) {
-        showFPS(window);
+    while (!glfwWindowShouldClose(glfwWindow)) {
+        showFPS(glfwWindow);
 
         double currentTime = glfwGetTime();
         double deltaTime = currentTime - lastTime;
 
+        // Render commands here
+        // ....
+
+        // Check events are triggered (like input, etc)
         glfwPollEvents();
-        update(deltaTime);
+        // function to swap the front and back buffers
+        glfwSwapBuffers(glfwWindow);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glfwSwapBuffers(window);
         lastTime = currentTime;
     }
 
@@ -75,8 +65,8 @@ int main() {
 bool initOpenGL() {
     // initialize GLFW
     if (!glfwInit()) {
-        Logger::Log()->error("Failed to initialize GLFW");
-        return true;
+        Logger::log()->error("Failed to initialize GLFW");
+        return false;
     }
 
     // Tell GLFW what version of OpenGL we are using
@@ -96,39 +86,39 @@ bool initOpenGL() {
     if (fullscreen) {
         GLFWmonitor *monitor = glfwGetPrimaryMonitor();
         if (const GLFWvidmode *vMode = glfwGetVideoMode(monitor)) {
-            window = glfwCreateWindow(vMode->width, vMode->height, APP_TITLE, monitor, nullptr);
-            if (!window) {
-                Logger::Log()->error("Failed to create GLFW window");
+            glfwWindow = glfwCreateWindow(vMode->width, vMode->height, APP_TITLE, monitor, nullptr);
+            if (!glfwWindow) {
+                Logger::log()->error("Failed to create GLFW window");
                 glfwTerminate();
-                return true;
+                return false;
             }
         }
     } else {
-        window = glfwCreateWindow(windowWidth, windowHeight, APP_TITLE, nullptr, nullptr);
+        glfwWindow = glfwCreateWindow(windowWidth, windowHeight, APP_TITLE, nullptr, nullptr);
     }
 
     // make the window's context current
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(glfwWindow);
 
     // initialize GLAD before calling any OpenGL functions
     gladLoadGL();
 
     // Set the required callback functions
-    glfwSetKeyCallback(window, glfw_onKey);
-    glfwSetFramebufferSizeCallback(window, glfw_onFramebufferSize);
-    glfwSetScrollCallback(window, glfw_onMouseScroll);
+    glfwSetKeyCallback(glfwWindow, glfw_onKey);
+    glfwSetFramebufferSizeCallback(glfwWindow, framebuffer_size_callback);
+    glfwSetScrollCallback(glfwWindow, glfw_onMouseScroll);
 
     // OpenGL version info
     const GLubyte *renderer = glGetString(GL_RENDERER);
     const GLubyte *version = glGetString(GL_VERSION);
-    Logger::Log()->info("Renderer: {}", reinterpret_cast<const char *>(renderer));
-    Logger::Log()->info("OpenGL version supported: {}", reinterpret_cast<const char *>(version));
-    Logger::Log()->info("OpenGL Initialization Complete");
+    Logger::log()->info("Renderer: {}", reinterpret_cast<const char *>(renderer));
+    Logger::log()->info("OpenGL version supported: {}", reinterpret_cast<const char *>(version));
+    Logger::log()->info("OpenGL Initialization Complete");
 
 
     // Hides and grabs cursor, unlimited movement
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwSetCursorPos(window, windowWidth / 2.0, windowHeight / 2.0);
+    glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPos(glfwWindow, windowWidth / 2.0, windowHeight / 2.0);
 
     // specify the color of the background
     glClearColor(0.23f, 0.38f, 0.47f, 1.0f);
@@ -141,9 +131,9 @@ bool initOpenGL() {
 }
 
 // Is called whenever a key is pressed/released via GLFW
-void glfw_onKey(GLFWwindow *pWindow, int key, int scancode, int action, int mode) {
+void glfw_onKey(GLFWwindow *window, int key, int scancode, int action, int mode) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-        glfwSetWindowShouldClose(pWindow, GLFW_TRUE);
+        glfwSetWindowShouldClose(window, GLFW_TRUE);
     if (key == GLFW_KEY_F1 && action == GLFW_PRESS) {
         wireframe = !wireframe;
         if (wireframe)
@@ -156,9 +146,9 @@ void glfw_onKey(GLFWwindow *pWindow, int key, int scancode, int action, int mode
         if (fullscreen) {
             // Get primary monitor
             GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-            const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+            const GLFWvidmode* videoMode = glfwGetVideoMode(monitor);
             // Switch to fullscreen
-            glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+            glfwSetWindowMonitor(window, monitor, 0, 0, videoMode->width, videoMode->height, videoMode->refreshRate);
         } else {
             // Switch back to windowed mode
             glfwSetWindowMonitor(window, nullptr, 100, 100, windowWidth, windowHeight, 0);
@@ -167,8 +157,8 @@ void glfw_onKey(GLFWwindow *pWindow, int key, int scancode, int action, int mode
 }
 
 // Code computes the average frames per second, and also the average time it takes
-// to render one frame.  These stats are appended to the pWwindow caption bar.
-void showFPS(GLFWwindow *pWindow) {
+// to render one frame.  These stats are appended to the pWindow caption bar.
+void showFPS(GLFWwindow *window) {
     static double previousSeconds = 0.0;
     static int frameCount = 0;
     const double currentSeconds = glfwGetTime(); // returns number of seconds since GLFW started, as double float
@@ -183,58 +173,23 @@ void showFPS(GLFWwindow *pWindow) {
                 << APP_TITLE << "    "
                 << "FPS: " << fps << "    "
                 << "Frame Time: " << msPerFrame << " (ms)";
-        glfwSetWindowTitle(pWindow, outs.str().c_str());
+        glfwSetWindowTitle(window, outs.str().c_str());
         frameCount = 0;
     }
     frameCount++;
 }
 
 // Is called when the pWindow is resized
-void glfw_onFramebufferSize(GLFWwindow *pWindow, int width, int height) {
+void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-void glfw_onMouseScroll(GLFWwindow *pWindow, double deltaX, double deltaY) {
-    double fov = fpsCamera.GetFOV() + deltaY * ZOOM_SENSITIVITY;
+void glfw_onMouseScroll(GLFWwindow *window, double deltaX, double deltaY) {
 
-    fov = glm::clamp(fov, 1.0, 120.0);
-
-    fpsCamera.SetFOV((float) fov);
 }
 
 // Update stuff every frame
 void update(double elapsedTime) {
-    // Camera orientation
-    double mouseX, mouseY;
-
-    // Get the current mouse cursor position delta
-    glfwGetCursorPos(window, &mouseX, &mouseY);
-
-    // Rotate the camera the difference in mouse distance from the center screen.  Multiply this delta by a speed scaler
-    fpsCamera.Rotate((float) (windowWidth / 2.0 - mouseX) * MOUSE_SENSITIVITY,
-                     (float) (windowHeight / 2.0 - mouseY) * MOUSE_SENSITIVITY);
-
-    // Clamp mouse cursor to center of screen
-    glfwSetCursorPos(window, windowWidth / 2.0, windowHeight / 2.0);
-
-    // Camera FPS movement
-
-    // Forward/backward
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * fpsCamera.GetLook());
-    else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * -fpsCamera.GetLook());
-
-    // Strafe left/right
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * -fpsCamera.GetRight());
-    else if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * fpsCamera.GetRight());
-
-    // Up/down
-    if (glfwGetKey(window, GLFW_KEY_Z) == GLFW_PRESS)
-        fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * fpsCamera.GetUp());
-    else if (glfwGetKey(window, GLFW_KEY_X) == GLFW_PRESS)
-        fpsCamera.Move(MOVE_SPEED * (float) elapsedTime * -fpsCamera.GetUp());
+  
 }
 

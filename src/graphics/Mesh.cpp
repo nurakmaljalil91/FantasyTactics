@@ -57,11 +57,11 @@ bool Mesh::LoadObj(const std::string &filename) {
     if (filename.find(".obj") != std::string::npos) {
         std::ifstream fin(filename, std::ios::in);
         if (!fin) {
-            Logger::Log()->error("Unable to open file {}", filename);
+            Logger::log()->error("Unable to open file {}", filename);
             return false;
         }
 
-        Logger::Log()->info("Loading OBJ file {}...", filename);
+        Logger::log()->info("Loading OBJ file {}...", filename);
 
         std::string lineBuffer;
 

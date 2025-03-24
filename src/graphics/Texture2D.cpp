@@ -23,7 +23,7 @@ bool Texture2D::LoadTexture(const std::string &filename, bool generateMipMaps) {
     unsigned char *imageData = stbi_load(filename.c_str(), &width, &height, &components, 4);
 
     if (imageData == nullptr) {
-        Logger::Log()->error("Texture loading failed for texture: {}", filename);
+        Logger::log()->error("Texture loading failed for texture: {}", filename);
         return false;
     }
 

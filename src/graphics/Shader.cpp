@@ -39,7 +39,7 @@ bool Shader::LoadShaders(const char *vsFilename, const char *fsFilename) {
 
     mHandle = glCreateProgram();
     if (mHandle == 0) {
-        Logger::Log()->error("Unable to create shader program!");
+        Logger::log()->error("Unable to create shader program!");
         return false;
     }
 
@@ -73,7 +73,7 @@ std::string Shader::FileToString(const std::string &filename) {
 
         file.close();
     } catch (std::exception ex) {
-        Logger::Log()->error("Error reading shader filename: {}", filename);
+        Logger::log()->error("Error reading shader filename: {}", filename);
     }
 
     return ss.str();
@@ -96,7 +96,7 @@ void Shader::CheckCompileErrors(GLuint shader, Shader::ShaderType type) {
             glGetProgramiv(shader, GL_INFO_LOG_LENGTH, &length);
             std::string errorLog(length, ' ');
             glGetProgramInfoLog(shader, length, &length, &errorLog[0]);
-            Logger::Log()->error("Error! Program failed to link. {}", errorLog);
+            Logger::log()->error("Error! Program failed to link. {}", errorLog);
         }
     } else {
         glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
@@ -105,7 +105,7 @@ void Shader::CheckCompileErrors(GLuint shader, Shader::ShaderType type) {
             glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
             std::string errorLog(length, ' ');
             glGetShaderInfoLog(shader, length, &length, &errorLog[0]);
-            Logger::Log()->error("Error! shader failed to compile. {}", errorLog);
+            Logger::log()->error("Error! shader failed to compile. {}", errorLog);
         }
     }
 }

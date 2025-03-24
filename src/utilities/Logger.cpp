@@ -7,7 +7,7 @@
 
 std::shared_ptr<spdlog::logger> Logger::mLogger;
 
-void Logger::Initialize() {
+void Logger::initialize() {
     const auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
     const auto file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>("logs/logfile.txt", true);
 

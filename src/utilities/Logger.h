@@ -11,14 +11,14 @@
 
 class Logger {
 public:
-    static Logger &Get() {
+    static Logger &get() {
         static Logger instance;
         return instance;
     }
 
-    static void Initialize();
+    static void initialize();
 
-    static std::shared_ptr<spdlog::logger> Log() { return mLogger; }
+    static std::shared_ptr<spdlog::logger> log() { return mLogger; }
 
 private:
     Logger() = default;
