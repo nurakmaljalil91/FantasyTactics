@@ -69,6 +69,8 @@ std::string Shader::FileToString(const std::string &filename) {
 
         if (!file.fail()) {
             ss << file.rdbuf();
+        } else {
+            Logger::log()->error("Error reading shader filename: {}", filename);
         }
 
         file.close();

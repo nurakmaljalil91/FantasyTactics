@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <sstream>
 #include "utilities/logger.h"
+#include "graphics/Shader.h"
 
 const char *APP_TITLE = "Fantasy Tactics";
 constexpr int windowWidth = 1200;
@@ -20,8 +21,6 @@ void glfw_onMouseScroll(GLFWwindow *window, double deltaX, double deltaY);
 
 bool initOpenGL();
 
-void update(double elapsedTime);
-
 int main() {
     //initialize logger
     Logger::initialize();
@@ -35,7 +34,49 @@ int main() {
     if (!success) {
         Logger::log()->error("Failed to initialize OpenGL");
     }
+
     double lastTime = glfwGetTime();
+
+    // Build and compile our shader program
+    Shader shader;
+    shader.LoadShaders("resources/shaders/triangle.vert", "resources/shaders/triangle.frag");
+
+    // set up vertex data (and buffer(s)) and configure vertex attributes
+    float vertices[] = {
+            0.5f,  0.5f, 0.0f,  // top right
+            0.5f, -0.5f, 0.0f,  // bottom right
+            -0.5f, -0.5f, 0.0f,  // bottom left
+            -0.5f,  0.5f, 0.0f   // top left
+    };
+    unsigned int indices[] = {  // note that we start from 0!
+            0, 1, 3,  // first Triangle
+            1, 2, 3   // second Triangle
+    };
+    unsigned int VBO, VAO, EBO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+    // bind the Vertex Array Object first, then bind and set vertex buffer(s), and then configure vertex attributes(s).
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
+    // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
+    glBindVertexArray(0);
 
     // Render loop
     while (!glfwWindowShouldClose(glfwWindow)) {
@@ -45,17 +86,29 @@ int main() {
         double deltaTime = currentTime - lastTime;
 
         // Render commands here
-        // ....
+        // ---------------------
+        // specify the color of the background
+        glClearColor(0.23f, 0.38f, 0.47f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Check events are triggered (like input, etc)
-        glfwPollEvents();
+        // draw our first triangle
+        shader.Use();
+        glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
+        //glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
         // function to swap the front and back buffers
         glfwSwapBuffers(glfwWindow);
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // Check events are triggered (like input, etc)
+        glfwPollEvents();
 
         lastTime = currentTime;
     }
+
+    // optional: de-allocate all resources once they've outlived their purpose:
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
 
     glfwTerminate();
     return 0;
@@ -119,9 +172,6 @@ bool initOpenGL() {
     // Hides and grabs cursor, unlimited movement
     glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPos(glfwWindow, windowWidth / 2.0, windowHeight / 2.0);
-
-    // specify the color of the background
-    glClearColor(0.23f, 0.38f, 0.47f, 1.0f);
 
     // specify the viewport of OpenGL in the window
     glViewport(0, 0, windowWidth, windowHeight);
