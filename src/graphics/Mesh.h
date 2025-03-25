@@ -23,18 +23,17 @@ public:
 
     ~Mesh();
 
-    bool LoadObj(const std::string &filename);
+    bool loadObj(const std::string &filename);
 
-    void Draw();
+    virtual void draw();
 
 protected:
-    void InitializeBuffers();
+    void initializeBuffers();
 
     std::vector<Vertex> mVertices;
-private:
-
     bool mLoaded;
     GLuint mVAO;
+private:
     GLuint mVBO;
     // GLuint mIBO;
 };

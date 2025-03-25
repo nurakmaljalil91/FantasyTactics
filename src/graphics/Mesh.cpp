@@ -48,7 +48,7 @@ Mesh::~Mesh() {
 //  - We ignore materials
 //  - We ignore normals
 //  - only commands "v", "vt" and "f" are supported
-bool Mesh::LoadObj(const std::string &filename) {
+bool Mesh::loadObj(const std::string &filename) {
     std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
     std::vector<glm::vec3> tempVertices;
     std::vector<glm::vec2> tempUVs;
@@ -151,7 +151,7 @@ bool Mesh::LoadObj(const std::string &filename) {
         }
 
         // Create and initailize the buffers
-        InitializeBuffers();
+        initializeBuffers();
 
         return (mLoaded = true);
     }
@@ -161,7 +161,7 @@ bool Mesh::LoadObj(const std::string &filename) {
 
 // Create and initialize the vertex buffer and vertex array object
 // Must have valid, non-empty std::vector of Vertex objects.
-void Mesh::InitializeBuffers() {
+void Mesh::initializeBuffers() {
     glGenVertexArrays(1, &mVAO);
     glGenBuffers(1, &mVBO);
 
@@ -186,7 +186,7 @@ void Mesh::InitializeBuffers() {
 }
 
 // Render the mesh
-void Mesh::Draw() {
+void Mesh::draw() {
     if (!mLoaded) return;
 
     glBindVertexArray(mVAO);

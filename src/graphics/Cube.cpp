@@ -70,5 +70,6 @@ Cube::Cube() {
     // {+0.5f, +0.f,  -0.5f} --> Should be {+0.5f, +0.5f, -0.5f}
 
     // Upload to GPU
-    InitializeBuffers();
+    initializeBuffers();
+    mLoaded = true;
 }
