@@ -26,7 +26,7 @@ Camera::Camera()
 //------------------------------------------------------------
 // Base Camera - Returns view matrix
 //------------------------------------------------------------
-glm::mat4 Camera::GetViewMatrix()const
+glm::mat4 Camera::getViewMatrix()const
 {
     return glm::lookAt(mPosition, mTargetPos, mUp);
 }
@@ -34,7 +34,7 @@ glm::mat4 Camera::GetViewMatrix()const
 //------------------------------------------------------------
 // Base Camera - Returns camera's local look vector
 //------------------------------------------------------------
-const glm::vec3& Camera::GetLook() const
+const glm::vec3& Camera::getLook() const
 {
     return mLook;
 }
@@ -42,7 +42,7 @@ const glm::vec3& Camera::GetLook() const
 //------------------------------------------------------------
 // Base Camera - Returns camera's local right vector
 //------------------------------------------------------------
-const glm::vec3& Camera::GetRight() const
+const glm::vec3& Camera::getRight() const
 {
     return mRight;
 }
@@ -50,7 +50,7 @@ const glm::vec3& Camera::GetRight() const
 //------------------------------------------------------------
 // Base Camera - Returns camera's local up vector
 //------------------------------------------------------------
-const glm::vec3& Camera::GetUp() const
+const glm::vec3& Camera::getUp() const
 {
     return mUp;
 }
@@ -58,7 +58,7 @@ const glm::vec3& Camera::GetUp() const
 
 // Base Camera - Returns camera's position
 //------------------------------------------------------------
-const glm::vec3& Camera::GetPosition() const
+const glm::vec3& Camera::getPosition() const
 {
     return mPosition;
 }

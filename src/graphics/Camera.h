@@ -11,31 +11,31 @@
 
 class Camera {
 public:
-    glm::mat4 GetViewMatrix() const;
+    glm::mat4 getViewMatrix() const;
 
-    virtual void SetPosition(const glm::vec3 &position) {
+    virtual void setPosition(const glm::vec3 &position) {
     }
 
-    virtual void Rotate(float yaw, float pitch) {
+    virtual void rotate(float yaw, float pitch) {
     } // in degrees
-    virtual void Move(const glm::vec3 &offsetPos) {
+    virtual void move(const glm::vec3 &offsetPos) {
     }
 
-    const glm::vec3 &GetLook() const;
+    const glm::vec3 &getLook() const;
 
-    const glm::vec3 &GetRight() const;
+    const glm::vec3 &getRight() const;
 
-    const glm::vec3 &GetUp() const;
+    const glm::vec3 &getUp() const;
 
-    const glm::vec3 &GetPosition() const;
+    const glm::vec3 &getPosition() const;
 
-    float GetFOV() const { return mFOV; }
-    void SetFOV(float fov) { mFOV = fov; } // in degrees
+    float getFov() const { return mFOV; }
+    void setFov(float fov) { mFOV = fov; } // in degrees
 
 protected:
     Camera();
 
-    virtual void UpdateCameraVectors() {
+    virtual void updateCameraVectors() {
     }
 
     glm::vec3 mPosition;

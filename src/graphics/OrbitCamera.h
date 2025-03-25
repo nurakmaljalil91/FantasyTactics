@@ -11,15 +11,15 @@ class OrbitCamera : public Camera {
 public:
     OrbitCamera();
 
-    virtual void Rotate(float yaw, float pitch); // in degrees
+    virtual void rotate(float yaw, float pitch); // in degrees
 
     // Camera Controls
-    void SetLookAt(const glm::vec3 &target);
+    void setLookAt(const glm::vec3 &target);
 
-    void SetRadius(float radius);
+    void setRadius(float radius);
 
 private:
-    void UpdateCameraVectors();
+    void updateCameraVectors();
 
     // Camera parameters
     float mRadius;
