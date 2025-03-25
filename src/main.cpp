@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "graphics/IsometricCamera.h"
 
 const char *APP_TITLE = "Fantasy Tactics";
 constexpr int windowWidth = 1200;
@@ -51,6 +52,17 @@ int main() {
     // Create a sphere
     Sphere sphere;
 
+    // 2) Construct your isometric camera
+    // Suppose you want an ortho box from -2..2 horizontally, -2..2 vertically
+    // near=0.1, far=100.0
+// Instead of (-2,2), try something bigger:
+    IsometricCamera isoCam(-5.f, 5.f, -5.f, 5.f, 0.1f, 100.f);
+
+
+    // 3) Position and angles. For a typical isometric angle:
+    isoCam.setPosition(glm::vec3(0.f, 0.f, 5.f)); // "pull back" a bit
+    isoCam.setAngles(45.f, 35.264f);
+
     // Render loop
     while (!glfwWindowShouldClose(glfwWindow)) {
         showFPS(glfwWindow);
@@ -67,37 +79,35 @@ int main() {
         // Use the Cel shader
         shader.use();
 
-        // 1) Set up the usual transformation matrices
+        // 4) Build a model matrix if you want your sphere to rotate
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, (float) glfwGetTime(), glm::vec3(0.3f, 1.0f, 0.0f));
-        glm::mat4 view = glm::lookAt(glm::vec3(0.f, 0.f, 3.f),
-                                     glm::vec3(0.f, 0.f, 0.f),
-                                     glm::vec3(0.f, 1.f, 0.f));
-        glm::mat4 proj = glm::perspective(glm::radians(45.0f),
-                                          (float) windowWidth / (float) windowHeight,
-                                          0.1f, 100.0f);
+        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.3f, 1.0f, 0.0f));
 
+        // 5) Retrieve the camera's view & projection
+        glm::mat4 view = isoCam.getViewMatrix();
+        glm::mat4 proj = isoCam.getProjectionMatrix();
+
+        // Pass them as uniforms
         GLuint modelLoc = glGetUniformLocation(shader.getProgram(), "uModel");
-        GLuint viewLoc = glGetUniformLocation(shader.getProgram(), "uView");
-        GLuint projLoc = glGetUniformLocation(shader.getProgram(), "uProjection");
+        GLuint viewLoc  = glGetUniformLocation(shader.getProgram(), "uView");
+        GLuint projLoc  = glGetUniformLocation(shader.getProgram(), "uProjection");
+
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
 
-        // 2) Set cel-shading uniforms
-        // Example directional light from “in front” of the object:
+        // Cel-shading uniforms
         glm::vec3 lightDir(1.0f, 1.0f, 1.0f);
         GLuint lightDirLoc = glGetUniformLocation(shader.getProgram(), "lightDir");
         glUniform3fv(lightDirLoc, 1, glm::value_ptr(lightDir));
 
-        // Example base color
         glm::vec3 baseColor(0.8f, 0.8f, 0.1f);
         GLuint baseColorLoc = glGetUniformLocation(shader.getProgram(), "baseColor");
         glUniform3fv(baseColorLoc, 1, glm::value_ptr(baseColor));
 
-        // 3) Draw your cube
+        // Draw the sphere
         sphere.draw();
-        
+
         // function to swap the front and back buffers
         glfwSwapBuffers(glfwWindow);
         // Check events are triggered (like input, etc)

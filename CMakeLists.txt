@@ -65,6 +65,8 @@ add_executable(
         src/graphics/Circle.h
         src/graphics/Sphere.cpp
         src/graphics/Sphere.h
+        src/graphics/IsometricCamera.cpp
+        src/graphics/IsometricCamera.h
 )
 
 # add link libraries
