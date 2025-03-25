@@ -3,8 +3,7 @@
 #include <sstream>
 #include "utilities/logger.h"
 #include "graphics/Shader.h"
-#include "graphics/Cube.h"
-#include "graphics/Circle.h"
+#include "graphics/Sphere.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -49,8 +48,8 @@ int main() {
     // Create a cube
     // Cube cube;
 
-    // Create a circle
-    Circle circle;
+    // Create a sphere
+    Sphere sphere;
 
     // Render loop
     while (!glfwWindowShouldClose(glfwWindow)) {
@@ -97,9 +96,8 @@ int main() {
         glUniform3fv(baseColorLoc, 1, glm::value_ptr(baseColor));
 
         // 3) Draw your cube
-        circle.draw();
-
-
+        sphere.draw();
+        
         // function to swap the front and back buffers
         glfwSwapBuffers(glfwWindow);
         // Check events are triggered (like input, etc)

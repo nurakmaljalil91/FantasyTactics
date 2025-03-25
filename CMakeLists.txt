@@ -63,6 +63,8 @@ add_executable(
         src/graphics/Cube.h
         src/graphics/Circle.cpp
         src/graphics/Circle.h
+        src/graphics/Sphere.cpp
+        src/graphics/Sphere.h
 )
 
 # add link libraries
