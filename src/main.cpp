@@ -39,7 +39,7 @@ int main() {
 
     // Build and compile our shader program
     Shader shader;
-    shader.LoadShaders("resources/shaders/triangle.vert", "resources/shaders/triangle.frag");
+    shader.loadShaders("resources/shaders/triangle.vert", "resources/shaders/triangle.frag");
 
     // set up vertex data (and buffer(s)) and configure vertex attributes
     float vertices[] = {
@@ -92,7 +92,7 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // draw our first triangle
-        shader.Use();
+        shader.use();
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
         //glDrawArrays(GL_TRIANGLES, 0, 3);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -170,8 +170,8 @@ bool initOpenGL() {
 
 
     // Hides and grabs cursor, unlimited movement
-    glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwSetCursorPos(glfwWindow, windowWidth / 2.0, windowHeight / 2.0);
+//    glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+//    glfwSetCursorPos(glfwWindow, windowWidth / 2.0, windowHeight / 2.0);
 
     // specify the viewport of OpenGL in the window
     glViewport(0, 0, windowWidth, windowHeight);

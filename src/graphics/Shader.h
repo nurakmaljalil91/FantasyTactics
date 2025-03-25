@@ -33,33 +33,33 @@ public:
     };
 
     // Only supports vertex and fragment (this series will only have those two)
-    bool LoadShaders(const char *vsFilename, const char *fsFilename);
+    bool loadShaders(const char *vsFilename, const char *fsFilename);
 
-    void Use();
+    void use();
 
-    GLuint GetProgram() const;
+    GLuint getProgram() const;
 
-    void SetUniform(const GLchar *name, const glm::vec2 &v);
+    void setUniform(const GLchar *name, const glm::vec2 &v);
 
-    void SetUniform(const GLchar *name, const glm::vec3 &v);
+    void setUniform(const GLchar *name, const glm::vec3 &v);
 
-    void SetUniform(const GLchar *name, const glm::vec4 &v);
+    void setUniform(const GLchar *name, const glm::vec4 &v);
 
-    void SetUniform(const GLchar *name, const glm::mat4 &m);
+    void setUniform(const GLchar *name, const glm::mat4 &m);
 
-    void SetUniform(const GLchar *name, const GLfloat f);
+    void setUniform(const GLchar *name, const GLfloat f);
 
-    void SetUniform(const GLchar *name, const GLint v);
+    void setUniform(const GLchar *name, const GLint v);
 
-    void SetUniformSampler(const GLchar *name, const GLint &slot);
+    void setUniformSampler(const GLchar *name, const GLint &slot);
 
 private:
-    std::string FileToString(const std::string &filename);
+    std::string fileToString(const std::string &filename);
 
-    void CheckCompileErrors(GLuint shader, ShaderType type);
+    void checkCompileErrors(GLuint shader, ShaderType type);
 
     // We are going to speed up looking for uniforms by keeping their locations in a map
-    GLint GetUniformLocation(const GLchar *name);
+    GLint getUniformLocation(const GLchar *name);
 
 
     GLuint mHandle;

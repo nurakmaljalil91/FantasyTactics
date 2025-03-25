@@ -36,7 +36,7 @@ git clone https://github.com/nurakmaljalil91/FantasyTactics.git
     - Click Generate
 - Download the zip file and extract the files
 - Clone Spdlog from https://github.com/gabime/spdlog
-- Use this guide to install SPDLOG: https://github.com/gabime/spdlog/wiki/9.-CMake
+- use this guide to install SPDLOG: https://github.com/gabime/spdlog/wiki/9.-CMake
 
 ### Installing Spdlog
 
