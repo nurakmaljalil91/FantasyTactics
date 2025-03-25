@@ -19,10 +19,10 @@ public:
 
     ~Texture2D();
 
-    bool LoadTexture(const std::string &filename, bool generateMipMaps = true);
+    bool loadTexture(const std::string &filename, bool generateMipMaps = true);
 
-    void Bind(GLuint texUnit = 0);
-    void Unbind(GLuint texUnit = 0);
+    void bind(GLuint texUnit = 0);
+    void unbind(GLuint texUnit = 0);
 
     //    void setWrap(GLint wrapModeHorizontal, GLint wrapModeVertical);
     //    void setMinFilter(GLint minFilter);

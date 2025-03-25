@@ -4,6 +4,7 @@
 #include "utilities/logger.h"
 #include "graphics/Shader.h"
 #include "graphics/Sphere.h"
+#include "graphics/Cube.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -47,10 +48,10 @@ int main() {
     shader.loadShaders("resources/shaders/cel_shading.vert", "resources/shaders/cel_shading.frag");
 
     // Create a cube
-    // Cube cube;
+     Cube cube;
 
     // Create a sphere
-    Sphere sphere;
+//    Sphere sphere;
 
     // 2) Construct your isometric camera
     // Suppose you want an ortho box from -2..2 horizontally, -2..2 vertically
@@ -81,7 +82,7 @@ int main() {
 
         // 4) Build a model matrix if you want your sphere to rotate
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.3f, 1.0f, 0.0f));
+//        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.3f, 1.0f, 0.0f));
 
         // 5) Retrieve the camera's view & projection
         glm::mat4 view = isoCam.getViewMatrix();
@@ -106,7 +107,7 @@ int main() {
         glUniform3fv(baseColorLoc, 1, glm::value_ptr(baseColor));
 
         // Draw the sphere
-        sphere.draw();
+        cube.draw();
 
         // function to swap the front and back buffers
         glfwSwapBuffers(glfwWindow);

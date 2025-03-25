@@ -18,7 +18,7 @@ Texture2D::~Texture2D() {
 // Loads texture from file
 // http://nothings.org/stb_image.h
 // Creates mip maps if generateMipMaps is true.
-bool Texture2D::LoadTexture(const std::string &filename, bool generateMipMaps) {
+bool Texture2D::loadTexture(const std::string &filename, bool generateMipMaps) {
     int width, height, components;
     unsigned char *imageData = stbi_load(filename.c_str(), &width, &height, &components, 4);
 
@@ -86,7 +86,7 @@ bool Texture2D::LoadTexture(const std::string &filename, bool generateMipMaps) {
 }
 
 // Binds texture to texture unit
-void Texture2D::Bind(GLuint texUnit) {
+void Texture2D::bind(GLuint texUnit) {
     assert(texUnit >= 0 && texUnit <= 32);
 
     glActiveTexture(GL_TEXTURE0 + texUnit);
@@ -94,7 +94,7 @@ void Texture2D::Bind(GLuint texUnit) {
 }
 
 // Unbinds texture
-void Texture2D::Unbind(GLuint texUnit) {
+void Texture2D::unbind(GLuint texUnit) {
     // assert(texUnit >= 0 && texUnit <= 31);
 
     glActiveTexture(GL_TEXTURE0 + texUnit);
