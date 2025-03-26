@@ -19,8 +19,8 @@ Shader::~Shader() {
 
 // Loads vertex and fragment shaders
 bool Shader::loadShaders(const char *vsFilename, const char *fsFilename) {
-    std::string vsString = fileToString(vsFilename);
-    std::string fsString = fileToString(fsFilename);
+    std::string vsString = _fileToString(vsFilename);
+    std::string fsString = _fileToString(fsFilename);
 
     const GLchar *vsSourcePtr = vsString.c_str();
     const GLchar *fsSourcePtr = fsString.c_str();
@@ -32,10 +32,10 @@ bool Shader::loadShaders(const char *vsFilename, const char *fsFilename) {
     glShaderSource(fs, 1, &fsSourcePtr, nullptr);
 
     glCompileShader(vs);
-    checkCompileErrors(vs, VERTEX);
+    _checkCompileErrors(vs, VERTEX);
 
     glCompileShader(fs);
-    checkCompileErrors(fs, FRAGMENT);
+    _checkCompileErrors(fs, FRAGMENT);
 
     mHandle = glCreateProgram();
     if (mHandle == 0) {
@@ -53,14 +53,14 @@ bool Shader::loadShaders(const char *vsFilename, const char *fsFilename) {
 
     mUniformLocations.clear();
 
-    checkCompileErrors(mHandle, PROGRAM);
+    _checkCompileErrors(mHandle, PROGRAM);
 
     return true;
 }
 
 // Opens and reads contents of ASCII file to a string.  Returns the string.
 // Not good for very large files.
-std::string Shader::fileToString(const std::string &filename) {
+std::string Shader::_fileToString(const std::string &filename) {
     std::stringstream ss;
     std::ifstream file;
 
@@ -89,7 +89,7 @@ void Shader::use() {
 }
 
 // Checks for shader compiler errors
-void Shader::checkCompileErrors(GLuint shader, ShaderType type) {
+void Shader::_checkCompileErrors(GLuint shader, ShaderType type) {
     GLint status = 0;
     if (type == PROGRAM) {
         glGetProgramiv(shader, GL_LINK_STATUS, &status);
@@ -119,26 +119,26 @@ GLuint Shader::getProgram() const {
 
 // Sets a glm::vec2 shader uniform
 void Shader::setUniform(const GLchar *name, const glm::vec2 &v) {
-    GLint loc = getUniformLocation(name);
+    GLint loc = _getUniformLocation(name);
     glUniform2f(loc, v.x, v.y);
 }
 
 // Sets a glm::vec3 shader uniform
 void Shader::setUniform(const GLchar *name, const glm::vec3 &v) {
-    GLint loc = getUniformLocation(name);
+    GLint loc = _getUniformLocation(name);
     glUniform3f(loc, v.x, v.y, v.z);
 }
 
 // Sets a glm::vec4 shader uniform
 void Shader::setUniform(const GLchar *name, const glm::vec4 &v) {
-    GLint loc = getUniformLocation(name);
+    GLint loc = _getUniformLocation(name);
     glUniform4f(loc, v.x, v.y, v.z, v.w);
 }
 
 // Sets a glm::mat4 shader uniform
 //-----------------------------------------------------------------------------
 void Shader::setUniform(const GLchar *name, const glm::mat4 &m) {
-    GLint loc = getUniformLocation(name);
+    GLint loc = _getUniformLocation(name);
 
     // loc = location of uniform in shader
     // count = how many matrices (1 if not an array of mats)
@@ -150,7 +150,7 @@ void Shader::setUniform(const GLchar *name, const glm::mat4 &m) {
 // Sets a GLfloat shader uniform
 //-----------------------------------------------------------------------------
 void Shader::setUniform(const GLchar *name, const GLfloat f) {
-    GLint loc = getUniformLocation(name);
+    GLint loc = _getUniformLocation(name);
     glUniform1f(loc, f);
 }
 
@@ -158,7 +158,7 @@ void Shader::setUniform(const GLchar *name, const GLfloat f) {
 // Sets a GLint shader uniform
 //-----------------------------------------------------------------------------
 void Shader::setUniform(const GLchar *name, const GLint v) {
-    GLint loc = getUniformLocation(name);
+    GLint loc = _getUniformLocation(name);
     glUniform1i(loc, v);
 }
 
@@ -168,13 +168,13 @@ void Shader::setUniform(const GLchar *name, const GLint v) {
 void Shader::setUniformSampler(const GLchar *name, const GLint &slot) {
     glActiveTexture(GL_TEXTURE0 + slot);
 
-    GLint loc = getUniformLocation(name);
+    GLint loc = _getUniformLocation(name);
     glUniform1i(loc, slot);
 }
 
 // Returns the uniform identifier given it's string name.
 // NOTE: shader must be currently active first.
-GLint Shader::getUniformLocation(const GLchar *name) {
+GLint Shader::_getUniformLocation(const GLchar *name) {
     std::map<std::string, GLint>::iterator it = mUniformLocations.find(name);
 
     // Only need to query the shader program IF it doesn't already exist.

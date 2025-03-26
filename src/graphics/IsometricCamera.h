@@ -35,8 +35,8 @@ public:
     const glm::mat4& getViewMatrix() const       { return mViewMatrix; }
     const glm::mat4& getProjectionMatrix() const { return mProjectionMatrix; }
 private:
-    void updateViewMatrix();
-    void updateProjectionMatrix();
+    void _updateViewMatrix();
+    void _updateProjectionMatrix();
 
     // Projection params
     float mLeft, mRight, mBottom, mTop, mNear, mFar;

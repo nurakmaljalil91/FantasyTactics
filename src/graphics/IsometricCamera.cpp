@@ -7,22 +7,22 @@
 IsometricCamera:: IsometricCamera(float left, float right, float bottom, float top, float nearPlane, float farPlane)
         : mLeft(left), mRight(right), mBottom(bottom), mTop(top), mNear(nearPlane), mFar(farPlane)
 {
-    updateProjectionMatrix();
-    updateViewMatrix();
+    _updateProjectionMatrix();
+    _updateViewMatrix();
 }
 
 void IsometricCamera::setPosition(const glm::vec3 &pos) {
     mPosition = pos;
-    updateViewMatrix();
+    _updateViewMatrix();
 }
 
 void IsometricCamera::setAngles(float angleY, float angleX) {
     mAngleY = angleY;
     mAngleX = angleX;
-    updateViewMatrix();
+    _updateViewMatrix();
 }
 
-void IsometricCamera::updateViewMatrix() {
+void IsometricCamera::_updateViewMatrix() {
     // Start with identity
     glm::mat4 view = glm::mat4(1.0f);
 
@@ -36,7 +36,7 @@ void IsometricCamera::updateViewMatrix() {
     mViewMatrix = view;
 }
 
-void IsometricCamera::updateProjectionMatrix() {
+void IsometricCamera::_updateProjectionMatrix() {
     // Orthographic projection for isometric
     mProjectionMatrix = glm::ortho(mLeft, mRight, mBottom, mTop, mNear, mFar);
 }

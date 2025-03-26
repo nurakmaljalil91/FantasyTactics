@@ -38,7 +38,7 @@ void FPSCamera::setPosition(const glm::vec3& position)
 void FPSCamera::move(const glm::vec3& offsetPos)
 {
 	mPosition += offsetPos;
-    updateCameraVectors();
+    _updateCameraVectors();
 }
 
 // FPSCamera - Sets the incremental orientation of the camera
@@ -60,11 +60,11 @@ void FPSCamera::rotate(float yaw, float pitch)
 
 	//std::cout << glm::degrees(mPitch) << " " << glm::degrees(mYaw) << std::endl;
 
-    updateCameraVectors();
+    _updateCameraVectors();
 }
 
 // FPSCamera - Calculates the front vector from the Camera's (updated) Euler Angles
-void FPSCamera::updateCameraVectors()
+void FPSCamera::_updateCameraVectors()
 {
 	// Spherical to Cartesian coordinates
 	// https://en.wikipedia.org/wiki/Spherical_coordinate_system (NOTE: Our coordinate sys has Y up not Z)

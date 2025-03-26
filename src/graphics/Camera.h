@@ -35,7 +35,7 @@ public:
 protected:
     Camera();
 
-    virtual void updateCameraVectors() {
+    virtual void _updateCameraVectors() {
     }
 
     glm::vec3 mPosition;

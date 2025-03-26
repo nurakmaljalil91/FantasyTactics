@@ -20,7 +20,7 @@ public:
     virtual void move(const glm::vec3 &offsetPos);
 
 private:
-    void updateCameraVectors();
+    void _updateCameraVectors();
 };
 
 

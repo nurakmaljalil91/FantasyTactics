@@ -19,7 +19,7 @@ public:
     void setRadius(float radius);
 
 private:
-    void updateCameraVectors();
+    void _updateCameraVectors();
 
     // Camera parameters
     float mRadius;

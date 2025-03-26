@@ -30,14 +30,14 @@ void OrbitCamera::rotate(float yaw, float pitch) {
     mPitch = glm::clamp(mPitch, -glm::pi<float>() / 2.0f + 0.1f, glm::pi<float>() / 2.0f - 0.1f);
 
     // Update Front, Right and Up Vectors using the updated Euler angles
-    updateCameraVectors();
+    _updateCameraVectors();
 }
 
 //------------------------------------------------------------
 // OrbitCamera - Calculates the front vector from the Camera's
 // (updated) Euler Angles
 //------------------------------------------------------------
-void OrbitCamera::updateCameraVectors() {
+void OrbitCamera::_updateCameraVectors() {
     // Spherical to Cartesian coordinates
     // https://en.wikipedia.org/wiki/Spherical_coordinate_system (NOTE: Our coordinate sys has Y up not Z)
     mPosition.x = mTargetPos.x + mRadius * cosf(mPitch) * sinf(mYaw);

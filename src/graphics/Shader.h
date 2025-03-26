@@ -54,12 +54,12 @@ public:
     void setUniformSampler(const GLchar *name, const GLint &slot);
 
 private:
-    std::string fileToString(const std::string &filename);
+    std::string _fileToString(const std::string &filename);
 
-    void checkCompileErrors(GLuint shader, ShaderType type);
+    void _checkCompileErrors(GLuint shader, ShaderType type);
 
     // We are going to speed up looking for uniforms by keeping their locations in a map
-    GLint getUniformLocation(const GLchar *name);
+    GLint _getUniformLocation(const GLchar *name);
 
 
     GLuint mHandle;
