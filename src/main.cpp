@@ -9,6 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "graphics/IsometricCamera.h"
+#include "graphics/Texture2D.h"
 
 const char *APP_TITLE = "Fantasy Tactics";
 constexpr int windowWidth = 1200;
@@ -45,13 +46,16 @@ int main() {
 
     // Build and compile our shader program
     Shader shader;
-    shader.loadShaders("resources/shaders/cel_shading.vert", "resources/shaders/cel_shading.frag");
+    shader.loadShaders("resources/shaders/cel_shading_texture.vert", "resources/shaders/cel_shading_texture.frag");
 
     // Create a cube
      Cube cube;
 
     // Create a sphere
 //    Sphere sphere;
+
+    Texture2D texture;
+    texture.loadTexture("resources/textures/crate.jpg", true);
 
     // 2) Construct your isometric camera
     // Suppose you want an ortho box from -2..2 horizontally, -2..2 vertically
@@ -80,15 +84,18 @@ int main() {
         // Use the Cel shader
         shader.use();
 
-        // 4) Build a model matrix if you want your sphere to rotate
+        // Bind the crate texture to texture unit 0
+        texture.bind(0);
+
+        // Tell the fragment shader that diffuseTexture is in GL_TEXTURE0
+        GLuint diffuseLoc = glGetUniformLocation(shader.getProgram(), "diffuseTexture");
+        glUniform1i(diffuseLoc, 0);
+
+        // Build model/view/projection
         glm::mat4 model = glm::mat4(1.0f);
-//        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.3f, 1.0f, 0.0f));
+        glm::mat4 view  = isoCam.getViewMatrix();
+        glm::mat4 proj  = isoCam.getProjectionMatrix();
 
-        // 5) Retrieve the camera's view & projection
-        glm::mat4 view = isoCam.getViewMatrix();
-        glm::mat4 proj = isoCam.getProjectionMatrix();
-
-        // Pass them as uniforms
         GLuint modelLoc = glGetUniformLocation(shader.getProgram(), "uModel");
         GLuint viewLoc  = glGetUniformLocation(shader.getProgram(), "uView");
         GLuint projLoc  = glGetUniformLocation(shader.getProgram(), "uProjection");
@@ -97,7 +104,7 @@ int main() {
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
 
-        // Cel-shading uniforms
+        // Cel shading lighting uniforms
         glm::vec3 lightDir(1.0f, 1.0f, 1.0f);
         GLuint lightDirLoc = glGetUniformLocation(shader.getProgram(), "lightDir");
         glUniform3fv(lightDirLoc, 1, glm::value_ptr(lightDir));
