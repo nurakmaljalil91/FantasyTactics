@@ -52,7 +52,7 @@ int main() {
      Cube cube;
 
     // Create a sphere
-//    Sphere sphere;
+    Sphere sphere;
 
     Texture2D texture;
     texture.loadTexture("resources/textures/crate.jpg", true);
@@ -61,12 +61,12 @@ int main() {
     // Suppose you want an ortho box from -2..2 horizontally, -2..2 vertically
     // near=0.1, far=100.0
 // Instead of (-2,2), try something bigger:
-    IsometricCamera isoCam(-5.f, 5.f, -5.f, 5.f, 0.1f, 100.f);
+    IsometricCamera isoCamera(-5.f, 5.f, -5.f, 5.f, 0.1f, 100.f);
 
 
     // 3) Position and angles. For a typical isometric angle:
-    isoCam.setPosition(glm::vec3(0.f, 0.f, 5.f)); // "pull back" a bit
-    isoCam.setAngles(45.f, 35.264f);
+    isoCamera.setPosition(glm::vec3(0.f, 0.f, 5.f)); // "pull back" a bit
+    isoCamera.setAngles(45.f, 35.264f);
 
     // Render loop
     while (!glfwWindowShouldClose(glfwWindow)) {
@@ -93,16 +93,16 @@ int main() {
 
         // Build model/view/projection
         glm::mat4 model = glm::mat4(1.0f);
-        glm::mat4 view  = isoCam.getViewMatrix();
-        glm::mat4 proj  = isoCam.getProjectionMatrix();
+        glm::mat4 view  = isoCamera.getViewMatrix();
+        glm::mat4 projection  = isoCamera.getProjectionMatrix();
 
-        GLuint modelLoc = glGetUniformLocation(shader.getProgram(), "uModel");
-        GLuint viewLoc  = glGetUniformLocation(shader.getProgram(), "uView");
-        GLuint projLoc  = glGetUniformLocation(shader.getProgram(), "uProjection");
+        GLuint modelLocation = glGetUniformLocation(shader.getProgram(), "uModel");
+        GLuint viewLocation  = glGetUniformLocation(shader.getProgram(), "uView");
+        GLuint projectionLocation  = glGetUniformLocation(shader.getProgram(), "uProjection");
 
-        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+        glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
         // Cel shading lighting uniforms
         glm::vec3 lightDir(1.0f, 1.0f, 1.0f);
