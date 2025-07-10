@@ -3,7 +3,6 @@
 #include <sstream>
 #include "utilities/logger.h"
 #include "graphics/Shader.h"
-#include "graphics/Sphere.h"
 #include "graphics/Cube.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -11,7 +10,7 @@
 #include "graphics/IsometricCamera.h"
 #include "graphics/Texture2D.h"
 
-const char *APP_TITLE = "Fantasy Tactics";
+auto APP_TITLE = "Fantasy Tactics";
 constexpr int windowWidth = 1200;
 constexpr int windowHeight = 800;
 GLFWwindow *glfwWindow = nullptr;
@@ -36,9 +35,7 @@ int main() {
 
     Logger::log()->info("Welcome to Fantasy Tactics!");
 
-    auto success = initOpenGL();
-
-    if (!success) {
+    if (auto success = initOpenGL(); !success) {
         Logger::log()->error("Failed to initialize OpenGL");
     }
 
@@ -49,18 +46,20 @@ int main() {
     shader.loadShaders("resources/shaders/cel_shading_texture.vert", "resources/shaders/cel_shading_texture.frag");
 
     // Create a cube
-     Cube cube;
+    Cube cube;
+    glm::vec3 cubePosition(0.0f, 0.0f, 0.0f);
+    const float moveSpeed = 3.0f;
 
     // Create a sphere
-    Sphere sphere;
+    // Sphere sphere;
 
     Texture2D texture;
     texture.loadTexture("resources/textures/crate.jpg", true);
 
-    // 2) Construct your isometric camera
+    // Construct your isometric camera
     // Suppose you want an ortho box from -2..2 horizontally, -2..2 vertically
     // near=0.1, far=100.0
-// Instead of (-2,2), try something bigger:
+    // Instead of (-2,2), try something bigger:
     IsometricCamera isoCamera(-5.f, 5.f, -5.f, 5.f, 0.1f, 100.f);
 
 
@@ -72,8 +71,17 @@ int main() {
     while (!glfwWindowShouldClose(glfwWindow)) {
         showFPS(glfwWindow);
 
-        double currentTime = glfwGetTime();
-        double deltaTime = currentTime - lastTime;
+        const double currentTime = glfwGetTime();
+        double deltaTime = static_cast<float>(currentTime - lastTime);
+
+        lastTime = currentTime;
+
+        // Handle input
+        if (glfwGetKey(glfwWindow, GLFW_KEY_W) == GLFW_PRESS) cubePosition.z -= moveSpeed * deltaTime;
+        if (glfwGetKey(glfwWindow, GLFW_KEY_S) == GLFW_PRESS) cubePosition.z += moveSpeed * deltaTime;
+        if (glfwGetKey(glfwWindow, GLFW_KEY_A) == GLFW_PRESS) cubePosition.x -= moveSpeed * deltaTime;
+        if (glfwGetKey(glfwWindow, GLFW_KEY_D) == GLFW_PRESS) cubePosition.x += moveSpeed * deltaTime;
+
 
         // Render commands here
         // ---------------------
@@ -88,30 +96,32 @@ int main() {
         texture.bind(0);
 
         // Tell the fragment shader that diffuseTexture is in GL_TEXTURE0
-        GLuint diffuseLoc = glGetUniformLocation(shader.getProgram(), "diffuseTexture");
-        glUniform1i(diffuseLoc, 0);
+        const GLuint diffuseLocation = glGetUniformLocation(shader.getProgram(), "diffuseTexture");
+        glUniform1i(static_cast<int>(diffuseLocation), 0);
 
         // Build model/view/projection
-        glm::mat4 model = glm::mat4(1.0f);
-        glm::mat4 view  = isoCamera.getViewMatrix();
-        glm::mat4 projection  = isoCamera.getProjectionMatrix();
+        auto model = glm::mat4(1.0f);
 
-        GLuint modelLocation = glGetUniformLocation(shader.getProgram(), "uModel");
-        GLuint viewLocation  = glGetUniformLocation(shader.getProgram(), "uView");
-        GLuint projectionLocation  = glGetUniformLocation(shader.getProgram(), "uProjection");
+        model = glm::translate(model, cubePosition);
+        glm::mat4 view = isoCamera.getViewMatrix();
+        glm::mat4 projection = isoCamera.getProjectionMatrix();
 
-        glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
+        const GLuint modelLocation = glGetUniformLocation(shader.getProgram(), "uModel");
+        const GLuint viewLocation = glGetUniformLocation(shader.getProgram(), "uView");
+        const GLuint projectionLocation = glGetUniformLocation(shader.getProgram(), "uProjection");
+
+        glUniformMatrix4fv(static_cast<int>(modelLocation), 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(static_cast<int>(viewLocation), 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(static_cast<int>(projectionLocation), 1, GL_FALSE, glm::value_ptr(projection));
 
         // Cel shading lighting uniforms
         glm::vec3 lightDir(1.0f, 1.0f, 1.0f);
-        GLuint lightDirLoc = glGetUniformLocation(shader.getProgram(), "lightDir");
-        glUniform3fv(lightDirLoc, 1, glm::value_ptr(lightDir));
+        const GLuint lightDirectionLocation = glGetUniformLocation(shader.getProgram(), "lightDir");
+        glUniform3fv(static_cast<int>(lightDirectionLocation), 1, glm::value_ptr(lightDir));
 
         glm::vec3 baseColor(0.8f, 0.8f, 0.1f);
-        GLuint baseColorLoc = glGetUniformLocation(shader.getProgram(), "baseColor");
-        glUniform3fv(baseColorLoc, 1, glm::value_ptr(baseColor));
+        const GLuint baseColorLocation = glGetUniformLocation(shader.getProgram(), "baseColor");
+        glUniform3fv(static_cast<int>(baseColorLocation), 1, glm::value_ptr(baseColor));
 
         // Draw the sphere
         cube.draw();
@@ -147,8 +157,8 @@ bool initOpenGL() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     // required for Mac OS X (https://stackoverflow.com/questions/23706187/opengl-3-2-context-in-osx-with-glfw3
     glfwWindowHint(
-            GLFW_OPENGL_FORWARD_COMPAT,
-            GL_TRUE);
+        GLFW_OPENGL_FORWARD_COMPAT,
+        GL_TRUE);
 
     // create a windowed mode window and its OpenGL context
     // Create an OpenGL 3.3 core, forward compatible context full screen application
@@ -186,8 +196,8 @@ bool initOpenGL() {
 
 
     // Hides and grabs cursor, unlimited movement
-//    glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-//    glfwSetCursorPos(glfwWindow, windowWidth / 2.0, windowHeight / 2.0);
+    //    glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    //    glfwSetCursorPos(glfwWindow, windowWidth / 2.0, windowHeight / 2.0);
 
     // specify the viewport of OpenGL in the window
     glViewport(0, 0, windowWidth, windowHeight);
@@ -197,7 +207,7 @@ bool initOpenGL() {
 }
 
 // Is called whenever a key is pressed/released via GLFW
-void glfw_onKey(GLFWwindow *window, int key, int scancode, int action, int mode) {
+void glfw_onKey(GLFWwindow *window, const int key, int scancode, const int action, int mode) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
     if (key == GLFW_KEY_F1 && action == GLFW_PRESS) {
@@ -236,9 +246,9 @@ void showFPS(GLFWwindow *window) {
         std::ostringstream outs;
         outs.precision(3); // decimal places
         outs << std::fixed
-             << APP_TITLE << "    "
-             << "FPS: " << fps << "    "
-             << "Frame Time: " << msPerFrame << " (ms)";
+                << APP_TITLE << "    "
+                << "FPS: " << fps << "    "
+                << "Frame Time: " << msPerFrame << " (ms)";
         glfwSetWindowTitle(window, outs.str().c_str());
         frameCount = 0;
     }
@@ -246,16 +256,13 @@ void showFPS(GLFWwindow *window) {
 }
 
 // Is called when the pWindow is resized
-void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
+void framebuffer_size_callback(GLFWwindow *window, const int width, const int height) {
     glViewport(0, 0, width, height);
 }
 
 void glfw_onMouseScroll(GLFWwindow *window, double deltaX, double deltaY) {
-
 }
 
 // Update stuff every frame
 void update(double elapsedTime) {
-
 }
-
