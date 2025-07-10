@@ -48,7 +48,6 @@ int main() {
     // Create a cube
     Cube cube;
     glm::vec3 cubePosition(0.0f, 0.0f, 0.0f);
-    const float moveSpeed = 3.0f;
 
     // Create a sphere
     // Sphere sphere;
@@ -60,15 +59,16 @@ int main() {
     // Suppose you want an ortho box from -2..2 horizontally, -2..2 vertically
     // near=0.1, far=100.0
     // Instead of (-2,2), try something bigger:
-    IsometricCamera isoCamera(-5.f, 5.f, -5.f, 5.f, 0.1f, 100.f);
+    IsometricCamera isometricCamera(-10.f, 10.f, -10.f, 10.f, 0.1f, 100.f);
 
 
     // 3) Position and angles. For a typical isometric angle:
-    isoCamera.setPosition(glm::vec3(0.f, 0.f, 5.f)); // "pull back" a bit
-    isoCamera.setAngles(45.f, 35.264f);
+    isometricCamera.setPosition(glm::vec3(0.f, 0.f, 5.f)); // "pull back" a bit
+    isometricCamera.setAngles(45.f, 35.264f);
 
     // Render loop
     while (!glfwWindowShouldClose(glfwWindow)) {
+        constexpr float moveSpeed = 3.0f;
         showFPS(glfwWindow);
 
         const double currentTime = glfwGetTime();
@@ -103,8 +103,8 @@ int main() {
         auto model = glm::mat4(1.0f);
 
         model = glm::translate(model, cubePosition);
-        glm::mat4 view = isoCamera.getViewMatrix();
-        glm::mat4 projection = isoCamera.getProjectionMatrix();
+        glm::mat4 view = isometricCamera.getViewMatrix();
+        glm::mat4 projection = isometricCamera.getProjectionMatrix();
 
         const GLuint modelLocation = glGetUniformLocation(shader.getProgram(), "uModel");
         const GLuint viewLocation = glGetUniformLocation(shader.getProgram(), "uView");
@@ -258,6 +258,16 @@ void showFPS(GLFWwindow *window) {
 // Is called when the pWindow is resized
 void framebuffer_size_callback(GLFWwindow *window, const int width, const int height) {
     glViewport(0, 0, width, height);
+
+    const float aspect = static_cast<float>(width) / static_cast<float>(height);
+    float scale  = 5.0f;
+
+    // re-set your ortho box so it always covers the same world area
+    // isoCamera.setOrtho(
+    //   -scale * aspect,   scale * aspect,
+    //   -scale,            scale,
+    //   0.1f, 100.f
+    // );
 }
 
 void glfw_onMouseScroll(GLFWwindow *window, double deltaX, double deltaY) {
