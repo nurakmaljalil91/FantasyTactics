@@ -59,7 +59,7 @@ int main() {
     // Suppose you want an ortho box from -2..2 horizontally, -2..2 vertically
     // near=0.1, far=100.0
     // Instead of (-2,2), try something bigger:
-    IsometricCamera isometricCamera(-10.f, 10.f, -10.f, 10.f, 0.1f, 100.f);
+    IsometricCamera isometricCamera(-10.f, 10.f, -10.f, 10.f, -100.f, 100.f);
 
 
     // 3) Position and angles. For a typical isometric angle:
@@ -72,7 +72,7 @@ int main() {
         showFPS(glfwWindow);
 
         const double currentTime = glfwGetTime();
-        double deltaTime = static_cast<float>(currentTime - lastTime);
+        auto deltaTime = static_cast<float>(currentTime - lastTime);
 
         lastTime = currentTime;
 
@@ -261,13 +261,6 @@ void framebuffer_size_callback(GLFWwindow *window, const int width, const int he
 
     const float aspect = static_cast<float>(width) / static_cast<float>(height);
     float scale  = 5.0f;
-
-    // re-set your ortho box so it always covers the same world area
-    // isoCamera.setOrtho(
-    //   -scale * aspect,   scale * aspect,
-    //   -scale,            scale,
-    //   0.1f, 100.f
-    // );
 }
 
 void glfw_onMouseScroll(GLFWwindow *window, double deltaX, double deltaY) {

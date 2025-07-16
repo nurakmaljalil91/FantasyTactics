@@ -4,9 +4,8 @@
 
 #include "IsometricCamera.h"
 
-IsometricCamera:: IsometricCamera(float left, float right, float bottom, float top, float nearPlane, float farPlane)
-        : mLeft(left), mRight(right), mBottom(bottom), mTop(top), mNear(nearPlane), mFar(farPlane)
-{
+IsometricCamera::IsometricCamera(float left, float right, float bottom, float top, float nearPlane, float farPlane)
+    : mLeft(left), mRight(right), mBottom(bottom), mTop(top), mNear(nearPlane), mFar(farPlane) {
     _updateProjectionMatrix();
     _updateViewMatrix();
 }
@@ -26,12 +25,12 @@ void IsometricCamera::_updateViewMatrix() {
     // Start with identity
     glm::mat4 view = glm::mat4(1.0f);
 
+    // Now translate by the negative position
+    view = glm::translate(view, -mPosition);
+
     // Rotate around X first, then Y to achieve typical isometric tilt
     view = glm::rotate(view, glm::radians(mAngleX), glm::vec3(1.f, 0.f, 0.f));
     view = glm::rotate(view, glm::radians(mAngleY), glm::vec3(0.f, 1.f, 0.f));
-
-    // Now translate by the negative position
-    view = glm::translate(view, -mPosition);
 
     mViewMatrix = view;
 }
