@@ -1,6 +1,12 @@
-//
-// Created by User on 7/1/2024.
-//
+/**
+* @file    Camera.h
+ * @brief   Header file for the Camera class.
+ * @details This file contains the definition of the Camera class which is responsible for managing
+ *          the camera in the game. The Camera class is responsible for setting up the camera and updating
+ *          the view matrix.
+ * @author  Nur Akmal bin Jalil
+ * @date    2024-01-07
+ */
 
 #ifndef CAMERA_H
 #define CAMERA_H

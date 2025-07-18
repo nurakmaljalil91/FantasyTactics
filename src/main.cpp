@@ -7,7 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "graphics/IsometricCamera.h"
+#include "graphics/cameras/IsometricCamera.h"
 #include "graphics/Texture2D.h"
 
 auto APP_TITLE = "Fantasy Tactics";

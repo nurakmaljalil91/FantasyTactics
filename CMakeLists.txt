@@ -52,11 +52,14 @@ add_executable(
         src/graphics/Shader.cpp
         src/utilities/Logger.cpp
         src/graphics/Texture2D.cpp
-        src/graphics/Camera.cpp
-        src/graphics/FPSCamera.cpp
-        src/graphics/FPSCamera.h
-        src/graphics/OrbitCamera.cpp
-        src/graphics/OrbitCamera.h
+        src/graphics/cameras/Camera.cpp
+        src/graphics/cameras/Camera.h
+        src/graphics/cameras/FPSCamera.cpp
+        src/graphics/cameras/FPSCamera.h
+        src/graphics/cameras/OrbitCamera.cpp
+        src/graphics/cameras/OrbitCamera.h
+        src/graphics/cameras/IsometricCamera.cpp
+        src/graphics/cameras/IsometricCamera.h
         src/graphics/Mesh.cpp
         src/graphics/Mesh.h
         src/graphics/Cube.cpp
@@ -65,8 +68,7 @@ add_executable(
         src/graphics/Circle.h
         src/graphics/Sphere.cpp
         src/graphics/Sphere.h
-        src/graphics/IsometricCamera.cpp
-        src/graphics/IsometricCamera.h
+
 )
 
 # add link libraries
