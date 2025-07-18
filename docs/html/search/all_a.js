@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['orbitcamera_0',['OrbitCamera',['../da/d51/class_orbit_camera.html',1,'']]]
+  ['logger_0',['Logger',['../d3/d42/class_logger.html',1,'']]]
 ];

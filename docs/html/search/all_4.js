@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['camera_0',['Camera',['../da/dbb/class_camera.html',1,'']]],
-  ['changelog_1',['CHANGELOG',['../d9/d18/md_docs_2_c_h_a_n_g_e_l_o_g.html',1,'']]],
-  ['circle_2',['Circle',['../d0/d88/class_circle.html',1,'']]],
-  ['cube_3',['Cube',['../d9/dbf/class_cube.html',1,'']]]
+  ['added_202024_2001_2004_0',['Added - 2024-01-04',['../d9/d18/md_docs_2_c_h_a_n_g_e_l_o_g.html#autotoc_md7',1,'']]],
+  ['added_202024_2001_2008_1',['Added - 2024-01-08',['../d9/d18/md_docs_2_c_h_a_n_g_e_l_o_g.html#autotoc_md4',1,'']]],
+  ['added_202024_2001_2011_2',['Added - 2024-01-11',['../d9/d18/md_docs_2_c_h_a_n_g_e_l_o_g.html#autotoc_md3',1,'']]]
 ];

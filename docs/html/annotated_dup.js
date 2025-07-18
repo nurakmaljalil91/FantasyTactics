@@ -1,6 +1,6 @@
 var annotated_dup =
 [
-    [ "Camera", "da/dbb/class_camera.html", null ],
+    [ "Camera", "da/dbb/class_camera.html", "da/dbb/class_camera" ],
     [ "Circle", "d0/d88/class_circle.html", null ],
     [ "Cube", "d9/dbf/class_cube.html", null ],
     [ "FPSCamera", "d0/d88/class_f_p_s_camera.html", null ],

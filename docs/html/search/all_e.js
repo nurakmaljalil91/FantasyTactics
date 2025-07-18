@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['unreleased_0',['[Unreleased]',['../d9/d18/md_docs_2_c_h_a_n_g_e_l_o_g.html#autotoc_md1',1,'']]]
+  ['shader_0',['Shader',['../d1/d51/class_shader.html',1,'']]],
+  ['spdlog_1',['Installing Spdlog',['../d3/dcc/md__r_e_a_d_m_e.html#autotoc_md12',1,'']]],
+  ['sphere_2',['Sphere',['../d3/d62/class_sphere.html',1,'']]]
 ];

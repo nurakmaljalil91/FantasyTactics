@@ -91,6 +91,11 @@ $(function(){initNavTree('da/dbb/class_camera.html','../../','d7/d04/class_camer
   <div class="headertitle"><div class="title">Camera Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Encapsulates a 3D camera with position, orientation, and projection controls.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="../../d5/d91/_camera_8h_source.html">Camera.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for Camera:</div>
 <div class="dyncontent">
@@ -99,56 +104,378 @@ Inheritance diagram for Camera:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2f90e661a78172675ca06ea69667b531" id="r_a2f90e661a78172675ca06ea69667b531"><td class="memItemLeft" align="right" valign="top"><a id="a2f90e661a78172675ca06ea69667b531" name="a2f90e661a78172675ca06ea69667b531"></a>
-glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><b>getViewMatrix</b> () const</td></tr>
-<tr class="memitem:aeed7685bb50d185092b8f9cac72a5178" id="r_aeed7685bb50d185092b8f9cac72a5178"><td class="memItemLeft" align="right" valign="top"><a id="aeed7685bb50d185092b8f9cac72a5178" name="aeed7685bb50d185092b8f9cac72a5178"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>setPosition</b> (const glm::vec3 &amp;position)</td></tr>
-<tr class="memitem:ae371fa135dedf654a8e18cd44fd9bc14" id="r_ae371fa135dedf654a8e18cd44fd9bc14"><td class="memItemLeft" align="right" valign="top"><a id="ae371fa135dedf654a8e18cd44fd9bc14" name="ae371fa135dedf654a8e18cd44fd9bc14"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>rotate</b> (float yaw, float pitch)</td></tr>
-<tr class="memitem:a6157a5260b456108c38303c3bd65a078" id="r_a6157a5260b456108c38303c3bd65a078"><td class="memItemLeft" align="right" valign="top"><a id="a6157a5260b456108c38303c3bd65a078" name="a6157a5260b456108c38303c3bd65a078"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>move</b> (const glm::vec3 &amp;offsetPos)</td></tr>
-<tr class="memitem:a65f5aaf42fd410a8759c9c420aefc972" id="r_a65f5aaf42fd410a8759c9c420aefc972"><td class="memItemLeft" align="right" valign="top"><a id="a65f5aaf42fd410a8759c9c420aefc972" name="a65f5aaf42fd410a8759c9c420aefc972"></a>
-const glm::vec3 &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getLook</b> () const</td></tr>
-<tr class="memitem:a09ddda17a105d39abf9a6ede4df3aabc" id="r_a09ddda17a105d39abf9a6ede4df3aabc"><td class="memItemLeft" align="right" valign="top"><a id="a09ddda17a105d39abf9a6ede4df3aabc" name="a09ddda17a105d39abf9a6ede4df3aabc"></a>
-const glm::vec3 &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getRight</b> () const</td></tr>
-<tr class="memitem:a321fd061cedbce6750ea493ed2c6fa2c" id="r_a321fd061cedbce6750ea493ed2c6fa2c"><td class="memItemLeft" align="right" valign="top"><a id="a321fd061cedbce6750ea493ed2c6fa2c" name="a321fd061cedbce6750ea493ed2c6fa2c"></a>
-const glm::vec3 &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getUp</b> () const</td></tr>
-<tr class="memitem:a1c9228e303c4f548ecce1b15b5440f53" id="r_a1c9228e303c4f548ecce1b15b5440f53"><td class="memItemLeft" align="right" valign="top"><a id="a1c9228e303c4f548ecce1b15b5440f53" name="a1c9228e303c4f548ecce1b15b5440f53"></a>
-const glm::vec3 &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getPosition</b> () const</td></tr>
-<tr class="memitem:a1e6f2044fa0777281cce45d573e2eed4" id="r_a1e6f2044fa0777281cce45d573e2eed4"><td class="memItemLeft" align="right" valign="top"><a id="a1e6f2044fa0777281cce45d573e2eed4" name="a1e6f2044fa0777281cce45d573e2eed4"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>getFov</b> () const</td></tr>
-<tr class="memitem:ab7d4dba9b253711a47f2e61c0188f4f6" id="r_ab7d4dba9b253711a47f2e61c0188f4f6"><td class="memItemLeft" align="right" valign="top"><a id="ab7d4dba9b253711a47f2e61c0188f4f6" name="ab7d4dba9b253711a47f2e61c0188f4f6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setFov</b> (float fov)</td></tr>
+<tr class="memitem:ae23af4d7cab430c77d537621cdd16b3f" id="r_ae23af4d7cab430c77d537621cdd16b3f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae23af4d7cab430c77d537621cdd16b3f">Camera</a> ()=default</td></tr>
+<tr class="memitem:adcb96efefa7af58e3ee6534b15d4979b" id="r_adcb96efefa7af58e3ee6534b15d4979b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adcb96efefa7af58e3ee6534b15d4979b">~Camera</a> ()=default</td></tr>
+<tr class="memitem:a1cbea0f4112c15b87d5ec0d9784745a4" id="r_a1cbea0f4112c15b87d5ec0d9784745a4"><td class="memItemLeft" align="right" valign="top"><a id="a1cbea0f4112c15b87d5ec0d9784745a4" name="a1cbea0f4112c15b87d5ec0d9784745a4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setup</b> (glm::vec3 position, glm::vec3 worldUp, float yawDegrees, float pitchDegrees, float movementSpeed=2.5f, float mouseSensitivity=0.1f, float zoomDegrees=45.0f)</td></tr>
+<tr class="memitem:a9d26f138aa6aaf13f1a7fd2a4c1d292b" id="r_a9d26f138aa6aaf13f1a7fd2a4c1d292b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9d26f138aa6aaf13f1a7fd2a4c1d292b">Camera</a> (const glm::vec3 &amp;position, const glm::vec3 &amp;worldUp, const float yawDegrees=-90.0f, const float pitchDegrees=0.0f, const float movementSpeed=2.5f, const float mouseSensitivity=0.1f, const float zoomDegrees=45.0f)</td></tr>
+<tr class="memdesc:a9d26f138aa6aaf13f1a7fd2a4c1d292b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs and initializes a camera in one call.  <br /></td></tr>
+<tr class="memitem:a2f90e661a78172675ca06ea69667b531" id="r_a2f90e661a78172675ca06ea69667b531"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f90e661a78172675ca06ea69667b531">getViewMatrix</a> () const</td></tr>
+<tr class="memdesc:a2f90e661a78172675ca06ea69667b531"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the view matrix, computed with glm::lookAt.  <br /></td></tr>
+<tr class="memitem:aa2ed9d27803f5edc824e4afe8cbbbfbc" id="r_aa2ed9d27803f5edc824e4afe8cbbbfbc"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2ed9d27803f5edc824e4afe8cbbbfbc">getProjectionMatrix</a> (float aspectRatio) const</td></tr>
+<tr class="memdesc:aa2ed9d27803f5edc824e4afe8cbbbfbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the perspective projection matrix.  <br /></td></tr>
+<tr class="memitem:ae1f762466898a785731558d93373f5f0" id="r_ae1f762466898a785731558d93373f5f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae1f762466898a785731558d93373f5f0">processKeyboard</a> (float deltaTime, bool forward, bool backward, bool left, bool right)</td></tr>
+<tr class="memdesc:ae1f762466898a785731558d93373f5f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the camera based on keyboard input.  <br /></td></tr>
+<tr class="memitem:ac028c5a8dd6b3d3aed476eb30e8f2980" id="r_ac028c5a8dd6b3d3aed476eb30e8f2980"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac028c5a8dd6b3d3aed476eb30e8f2980">processMouseMovement</a> (float xOffset, float yOffset)</td></tr>
+<tr class="memdesc:ac028c5a8dd6b3d3aed476eb30e8f2980"><td class="mdescLeft">&#160;</td><td class="mdescRight">Rotates the camera based on mouse movement.  <br /></td></tr>
+<tr class="memitem:a067090ee525389944ba3bacaa62f7632" id="r_a067090ee525389944ba3bacaa62f7632"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a067090ee525389944ba3bacaa62f7632">processMouseScroll</a> (float yOffset)</td></tr>
+<tr class="memdesc:a067090ee525389944ba3bacaa62f7632"><td class="mdescLeft">&#160;</td><td class="mdescRight">Zooms the camera in/out based on scroll wheel.  <br /></td></tr>
+<tr class="memitem:aa9dc951f8d6e7082233786438139c51d" id="r_aa9dc951f8d6e7082233786438139c51d"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9dc951f8d6e7082233786438139c51d">getPosition</a> () const</td></tr>
+<tr class="memdesc:aa9dc951f8d6e7082233786438139c51d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the camera’s current world-space position.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a0c3bb305de160cc9332c1f305f27a137" id="r_a0c3bb305de160cc9332c1f305f27a137"><td class="memItemLeft" align="right" valign="top"><a id="a0c3bb305de160cc9332c1f305f27a137" name="a0c3bb305de160cc9332c1f305f27a137"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>_updateCameraVectors</b> ()</td></tr>
+<tr class="memitem:ad424b8b92e580508caf21337b69b93fa" id="r_ad424b8b92e580508caf21337b69b93fa"><td class="memItemLeft" align="right" valign="top"><a id="ad424b8b92e580508caf21337b69b93fa" name="ad424b8b92e580508caf21337b69b93fa"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>updateCameraVectors</b> ()</td></tr>
+<tr class="memdesc:ad424b8b92e580508caf21337b69b93fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recalculates _front, _right, and _up vectors from current yaw &amp; pitch. <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a14baadec94c94b7f8e833bd5b091565a" id="r_a14baadec94c94b7f8e833bd5b091565a"><td class="memItemLeft" align="right" valign="top"><a id="a14baadec94c94b7f8e833bd5b091565a" name="a14baadec94c94b7f8e833bd5b091565a"></a>
-glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>mPosition</b></td></tr>
-<tr class="memitem:a504ee8d17463a8df548267323d6f7079" id="r_a504ee8d17463a8df548267323d6f7079"><td class="memItemLeft" align="right" valign="top"><a id="a504ee8d17463a8df548267323d6f7079" name="a504ee8d17463a8df548267323d6f7079"></a>
-glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>mTargetPos</b></td></tr>
-<tr class="memitem:adf99e1c8c7d99aac4cc6a145caef8ec0" id="r_adf99e1c8c7d99aac4cc6a145caef8ec0"><td class="memItemLeft" align="right" valign="top"><a id="adf99e1c8c7d99aac4cc6a145caef8ec0" name="adf99e1c8c7d99aac4cc6a145caef8ec0"></a>
-glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>mLook</b></td></tr>
-<tr class="memitem:aeb654bbaf5de5e39222fad748b1bee33" id="r_aeb654bbaf5de5e39222fad748b1bee33"><td class="memItemLeft" align="right" valign="top"><a id="aeb654bbaf5de5e39222fad748b1bee33" name="aeb654bbaf5de5e39222fad748b1bee33"></a>
-glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>mUp</b></td></tr>
-<tr class="memitem:a263db557a765b5fab7ae270c7f426eed" id="r_a263db557a765b5fab7ae270c7f426eed"><td class="memItemLeft" align="right" valign="top"><a id="a263db557a765b5fab7ae270c7f426eed" name="a263db557a765b5fab7ae270c7f426eed"></a>
-glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>mRight</b></td></tr>
-<tr class="memitem:adc8484e8de8da09b58b3a7b75e4a8c06" id="r_adc8484e8de8da09b58b3a7b75e4a8c06"><td class="memItemLeft" align="right" valign="top"><a id="adc8484e8de8da09b58b3a7b75e4a8c06" name="adc8484e8de8da09b58b3a7b75e4a8c06"></a>
-const glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>WORLD_UP</b></td></tr>
-<tr class="memitem:a1787f828365ee9927f781e7fb358e600" id="r_a1787f828365ee9927f781e7fb358e600"><td class="memItemLeft" align="right" valign="top"><a id="a1787f828365ee9927f781e7fb358e600" name="a1787f828365ee9927f781e7fb358e600"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>mYaw</b></td></tr>
-<tr class="memitem:a0d0729ca735aa3ca3c88c7d37ede6c9b" id="r_a0d0729ca735aa3ca3c88c7d37ede6c9b"><td class="memItemLeft" align="right" valign="top"><a id="a0d0729ca735aa3ca3c88c7d37ede6c9b" name="a0d0729ca735aa3ca3c88c7d37ede6c9b"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>mPitch</b></td></tr>
-<tr class="memitem:a62275f5094379505188ebd905f41b959" id="r_a62275f5094379505188ebd905f41b959"><td class="memItemLeft" align="right" valign="top"><a id="a62275f5094379505188ebd905f41b959" name="a62275f5094379505188ebd905f41b959"></a>
-float&#160;</td><td class="memItemRight" valign="bottom"><b>mFOV</b></td></tr>
+<tr class="memitem:a0a931ed2051befaad1f482b3b5e98ca0" id="r_a0a931ed2051befaad1f482b3b5e98ca0"><td class="memItemLeft" align="right" valign="top"><a id="a0a931ed2051befaad1f482b3b5e98ca0" name="a0a931ed2051befaad1f482b3b5e98ca0"></a>
+glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>_position</b> = glm::vec3(0.0f)</td></tr>
+<tr class="memitem:ac610e748840c4b70c9081c2d68df2e8d" id="r_ac610e748840c4b70c9081c2d68df2e8d"><td class="memItemLeft" align="right" valign="top"><a id="ac610e748840c4b70c9081c2d68df2e8d" name="ac610e748840c4b70c9081c2d68df2e8d"></a>
+glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>_front</b> = glm::vec3(0.0f, 0.0f, -1.0f)</td></tr>
+<tr class="memitem:a323a698e4c5773ee3ec380851b145e2d" id="r_a323a698e4c5773ee3ec380851b145e2d"><td class="memItemLeft" align="right" valign="top"><a id="a323a698e4c5773ee3ec380851b145e2d" name="a323a698e4c5773ee3ec380851b145e2d"></a>
+glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>_up</b> = glm::vec3(0.0f, 1.0f, 0.0f)</td></tr>
+<tr class="memitem:a4c556280ed181d8589c28eec7ebebb49" id="r_a4c556280ed181d8589c28eec7ebebb49"><td class="memItemLeft" align="right" valign="top"><a id="a4c556280ed181d8589c28eec7ebebb49" name="a4c556280ed181d8589c28eec7ebebb49"></a>
+glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>_right</b> = glm::vec3(1.0f, 0.0f, 0.0f)</td></tr>
+<tr class="memitem:a821cb93133c99177c74ea39339aaa269" id="r_a821cb93133c99177c74ea39339aaa269"><td class="memItemLeft" align="right" valign="top"><a id="a821cb93133c99177c74ea39339aaa269" name="a821cb93133c99177c74ea39339aaa269"></a>
+glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>_worldUp</b> = glm::vec3(0.0f, 1.0f, 0.0f)</td></tr>
+<tr class="memitem:a20b2e0a12e053acd7cb5bf7acc1e36ba" id="r_a20b2e0a12e053acd7cb5bf7acc1e36ba"><td class="memItemLeft" align="right" valign="top"><a id="a20b2e0a12e053acd7cb5bf7acc1e36ba" name="a20b2e0a12e053acd7cb5bf7acc1e36ba"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>_yaw</b> = -90.0f</td></tr>
+<tr class="memdesc:a20b2e0a12e053acd7cb5bf7acc1e36ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Yaw angle, initialized to look toward -Z. <br /></td></tr>
+<tr class="memitem:a685190408518a0fac51af843fb6a5473" id="r_a685190408518a0fac51af843fb6a5473"><td class="memItemLeft" align="right" valign="top"><a id="a685190408518a0fac51af843fb6a5473" name="a685190408518a0fac51af843fb6a5473"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>_pitch</b> = 0.0f</td></tr>
+<tr class="memdesc:a685190408518a0fac51af843fb6a5473"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pitch angle. <br /></td></tr>
+<tr class="memitem:a477bcc65dd485b0a21ab6b003f060cae" id="r_a477bcc65dd485b0a21ab6b003f060cae"><td class="memItemLeft" align="right" valign="top"><a id="a477bcc65dd485b0a21ab6b003f060cae" name="a477bcc65dd485b0a21ab6b003f060cae"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>_movementSpeed</b> = 2.5f</td></tr>
+<tr class="memdesc:a477bcc65dd485b0a21ab6b003f060cae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Movement speed multiplier. <br /></td></tr>
+<tr class="memitem:a7e25ab2b486e29e8c512fc1713737358" id="r_a7e25ab2b486e29e8c512fc1713737358"><td class="memItemLeft" align="right" valign="top"><a id="a7e25ab2b486e29e8c512fc1713737358" name="a7e25ab2b486e29e8c512fc1713737358"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>_mouseSensitivity</b> = 0.1f</td></tr>
+<tr class="memdesc:a7e25ab2b486e29e8c512fc1713737358"><td class="mdescLeft">&#160;</td><td class="mdescRight">Mouse look sensitivity. <br /></td></tr>
+<tr class="memitem:a468cc68ddf381d2c99a00ce8d9ee0bf8" id="r_a468cc68ddf381d2c99a00ce8d9ee0bf8"><td class="memItemLeft" align="right" valign="top"><a id="a468cc68ddf381d2c99a00ce8d9ee0bf8" name="a468cc68ddf381d2c99a00ce8d9ee0bf8"></a>
+float&#160;</td><td class="memItemRight" valign="bottom"><b>_zoom</b> = 45.0f</td></tr>
+<tr class="memdesc:a468cc68ddf381d2c99a00ce8d9ee0bf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Field‑of‑view (degrees) <br /></td></tr>
 </table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Encapsulates a 3D camera with position, orientation, and projection controls. </p>
+<p>The <a class="el" href="../../da/dbb/class_camera.html" title="Encapsulates a 3D camera with position, orientation, and projection controls.">Camera</a> class manages:</p><ul>
+<li>Position and orientation in world space (using Euler angles: yaw, pitch).</li>
+<li>Movement via keyboard input.</li>
+<li>Rotation via mouse input.</li>
+<li>Zoom via mouse scroll.</li>
+<li>Retrieval of view and projection matrices for rendering. </li>
+</ul>
+</div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ae23af4d7cab430c77d537621cdd16b3f" name="ae23af4d7cab430c77d537621cdd16b3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae23af4d7cab430c77d537621cdd16b3f">&#9670;&#160;</a></span>Camera() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Camera::Camera </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel default">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Default constructor (leaves everything at defaults). </p>
+
+</div>
+</div>
+<a id="adcb96efefa7af58e3ee6534b15d4979b" name="adcb96efefa7af58e3ee6534b15d4979b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcb96efefa7af58e3ee6534b15d4979b">&#9670;&#160;</a></span>~Camera()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Camera::~Camera </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel default">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Default destructor. </p>
+
+</div>
+</div>
+<a id="a9d26f138aa6aaf13f1a7fd2a4c1d292b" name="a9d26f138aa6aaf13f1a7fd2a4c1d292b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d26f138aa6aaf13f1a7fd2a4c1d292b">&#9670;&#160;</a></span>Camera() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Camera::Camera </td>
+          <td>(</td>
+          <td class="paramtype">const glm::vec3 &amp;</td>          <td class="paramname"><span class="paramname"><em>position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::vec3 &amp;</td>          <td class="paramname"><span class="paramname"><em>worldUp</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float</td>          <td class="paramname"><span class="paramname"><em>yawDegrees</em></span><span class="paramdefsep"> = </span><span class="paramdefval">-90.0f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float</td>          <td class="paramname"><span class="paramname"><em>pitchDegrees</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.0f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float</td>          <td class="paramname"><span class="paramname"><em>movementSpeed</em></span><span class="paramdefsep"> = </span><span class="paramdefval">2.5f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float</td>          <td class="paramname"><span class="paramname"><em>mouseSensitivity</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0.1f</span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const float</td>          <td class="paramname"><span class="paramname"><em>zoomDegrees</em></span><span class="paramdefsep"> = </span><span class="paramdefval">45.0f</span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructs and initializes a camera in one call. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">position</td><td>Initial world-space position. </td></tr>
+    <tr><td class="paramname">worldUp</td><td>World up vector. </td></tr>
+    <tr><td class="paramname">yawDegrees</td><td>Initial yaw. </td></tr>
+    <tr><td class="paramname">pitchDegrees</td><td>Initial pitch. </td></tr>
+    <tr><td class="paramname">movementSpeed</td><td>Movement speed. </td></tr>
+    <tr><td class="paramname">mouseSensitivity</td><td>Mouse sensitivity. </td></tr>
+    <tr><td class="paramname">zoomDegrees</td><td>FOV angle for projection. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="aa9dc951f8d6e7082233786438139c51d" name="aa9dc951f8d6e7082233786438139c51d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9dc951f8d6e7082233786438139c51d">&#9670;&#160;</a></span>getPosition()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::vec3 Camera::getPosition </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the camera’s current world-space position. </p>
+<dl class="section return"><dt>Returns</dt><dd>A 3D position vector. </dd></dl>
+
+</div>
+</div>
+<a id="aa2ed9d27803f5edc824e4afe8cbbbfbc" name="aa2ed9d27803f5edc824e4afe8cbbbfbc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2ed9d27803f5edc824e4afe8cbbbfbc">&#9670;&#160;</a></span>getProjectionMatrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::mat4 Camera::getProjectionMatrix </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>aspectRatio</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the perspective projection matrix. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">aspectRatio</td><td>Width/height of the viewport. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A 4×4 projection matrix. </dd></dl>
+
+</div>
+</div>
+<a id="a2f90e661a78172675ca06ea69667b531" name="a2f90e661a78172675ca06ea69667b531"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f90e661a78172675ca06ea69667b531">&#9670;&#160;</a></span>getViewMatrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::mat4 Camera::getViewMatrix </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel nodiscard">nodiscard</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns the view matrix, computed with glm::lookAt. </p>
+<dl class="section return"><dt>Returns</dt><dd>A 4×4 view matrix. </dd></dl>
+
+</div>
+</div>
+<a id="ae1f762466898a785731558d93373f5f0" name="ae1f762466898a785731558d93373f5f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1f762466898a785731558d93373f5f0">&#9670;&#160;</a></span>processKeyboard()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Camera::processKeyboard </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>deltaTime</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>forward</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>backward</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>left</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>right</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Moves the camera based on keyboard input. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">deltaTime</td><td>Time has elapsed since the last frame (in seconds). </td></tr>
+    <tr><td class="paramname">forward</td><td>True to move forward. </td></tr>
+    <tr><td class="paramname">backward</td><td>True to move backward. </td></tr>
+    <tr><td class="paramname">left</td><td>True to move left. </td></tr>
+    <tr><td class="paramname">right</td><td>True to move right. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ac028c5a8dd6b3d3aed476eb30e8f2980" name="ac028c5a8dd6b3d3aed476eb30e8f2980"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac028c5a8dd6b3d3aed476eb30e8f2980">&#9670;&#160;</a></span>processMouseMovement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Camera::processMouseMovement </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>xOffset</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>yOffset</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Rotates the camera based on mouse movement. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">xOffset</td><td>Horizontal mouse movement delta. </td></tr>
+    <tr><td class="paramname">yOffset</td><td>Vertical mouse movement delta. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a067090ee525389944ba3bacaa62f7632" name="a067090ee525389944ba3bacaa62f7632"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a067090ee525389944ba3bacaa62f7632">&#9670;&#160;</a></span>processMouseScroll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Camera::processMouseScroll </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>yOffset</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Zooms the camera in/out based on scroll wheel. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">yOffset</td><td>Scroll delta (positive = scroll up/zoom in). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>src/graphics/<a class="el" href="../../d5/d91/_camera_8h_source.html">Camera.h</a></li>
-<li>src/graphics/<b>Camera.cpp</b></li>
+<li>src/graphics/cameras/<a class="el" href="../../d5/d91/_camera_8h_source.html">Camera.h</a></li>
+<li>src/graphics/cameras/<a class="el" href="../../d1/d33/_camera_8cpp.html">Camera.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
