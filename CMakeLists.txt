@@ -44,22 +44,26 @@ include_directories(${STB_IMAGE_PATH})
 # add resources folder
 file(COPY src/resources DESTINATION ${CMAKE_BINARY_DIR})
 
+set(CAMERA_SOURCE_DIR
+        src/graphics/cameras/Camera.cpp
+        src/graphics/cameras/Camera.h
+        src/graphics/cameras/OrbitCamera.cpp
+        src/graphics/cameras/OrbitCamera.h
+        src/graphics/cameras/IsometricCamera.cpp
+        src/graphics/cameras/IsometricCamera.h
+        src/graphics/cameras/FirstPersonCamera.cpp
+        src/graphics/cameras/FirstPersonCamera.h
+)
+
 # Add source to this project's executable.
 add_executable(
         FantasyTactics
         src/main.cpp
         ${GLAD_PATH}/src/glad.c
+        ${CAMERA_SOURCE_DIR}
         src/graphics/Shader.cpp
         src/utilities/Logger.cpp
         src/graphics/Texture2D.cpp
-        src/graphics/cameras/Camera.cpp
-        src/graphics/cameras/Camera.h
-        src/graphics/cameras/FPSCamera.cpp
-        src/graphics/cameras/FPSCamera.h
-        src/graphics/cameras/OrbitCamera.cpp
-        src/graphics/cameras/OrbitCamera.h
-        src/graphics/cameras/IsometricCamera.cpp
-        src/graphics/cameras/IsometricCamera.h
         src/graphics/Mesh.cpp
         src/graphics/Mesh.h
         src/graphics/Cube.cpp
