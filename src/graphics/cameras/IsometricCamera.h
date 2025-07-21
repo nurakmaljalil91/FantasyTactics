@@ -1,12 +1,20 @@
-//
-// Created by User on 26/3/2025.
-//
+/**
+ * @file    IsometricCamera.h
+ * @brief   Header for an isometric (orthographic) camera.
+ * @details Defines a camera that looks down at a target from the
+ *          standard isometric angles (yaw = 225°, pitch = –35.264°)
+ *          and uses an orthographic projection.
+ * @author  Nur Akmal bin Jalil
+ * @date    2025-07-21
+ */
 
 #ifndef FANTASYTACTICS_ISOMETRICCAMERA_H
 #define FANTASYTACTICS_ISOMETRICCAMERA_H
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "Camera.h"
+#include "GLFW/glfw3.h"
 
 //
 // A basic isometric camera using an orthographic projection.
@@ -22,35 +30,46 @@
 // glm::mat4 proj = isoCam.getProjectionMatrix();
 // // pass them to your shader as "uView", "uProjection", etc.
 //
-class IsometricCamera {
+class IsometricCamera : public Camera {
 public:
+    /**
+        * @brief Constructs an isometric camera.
+        * @param center     The world‑space point to orbit around.
+        * @param size       Half the height of the ortho view volume (world units).
+        * @param distance   Distance from a center along the isometric direction.
+        */
+    explicit IsometricCamera(
+        const glm::vec3 &center = glm::vec3(0.0f),
+        float size = 10.0f,
+        float distance = 20.0f
+    );
 
-    IsometricCamera(float left, float right, float bottom, float top, float nearPlane, float farPlane);
+    /**
+     * @brief Recompute _position, _right, _up based on center/direction.
+     * Call once per frame before getViewMatrix().
+     */
+    void updateCamera();
 
-    void setPosition(const glm::vec3& pos);
+    /**
+     * @brief Zooms the ortho volume in/out.
+     * @param yOffset  Scroll wheel delta.
+     */
+    void processMouseScroll(float yOffset);
 
-    void setAngles(float angleY, float angleX);
+    /** GLFW scroll callback: hook with glfwSetScrollCallback */
+    static void scrollCallback(GLFWwindow *window, double /*dx*/, double dy);
 
-    // Accessors for final matrices
-    const glm::mat4& getViewMatrix() const       { return mViewMatrix; }
-    const glm::mat4& getProjectionMatrix() const { return mProjectionMatrix; }
+    /**
+     * @brief Returns an orthographic projection matrix.
+     * @param aspectRatio  viewport width/height
+     * @return 4×4 ortho projection
+     */
+    [[nodiscard]] glm::mat4 getProjectionMatrix(float aspectRatio) const;
+
 private:
-    void _updateViewMatrix();
-    void _updateProjectionMatrix();
-
-    // Projection params
-    float mLeft, mRight, mBottom, mTop, mNear, mFar;
-
-    // Euler angles (in degrees) for isometric tilt
-    float mAngleY = 45.0f;     // around Y axis
-    float mAngleX = 35.264f;   // around X axis (approx classic 7:4 isometric angle)
-
-    // Camera position
-    glm::vec3 mPosition = glm::vec3(0.0f);
-
-    // Final matrices
-    glm::mat4 mViewMatrix       = glm::mat4(1.0f);
-    glm::mat4 mProjectionMatrix = glm::mat4(1.0f);
+    glm::vec3 _center; ///< Target to look at
+    float _size; ///< Half‑height of ortho box
+    float _distance; ///< Distance from a center along iso direction
 };
 
 

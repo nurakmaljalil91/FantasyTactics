@@ -1,41 +1,50 @@
-//
-// Created by User on 26/3/2025.
-//
+/**
+ * @file    IsometricCamera.cpp
+ * @brief   Implementation of an isometric (orthographic) camera.
+ * @author  Nur Akmal bin Jalil
+ * @date    2025-07-21
+ */
 
 #include "IsometricCamera.h"
 
-IsometricCamera::IsometricCamera(float left, float right, float bottom, float top, float nearPlane, float farPlane)
-    : mLeft(left), mRight(right), mBottom(bottom), mTop(top), mNear(nearPlane), mFar(farPlane) {
-    _updateProjectionMatrix();
-    _updateViewMatrix();
+#include <iostream>
+#include <ostream>
+
+IsometricCamera::IsometricCamera(const glm::vec3 &center, float size, float distance): Camera(), _center(center),
+                                                                                       _size(size), _distance(distance) {
+    // classic isometric angles: yaw=225°, pitch=–35.264°
+    _yaw = 225.0f;
+    _pitch = -35.264f;
+    // compute initial front/right/up
+    updateCameraVectors();
+    // position ourselves
+    updateCamera();
 }
 
-void IsometricCamera::setPosition(const glm::vec3 &pos) {
-    mPosition = pos;
-    _updateViewMatrix();
+void IsometricCamera::updateCamera() {
+    // place camera at center minus front*distance
+    // (front comes from base updateCameraVectors())
+    _position = _center - _front * _distance;
+    // recompute right & up so lookAt() uses them correctly
+    _right = glm::normalize(glm::cross(_front, _worldUp));
+    _up = glm::normalize(glm::cross(_right, _front));
 }
 
-void IsometricCamera::setAngles(float angleY, float angleX) {
-    mAngleY = angleY;
-    mAngleX = angleX;
-    _updateViewMatrix();
+void IsometricCamera::processMouseScroll(const float yOffset) {
+    _size -= yOffset;
+    if (_size < 1.0f) _size = 1.0f;
 }
 
-void IsometricCamera::_updateViewMatrix() {
-    // Start with identity
-    glm::mat4 view = glm::mat4(1.0f);
-
-    // Now translate by the negative position
-    view = glm::translate(view, -mPosition);
-
-    // Rotate around X first, then Y to achieve typical isometric tilt
-    view = glm::rotate(view, glm::radians(mAngleX), glm::vec3(1.f, 0.f, 0.f));
-    view = glm::rotate(view, glm::radians(mAngleY), glm::vec3(0.f, 1.f, 0.f));
-
-    mViewMatrix = view;
+void IsometricCamera::scrollCallback(GLFWwindow *window, double, const double dy) {
+    if (const auto camera = static_cast<IsometricCamera *>(glfwGetWindowUserPointer(window))) camera->
+            processMouseScroll(static_cast<float>(dy));
 }
 
-void IsometricCamera::_updateProjectionMatrix() {
-    // Orthographic projection for isometric
-    mProjectionMatrix = glm::ortho(mLeft, mRight, mBottom, mTop, mNear, mFar);
+glm::mat4 IsometricCamera::getProjectionMatrix(const float aspectRatio) const {
+    const float right = _size * aspectRatio;
+    const float left = -right;
+    const float top = _size;
+    const float bottom = -_size;
+    // use a large near/far to encompass your scene
+    return glm::ortho(left, right, bottom, top, -1000.0f, 1000.0f);
 }

@@ -60,23 +60,27 @@ int main() {
     // Suppose you want an ortho box from -2..2 horizontally, -2..2 vertically
     // near=0.1, far=100.0
     // Instead of (-2,2), try something bigger:
-    // IsometricCamera isometricCamera(-10.f, 10.f, -10.f, 10.f, -100.f, 100.f);
+    IsometricCamera isometricCamera({0.0f,0.0f,0.0f}, 5.0f, 5.0f);
 
 
     // 3) Position and angles. For a typical isometric angle:
     // isometricCamera.setPosition(glm::vec3(0.f, 0.f, 5.f)); // "pull back" a bit
     // isometricCamera.setAngles(45.f, 35.264f);
 
-    OrbitCamera orbitCamera({0.0f, 0.0f, 0.0f}, 10.0f);
+    // OrbitCamera orbitCamera({0.0f, 0.0f, 0.0f}, 10.0f);
 
-    glfwSetWindowUserPointer(glfwWindow, &orbitCamera);
-    glfwSetCursorPosCallback(glfwWindow, OrbitCamera::mouseCallback);
-    glfwSetScrollCallback(glfwWindow,  OrbitCamera::scrollCallback);
-    // optionally hide the cursor while dragging
-    glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // glfwSetWindowUserPointer(glfwWindow, &orbitCamera);
+    // glfwSetCursorPosCallback(glfwWindow, OrbitCamera::mouseCallback);
+    // glfwSetScrollCallback(glfwWindow, OrbitCamera::scrollCallback);
+    // // optionally hide the cursor while dragging
+    // glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    // glfwSetWindowUserPointer(glfwWindow, &glfwWindow);
+    glfwSetScrollCallback(glfwWindow, IsometricCamera::scrollCallback);
 
     // Render loop
     while (!glfwWindowShouldClose(glfwWindow)) {
+        float aspect = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
         constexpr float moveSpeed = 3.0f;
         showFPS(glfwWindow);
 
@@ -91,7 +95,7 @@ int main() {
         // if (glfwGetKey(glfwWindow, GLFW_KEY_A) == GLFW_PRESS) cubePosition.x -= moveSpeed * deltaTime;
         // if (glfwGetKey(glfwWindow, GLFW_KEY_D) == GLFW_PRESS) cubePosition.x += moveSpeed * deltaTime;
 
-        orbitCamera.updateCameraPosition();
+        isometricCamera.updateCamera();
         // Render commands here
         // ---------------------
         // specify the color of the background
@@ -112,8 +116,8 @@ int main() {
         auto model = glm::mat4(1.0f);
 
         model = glm::translate(model, cubePosition);
-        glm::mat4 view = orbitCamera.getViewMatrix();
-        glm::mat4 projection = orbitCamera.getProjectionMatrix(static_cast<float>(windowWidth/windowHeight));
+        glm::mat4 view = isometricCamera.getViewMatrix();
+        glm::mat4 projection = isometricCamera.getProjectionMatrix(aspect);
 
         const GLuint modelLocation = glGetUniformLocation(shader.getProgram(), "uModel");
         const GLuint viewLocation = glGetUniformLocation(shader.getProgram(), "uView");
