@@ -72,6 +72,8 @@ add_executable(
         src/graphics/Circle.h
         src/graphics/Sphere.cpp
         src/graphics/Sphere.h
+        src/Game.cpp
+        src/Game.h
 
 )
 
