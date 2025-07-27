@@ -66,18 +66,29 @@ set(MESHES_SOURCE_DIR
         src/graphics/meshes/Sphere.h
 )
 
+set(RENDERERS_SOURCE_DIR
+        src/graphics/renderers/ShaderProgram.cpp
+        src/graphics/renderers/ShaderProgram.h
+        src/graphics/renderers/Texture2D.cpp
+        src/graphics/renderers/Texture2D.h
+)
+
+set(UTILITIES_SOURCE_DIR
+        src/utilities/Logger.cpp
+        src/utilities/Logger.h
+)
+
 # Add source to this project's executable.
 add_executable(
         FantasyTactics
-        src/main.cpp
         ${GLAD_PATH}/src/glad.c
         ${CAMERA_SOURCE_DIR}
         ${MESHES_SOURCE_DIR}
-        src/graphics/Shader.cpp
-        src/utilities/Logger.cpp
-        src/graphics/Texture2D.cpp
+        ${RENDERERS_SOURCE_DIR}
+        ${UTILITIES_SOURCE_DIR}
         src/Game.cpp
         src/Game.h
+        src/main.cpp
 )
 
 # add link libraries

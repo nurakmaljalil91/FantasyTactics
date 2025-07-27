@@ -5,6 +5,8 @@
 #include "Texture2D.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+#include <cassert>
+#include "../../utilities/Logger.h"
 
 // constructor
 Texture2D::Texture2D() {
@@ -12,10 +14,10 @@ Texture2D::Texture2D() {
 
 // destructor
 Texture2D::~Texture2D() {
-    glDeleteTextures(1, &mTexture);
+    glDeleteTextures(1, &_texture);
 }
 
-// Loads texture from file
+// Loads texture from a file
 // http://nothings.org/stb_image.h
 // Creates mip maps if generateMipMaps is true.
 bool Texture2D::loadTexture(const std::string &filename, bool generateMipMaps) {
@@ -47,8 +49,8 @@ bool Texture2D::loadTexture(const std::string &filename, bool generateMipMaps) {
         }
     }
 
-    glGenTextures(1, &mTexture);
-    glBindTexture(GL_TEXTURE_2D, mTexture);
+    glGenTextures(1, &_texture);
+    glBindTexture(GL_TEXTURE_2D, _texture);
     // all upcoming GL_TEXTURE_2D operations will affect our texture object (mTexture)
 
     // set texture parameters
@@ -90,7 +92,7 @@ void Texture2D::bind(GLuint texUnit) {
     assert(texUnit >= 0 && texUnit <= 32);
 
     glActiveTexture(GL_TEXTURE0 + texUnit);
-    glBindTexture(GL_TEXTURE_2D, mTexture);
+    glBindTexture(GL_TEXTURE_2D, _texture);
 }
 
 // Unbinds texture

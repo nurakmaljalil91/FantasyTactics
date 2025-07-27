@@ -8,10 +8,7 @@
 #include "glad/glad.h"
 #include <string>
 #include <iostream>
-#include <cassert>
 
-
-#include "../utilities/logger.h"
 
 class Texture2D {
 public:
@@ -41,7 +38,7 @@ private:
     //        std::string fileToString(const std::string& filename);
     //        void checkTextureErrors(GLuint texture);
 
-    GLuint mTexture;
+    GLuint _texture;
     //        int width;
     //        int height;
     //        int numComponents;

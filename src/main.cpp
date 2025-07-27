@@ -2,13 +2,13 @@
 #include <GLFW/glfw3.h>
 #include <sstream>
 #include "utilities/logger.h"
-#include "graphics/Shader.h"
+#include "graphics/renderers/ShaderProgram.h"
 #include "graphics/meshes/Cube.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "graphics/cameras/IsometricCamera.h"
-#include "graphics/Texture2D.h"
+#include "graphics/renderers/Texture2D.h"
 #include "graphics/cameras/OrbitCamera.h"
 
 auto APP_TITLE = "Fantasy Tactics";
@@ -41,7 +41,7 @@ int main() {
     double lastTime = glfwGetTime();
 
     // Build and compile our shader program
-    Shader shader;
+    ShaderProgram shader;
     shader.loadShaders("resources/shaders/cel_shading_texture.vert", "resources/shaders/cel_shading_texture.frag");
 
     // Create a cube
