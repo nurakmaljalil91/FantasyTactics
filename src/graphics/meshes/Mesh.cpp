@@ -1,60 +1,56 @@
-//
-// Created by User on 11/1/2024.
-//
-
+/**
+ * @file    Mesh.cpp
+ * @brief   Implementation of the Mesh class for loading and rendering 3D models.
+ * @details Mesh class that can load Wavefront OBJ files and render them using OpenGL.
+ *          This implementation is simplified and assumes the OBJ file contains only triangles
+ * @author  Nur Akmal bin Jalil
+ * @date    2024-01-11
+ */
 #include "Mesh.h"
-
 #include <sstream>
 #include <fstream>
 
-// split
-//
-// Params:  s - string to split
-//		    t - string to split (ie. delimiter)
-//
-//Result:  Splits string according to some substring and returns it as a vector.
-std::vector<std::string> split(std::string s, std::string t) {
-    std::vector<std::string> res;
+/**
+ * @brief  Splits string according to some substring and returns it as a vector.
+ * @param  stringData
+ * @param  delimiter
+ * @return returns a vector of strings, each element is a substring of the original string
+ */
+std::vector<std::string> splitString(std::string stringData, const std::string &delimiter) {
+    std::vector<std::string> results;
     while (true) {
-        const int pos = s.find(t);
+        const int pos = stringData.find(delimiter);
         if (pos == -1) {
-            res.push_back(s);
+            results.push_back(stringData);
             break;
         }
-        res.push_back(s.substr(0, pos));
-        s = s.substr(pos + 1, s.size() - pos - 1);
+        results.push_back(stringData.substr(0, pos));
+        stringData = stringData.substr(pos + 1, stringData.size() - pos - 1);
     }
-    return res;
+    return results;
 }
 
-// Constructor
 Mesh::Mesh()
-    : mLoaded(false), mVAO(0), mVBO(0) {
+    : loaded(false),
+      VAO(0),
+      VBO(0),
+      EBO(0) {
 }
 
-// Destructor
 Mesh::~Mesh() {
-    glDeleteVertexArrays(1, &mVAO);
-    glDeleteBuffers(1, &mVBO);
-    // glDeleteBuffers(1, &mIBO);
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
 }
 
-// Loads a Wavefront OBJ model
-//
-// NOTE: This is not a complete, full featured OBJ loader.  It is greatly
-// simplified.
-// Assumptions!
-//  - OBJ file must contain only triangles
-//  - We ignore materials
-//  - We ignore normals
-//  - only commands "v", "vt" and "f" are supported
 bool Mesh::loadObj(const std::string &filename) {
-    std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
-    std::vector<glm::vec3> tempVertices;
-    std::vector<glm::vec2> tempUVs;
-    std::vector<glm::vec3> tempNormals;
-
     if (filename.find(".obj") != std::string::npos) {
+        std::vector<glm::vec3> tempNormals;
+        std::vector<glm::vec2> tempUVs;
+        std::vector<glm::vec3> tempVertices;
+        std::vector<unsigned int> normalIndices;
+        std::vector<unsigned int> uvIndices;
+        std::vector<unsigned int> vertexIndices;
         std::ifstream fin(filename, std::ios::in);
         if (!fin) {
             Logger::log()->error("Unable to open file {}", filename);
@@ -96,7 +92,7 @@ bool Mesh::loadObj(const std::string &filename) {
                 int vertexIndex, uvIndex, normalIndex;
 
                 while (ss >> faceData) {
-                    std::vector<std::string> data = split(faceData, "/");
+                    std::vector<std::string> data = splitString(faceData, "/");
 
                     if (data[0].size() > 0) {
                         sscanf_s(data[0].c_str(), "%d", &vertexIndex);
@@ -104,7 +100,7 @@ bool Mesh::loadObj(const std::string &filename) {
                     }
 
                     if (data.size() >= 1) {
-                        // Is face format v//vn?  If data[1] is empty string then
+                        // Is face format v//vn?  If data[1] is empty string, then
                         // this vertex has no texture coordinate
                         if (data[1].size() > 0) {
                             sscanf_s(data[1].c_str(), "%d", &uvIndex);
@@ -113,7 +109,7 @@ bool Mesh::loadObj(const std::string &filename) {
                     }
 
                     if (data.size() >= 2) {
-                        // Does this vertex have a normal?
+                        // Does this vertex have normal?
                         if (data[2].size() > 0) {
                             sscanf_s(data[2].c_str(), "%d", &normalIndex);
                             normalIndices.push_back(normalIndex);
@@ -147,49 +143,46 @@ bool Mesh::loadObj(const std::string &filename) {
                 meshVertex.texCoords = uv;
             }
 
-            mVertices.push_back(meshVertex);
+            vertices.push_back(meshVertex);
         }
 
-        // Create and initailize the buffers
+        // Create and initialize the buffers
         initializeBuffers();
 
-        return (mLoaded = true);
+        return loaded = true;
     }
 
     return false;
 }
 
-// Create and initialize the vertex buffer and vertex array object
-// Must have valid, non-empty std::vector of Vertex objects.
 void Mesh::initializeBuffers() {
-    glGenVertexArrays(1, &mVAO);
-    glGenBuffers(1, &mVBO);
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
 
-    glBindVertexArray(mVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-    glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(Vertex), &mVertices[0], GL_STATIC_DRAW);
+    glBindVertexArray(VAO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
     // Vertex Positions
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), static_cast<GLvoid *>(nullptr));
     glEnableVertexAttribArray(0);
 
-    // Normals attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(3 * sizeof(GLfloat)));
+    // Normal attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(1);
 
     // Vertex Texture Coords
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(6 * sizeof(GLfloat)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<GLvoid *>(6 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
 
     // unbind to make sure other code does not change it somewhere else
     glBindVertexArray(0);
 }
 
-// Render the mesh
 void Mesh::draw() {
-    if (!mLoaded) return;
+    if (!loaded) return;
 
-    glBindVertexArray(mVAO);
-    glDrawArrays(GL_TRIANGLES, 0, mVertices.size());
+    glBindVertexArray(VAO);
+    glDrawArrays(GL_TRIANGLES, 0, vertices.size());
     glBindVertexArray(0);
 }

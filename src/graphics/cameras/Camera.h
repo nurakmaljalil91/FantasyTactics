@@ -43,31 +43,31 @@ public:
 
     /**
      * @brief Constructs and initializes a camera in one call.
-     * @param position        Initial world-space position.
-     * @param worldUp         World up vector.
-     * @param yawDegrees      Initial yaw.
-     * @param pitchDegrees    Initial pitch.
-     * @param movementSpeed   Movement speed.
+     * @param position         Initial world-space position.
+     * @param worldUp          World up vector.
+     * @param yawDegrees       Initial yaw.
+     * @param pitchDegrees     Initial pitch.
+     * @param movementSpeed    Movement speed.
      * @param mouseSensitivity Mouse sensitivity.
-     * @param zoomDegrees     FOV angle for projection.
+     * @param zoomDegrees      FOV angle for projection.
      */
     Camera(const glm::vec3 &position,
            const glm::vec3 &worldUp,
-           const float yawDegrees = -90.0f, // default look toward -Z
-           const float pitchDegrees = 0.0f,
-           const float movementSpeed = 2.5f,
-           const float mouseSensitivity = 0.1f,
-           const float zoomDegrees = 45.0f);
+           float yawDegrees = -90.0f, // default look toward -Z
+           float pitchDegrees = 0.0f,
+           float movementSpeed = 2.5f,
+           float mouseSensitivity = 0.1f,
+           float zoomDegrees = 45.0f);
 
     /**
-     * @brief Returns the view matrix, computed with glm::lookAt.
+     * @brief  Returns the view matrix, computed with glm::lookAt.
      * @return A 4×4 view matrix.
      */
     [[nodiscard]] glm::mat4 getViewMatrix() const;
 
     /**
-     * @brief Returns the perspective projection matrix.
-     * @param aspectRatio Width/height of the viewport.
+     * @brief  Returns the perspective projection matrix.
+     * @param  aspectRatio Width/height of the viewport.
      * @return A 4×4 projection matrix.
      */
     [[nodiscard]] glm::mat4 getProjectionMatrix(float aspectRatio) const;
@@ -85,7 +85,7 @@ public:
     /**
      * @brief Rotates the camera based on mouse movement.
      * @param xOffset Horizontal mouse movement delta.
-     * @param yOffset Vertical   mouse movement delta.
+     * @param yOffset Vertical mouse movement delta.
      */
     void processMouseMovement(float xOffset, float yOffset);
 
@@ -96,14 +96,14 @@ public:
     void processMouseScroll(float yOffset);
 
     /**
-    * @brief Retrieves the camera’s current world-space position.
+    * @brief  Retrieves the camera’s current world-space position.
     * @return A 3D position vector.
     */
-    glm::vec3 getPosition() const { return _position; }
+    [[nodiscard]] glm::vec3 getPosition() const { return _position; }
 
 protected:
     /**
-    * @brief Recalculates _front, _right, and _up vectors from current yaw & pitch.
+    * @brief Recalculates front, right, and up vectors from current yaw and pitch.
     */
     void updateCameraVectors();
 

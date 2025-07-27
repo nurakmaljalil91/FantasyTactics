@@ -1,26 +1,27 @@
-//
-// Created by User on 26/3/2025.
-//
-
+/**
+ * @file    Sphere.cpp
+ * @brief   Sphere class for rendering a sphere mesh.
+ * @details Sphere class that initializes a sphere mesh with a specified radius, stacks, and slices.
+ * @author  Nur Akmal bin Jalil
+ * @date    2025-03-26
+ */
 #include "Sphere.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp> // for pi constants
 #include <cmath>
 
-Sphere::Sphere(float radius, int stacks, int slices)
-{
+Sphere::Sphere(float radius, int stacks, int slices) {
     // We’ll create (stacks+1)*(slices+1) "grid" of vertices,
     // then form 2 triangles per grid cell.
 
     // Helper lambda for generating one vertex (position, normal, texcoords)
-    auto makeVertex = [&](int stackIdx, int sliceIdx)
-    {
+    auto makeVertex = [&](const int stackIdx, const int sliceIdx) {
         // Range: stackIdx in [0..stacks], sliceIdx in [0..slices]
-        float theta = glm::pi<float>() * (float)stackIdx / (float)stacks;          // 0..pi
-        float phi   = glm::two_pi<float>() * (float)sliceIdx / (float)slices;      // 0..2*pi
+        const float theta = glm::pi<float>() * static_cast<float>(stackIdx) / static_cast<float>(stacks); // 0..pi
+        const float phi = glm::two_pi<float>() * static_cast<float>(sliceIdx) / static_cast<float>(slices); // 0..2*pi
 
-        // spherical coordinates (assuming "theta" is polar angle from +y down,
-        //  and "phi" is angle around the y-axis from +z toward +x, for example).
+        // Spherical coordinates (assuming "theta" is a polar angle from +y down,
+        // and "phi" is angle around the y-axis from +z toward +x, for example).
         // A common alternative is "theta = latitude, phi = longitude" – up to you.
         // Here, let's do a more typical approach:
         //    x = sin(theta)*cos(phi)
@@ -54,27 +55,25 @@ Sphere::Sphere(float radius, int stacks, int slices)
     //   (i,j), (i+1,j), (i,j+1)  and  (i+1,j), (i+1,j+1), (i,j+1)
     // with wrap-around in the slice (longitude) direction.
 
-    for (int i = 0; i < stacks; ++i)
-    {
-        for (int j = 0; j < slices; ++j)
-        {
+    for (int i = 0; i < stacks; ++i) {
+        for (int j = 0; j < slices; ++j) {
             // current slice j, next slice j+1 (wrapped)
             int jNext = (j + 1) % slices;
             // The four corners of this patch:
-            Vertex v0 = makeVertex(i,   j);
-            Vertex v1 = makeVertex(i+1, j);
-            Vertex v2 = makeVertex(i,   jNext);
-            Vertex v3 = makeVertex(i+1, jNext);
+            Vertex v0 = makeVertex(i, j);
+            Vertex v1 = makeVertex(i + 1, j);
+            Vertex v2 = makeVertex(i, jNext);
+            Vertex v3 = makeVertex(i + 1, jNext);
 
             // Triangle 1
-            mVertices.push_back(v0);
-            mVertices.push_back(v1);
-            mVertices.push_back(v2);
+            vertices.push_back(v0);
+            vertices.push_back(v1);
+            vertices.push_back(v2);
 
             // Triangle 2
-            mVertices.push_back(v1);
-            mVertices.push_back(v3);
-            mVertices.push_back(v2);
+            vertices.push_back(v1);
+            vertices.push_back(v3);
+            vertices.push_back(v2);
         }
     }
 
@@ -82,5 +81,8 @@ Sphere::Sphere(float radius, int stacks, int slices)
     initializeBuffers();
 
     // Mark loaded
-    mLoaded = true;
+    loaded = true;
+}
+
+Sphere::~Sphere() {
 }

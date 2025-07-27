@@ -55,26 +55,29 @@ set(CAMERA_SOURCE_DIR
         src/graphics/cameras/FirstPersonCamera.h
 )
 
+set(MESHES_SOURCE_DIR
+        src/graphics/meshes/Circle.cpp
+        src/graphics/meshes/Circle.h
+        src/graphics/meshes/Cube.cpp
+        src/graphics/meshes/Cube.h
+        src/graphics/meshes/Mesh.cpp
+        src/graphics/meshes/Mesh.h
+        src/graphics/meshes/Sphere.cpp
+        src/graphics/meshes/Sphere.h
+)
+
 # Add source to this project's executable.
 add_executable(
         FantasyTactics
         src/main.cpp
         ${GLAD_PATH}/src/glad.c
         ${CAMERA_SOURCE_DIR}
+        ${MESHES_SOURCE_DIR}
         src/graphics/Shader.cpp
         src/utilities/Logger.cpp
         src/graphics/Texture2D.cpp
-        src/graphics/Mesh.cpp
-        src/graphics/Mesh.h
-        src/graphics/Cube.cpp
-        src/graphics/Cube.h
-        src/graphics/Circle.cpp
-        src/graphics/Circle.h
-        src/graphics/Sphere.cpp
-        src/graphics/Sphere.h
         src/Game.cpp
         src/Game.h
-
 )
 
 # add link libraries
