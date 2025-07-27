@@ -7,11 +7,8 @@
 
 #include "IsometricCamera.h"
 
-#include <iostream>
-#include <ostream>
-
 IsometricCamera::IsometricCamera(const glm::vec3 &center, float size, float distance): Camera(), _center(center),
-                                                                                       _size(size), _distance(distance) {
+    _size(size), _distance(distance) {
     // classic isometric angles: yaw=225°, pitch=–35.264°
     _yaw = 225.0f;
     _pitch = -35.264f;
@@ -36,8 +33,9 @@ void IsometricCamera::processMouseScroll(const float yOffset) {
 }
 
 void IsometricCamera::scrollCallback(GLFWwindow *window, double, const double dy) {
-    if (const auto camera = static_cast<IsometricCamera *>(glfwGetWindowUserPointer(window))) camera->
-            processMouseScroll(static_cast<float>(dy));
+    if (const auto camera = static_cast<IsometricCamera *>(glfwGetWindowUserPointer(window)))
+        camera->
+                processMouseScroll(static_cast<float>(dy));
 }
 
 glm::mat4 IsometricCamera::getProjectionMatrix(const float aspectRatio) const {
@@ -47,4 +45,15 @@ glm::mat4 IsometricCamera::getProjectionMatrix(const float aspectRatio) const {
     const float bottom = -_size;
     // use a large near/far to encompass your scene
     return glm::ortho(left, right, bottom, top, -1000.0f, 1000.0f);
+}
+
+void IsometricCamera::setAngles(const float yaw, const float pitch) {
+    _yaw = yaw;
+    _pitch = pitch;
+    updateCameraVectors();
+    updateCamera();
+}
+
+void IsometricCamera::rotateYaw(const float delta) {
+    setAngles(_yaw + delta, _pitch);
 }

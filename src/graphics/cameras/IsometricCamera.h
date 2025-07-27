@@ -66,6 +66,31 @@ public:
      */
     [[nodiscard]] glm::mat4 getProjectionMatrix(float aspectRatio) const;
 
+    /**
+     * @brief Sets the camera's yaw and pitch angles.
+     * @param yaw    Yaw angle in degrees (rotation around Y axis).
+     * @param pitch  Pitch angle in degrees (rotation around X axis).
+     */
+    void setAngles(float yaw, float pitch);
+
+    /**
+     * @brief Rotates the camera around the Y axis (yaw).
+     * @param delta  Change in yaw angle in degrees.
+     */
+    void rotateYaw(float delta);
+
+    /**
+     * @brief gets the current yaw angle.
+     * @return yaw angle in degrees.
+     */
+    [[nodiscard]] float getYaw() const { return _yaw; }
+
+    /**
+     * @brief gets the current pitch angle.
+     * @return pitch angle in degrees.
+     */
+    [[nodiscard]] float getPitch() const { return _pitch; }
+
 private:
     glm::vec3 _center; ///< Target to look at
     float _size; ///< Half‑height of ortho box

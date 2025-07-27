@@ -32,8 +32,6 @@ int main() {
     //initialize logger
     Logger::initialize();
 
-    Logger::log()->info("Welcome to Cbit Game Engines!");
-
     Logger::log()->info("Welcome to Fantasy Tactics!");
 
     if (auto success = initOpenGL(); !success) {
@@ -60,7 +58,7 @@ int main() {
     // Suppose you want an ortho box from -2..2 horizontally, -2..2 vertically
     // near=0.1, far=100.0
     // Instead of (-2,2), try something bigger:
-    IsometricCamera isometricCamera({0.0f,0.0f,0.0f}, 5.0f, 5.0f);
+    IsometricCamera isometricCamera({0.0f, 0.0f, 0.0f}, 5.0f, 5.0f);
 
 
     // 3) Position and angles. For a typical isometric angle:
@@ -76,6 +74,7 @@ int main() {
     // glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // glfwSetWindowUserPointer(glfwWindow, &glfwWindow);
+    glfwSetWindowUserPointer(glfwWindow, &isometricCamera);
     glfwSetScrollCallback(glfwWindow, IsometricCamera::scrollCallback);
 
     // Render loop
@@ -198,7 +197,7 @@ bool initOpenGL() {
     // Set the required callback functions
     glfwSetKeyCallback(glfwWindow, glfw_onKey);
     glfwSetFramebufferSizeCallback(glfwWindow, framebuffer_size_callback);
-    glfwSetScrollCallback(glfwWindow, glfw_onMouseScroll);
+    // glfwSetScrollCallback(glfwWindow, glfw_onMouseScroll);
 
     // OpenGL version info
     const GLubyte *renderer = glGetString(GL_RENDERER);
@@ -221,8 +220,41 @@ bool initOpenGL() {
 
 // Is called whenever a key is pressed/released via GLFW
 void glfw_onKey(GLFWwindow *window, const int key, int scancode, const int action, int mode) {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GLFW_TRUE);
+        return;
+    }
+
+    if (action != GLFW_PRESS && action != GLFW_REPEAT) {
+        return;
+    }
+
+    auto camera = static_cast<IsometricCamera *>(glfwGetWindowUserPointer(window));
+    if (!camera) {
+        return;
+    }
+
+    constexpr float angleStep = 25.0f; // degrees
+
+    switch (key) {
+        case GLFW_KEY_RIGHT:
+            camera->rotateYaw(-angleStep);
+            break;
+        case GLFW_KEY_LEFT:
+            camera->rotateYaw(angleStep);
+            break;
+        case GLFW_KEY_UP:
+            camera->setAngles(camera->getYaw(), -90.0f); // Look straight down
+            break;
+        case GLFW_KEY_DOWN:
+            camera->setAngles(225.0f, -35.264f); // Look at a typical isometric angle
+            break;
+        default:
+            // No action for other keys
+            break;
+    }
+
+
     if (key == GLFW_KEY_F1 && action == GLFW_PRESS) {
         wireframe = !wireframe;
         if (wireframe)
@@ -273,7 +305,7 @@ void framebuffer_size_callback(GLFWwindow *window, const int width, const int he
     glViewport(0, 0, width, height);
 
     const float aspect = static_cast<float>(width) / static_cast<float>(height);
-    float scale  = 5.0f;
+    float scale = 5.0f;
 }
 
 void glfw_onMouseScroll(GLFWwindow *window, double deltaX, double deltaY) {
