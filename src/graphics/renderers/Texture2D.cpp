@@ -1,6 +1,17 @@
-//
-// Created by User on 1/1/2024.
-//
+/**
+ * @file    Texture2D.cpp
+ * @brief   Implementation of the Texture2D class for managing 2D textures in OpenGL.
+ * @details The Texture2D class is responsible for loading, binding, and managing 2D textures in OpenGL.
+ *          It uses the stb_image library to load images from files and creates OpenGL texture objects.
+ *          The class provides methods to load textures from files, bind and unbind textures, and manage texture parameters.
+ *          It is designed to be used in a graphics rendering context where OpenGL is used for rendering 2D and 3D graphics.
+ *          The class handles texture loading, flipping images vertically, setting texture parameters such as wrapping and filtering,
+ *          and generating mipmaps if requested.
+ *          It also provides methods to bind the texture to a specific texture unit and unbind it when no longer needed.
+ *          The class is designed to be efficient and easy to use, allowing developers to quickly integrate 2D textures into their OpenGL applications.
+ * @author  Nur Akmal bin Jalil
+ * @date    2024-01-01
+ */
 
 #include "Texture2D.h"
 #define STB_IMAGE_IMPLEMENTATION
@@ -9,7 +20,7 @@
 #include "../../utilities/Logger.h"
 
 // constructor
-Texture2D::Texture2D() {
+Texture2D::Texture2D(): _texture(0) {
 }
 
 // destructor
@@ -17,10 +28,7 @@ Texture2D::~Texture2D() {
     glDeleteTextures(1, &_texture);
 }
 
-// Loads texture from a file
-// http://nothings.org/stb_image.h
-// Creates mip maps if generateMipMaps is true.
-bool Texture2D::loadTexture(const std::string &filename, bool generateMipMaps) {
+bool Texture2D::loadTexture(const std::string &filename, const bool generateMipMaps) {
     int width, height, components;
     unsigned char *imageData = stbi_load(filename.c_str(), &width, &height, &components, 4);
 
@@ -30,11 +38,11 @@ bool Texture2D::loadTexture(const std::string &filename, bool generateMipMaps) {
     }
 
     // flip image vertically
-    int widthInBytes = width * 4;
+    const int widthInBytes = width * 4;
     unsigned char *top = nullptr;
     unsigned char *bottom = nullptr;
     unsigned char temp = 0;
-    int halfHeight = height / 2;
+    const int halfHeight = height / 2;
 
     for (int row = 0; row < halfHeight; row++) {
         top = imageData + row * widthInBytes;
@@ -88,7 +96,7 @@ bool Texture2D::loadTexture(const std::string &filename, bool generateMipMaps) {
 }
 
 // Binds texture to texture unit
-void Texture2D::bind(GLuint texUnit) {
+void Texture2D::bind(const GLuint texUnit) const {
     assert(texUnit >= 0 && texUnit <= 32);
 
     glActiveTexture(GL_TEXTURE0 + texUnit);
@@ -96,7 +104,7 @@ void Texture2D::bind(GLuint texUnit) {
 }
 
 // Unbinds texture
-void Texture2D::unbind(GLuint texUnit) {
+void Texture2D::unbind(const GLuint texUnit) {
     // assert(texUnit >= 0 && texUnit <= 31);
 
     glActiveTexture(GL_TEXTURE0 + texUnit);
