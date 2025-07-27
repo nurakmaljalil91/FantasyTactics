@@ -17,7 +17,7 @@ Circle::Circle(float radius, int segments) {
     Vertex center;
     center.position = glm::vec3(0.0f, 0.0f, 0.0f);
     center.normal = glm::vec3(0.0f, 0.0f, 1.0f);
-    center.texCoords = glm::vec2(0.5f, 0.5f);
+    center.textureCoordinates = glm::vec2(0.5f, 0.5f);
     vertices.push_back(center);
 
     // 2) Create ring vertices around the circle
@@ -31,7 +31,7 @@ Circle::Circle(float radius, int segments) {
         v.position = glm::vec3(x, y, 0.0f);
         v.normal = glm::vec3(0.0f, 0.0f, 1.0f);
         // Simple UV mapping: center at (0.5, 0.5), radius 0.5
-        v.texCoords = glm::vec2(0.5f + 0.5f * std::cos(angle),
+        v.textureCoordinates = glm::vec2(0.5f + 0.5f * std::cos(angle),
                                 0.5f + 0.5f * std::sin(angle));
         vertices.push_back(v);
     }

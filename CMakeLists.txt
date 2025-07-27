@@ -60,6 +60,8 @@ set(MESHES_SOURCE_DIR
         src/graphics/meshes/Circle.h
         src/graphics/meshes/Cube.cpp
         src/graphics/meshes/Cube.h
+        src/graphics/meshes/Ellipsoid.cpp
+        src/graphics/meshes/Ellipsoid.h
         src/graphics/meshes/Mesh.cpp
         src/graphics/meshes/Mesh.h
         src/graphics/meshes/Sphere.cpp

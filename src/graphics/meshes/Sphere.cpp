@@ -6,83 +6,54 @@
  * @date    2025-03-26
  */
 #include "Sphere.h"
+#include <cmath>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp> // for pi constants
-#include <cmath>
 
-Sphere::Sphere(float radius, int stacks, int slices) {
-    // We’ll create (stacks+1)*(slices+1) "grid" of vertices,
-    // then form 2 triangles per grid cell.
-
+Sphere::Sphere(const float radius, const int stacks, const int slices) {
     // Helper lambda for generating one vertex (position, normal, texcoords)
     auto makeVertex = [&](const int stackIdx, const int sliceIdx) {
-        // Range: stackIdx in [0..stacks], sliceIdx in [0..slices]
         const float theta = glm::pi<float>() * static_cast<float>(stackIdx) / static_cast<float>(stacks); // 0..pi
-        const float phi = glm::two_pi<float>() * static_cast<float>(sliceIdx) / static_cast<float>(slices); // 0..2*pi
+        const float phi = glm::two_pi<float>() * static_cast<float>(sliceIdx) / static_cast<float>(slices); // 0..2pi
 
-        // Spherical coordinates (assuming "theta" is a polar angle from +y down,
-        // and "phi" is angle around the y-axis from +z toward +x, for example).
-        // A common alternative is "theta = latitude, phi = longitude" – up to you.
-        // Here, let's do a more typical approach:
-        //    x = sin(theta)*cos(phi)
-        //    y = cos(theta)
-        //    z = sin(theta)*sin(phi)
-        // so the "poles" are at theta=0 (top) and theta=pi (bottom).
+        const float x = radius * std::sin(theta) * std::cos(phi);
+        const float y = radius * std::cos(theta);
+        const float z = radius * std::sin(theta) * std::sin(phi);
 
-        float x = radius * sin(theta) * cos(phi);
-        float y = radius * cos(theta);
-        float z = radius * sin(theta) * sin(phi);
-
-        Vertex v;
+        Vertex v{};
         v.position = glm::vec3(x, y, z);
-
-        // For a sphere, the normal is (position / radius) if radius != 0
-        v.normal = glm::normalize(glm::vec3(x, y, z));
-
-        // A simple spherical UV map:
-        //   u = phi / (2*pi)
-        //   v = 1 - (theta / pi)
-        float u = phi / glm::two_pi<float>();
-        float w = 1.0f - (theta / glm::pi<float>()); // (use 'w' to avoid naming conflict with v.position)
-        v.texCoords = glm::vec2(u, w);
-
+        v.normal = glm::normalize(v.position);
+        v.textureCoordinates = glm::vec2(phi / glm::two_pi<float>(), 1.0f - theta / glm::pi<float>());
         return v;
     };
 
-    // Generate all vertices in a 2D grid [stacks+1] x [slices+1]
-    // We’ll store them in a helper 2D array, or push directly into triangles.
-    // For each cell, we create 2 triangles:
-    //   (i,j), (i+1,j), (i,j+1)  and  (i+1,j), (i+1,j+1), (i,j+1)
-    // with wrap-around in the slice (longitude) direction.
-
-    for (int i = 0; i < stacks; ++i) {
-        for (int j = 0; j < slices; ++j) {
-            // current slice j, next slice j+1 (wrapped)
-            int jNext = (j + 1) % slices;
-            // The four corners of this patch:
-            Vertex v0 = makeVertex(i, j);
-            Vertex v1 = makeVertex(i + 1, j);
-            Vertex v2 = makeVertex(i, jNext);
-            Vertex v3 = makeVertex(i + 1, jNext);
-
-            // Triangle 1
-            vertices.push_back(v0);
-            vertices.push_back(v1);
-            vertices.push_back(v2);
-
-            // Triangle 2
-            vertices.push_back(v1);
-            vertices.push_back(v3);
-            vertices.push_back(v2);
+    // Vertex generation: (stacks + 1) * (slices + 1)
+    for (int i = 0; i <= stacks; ++i) {
+        for (int j = 0; j <= slices; ++j) {
+            vertices.push_back(makeVertex(i, j));
         }
     }
 
-    // Upload to GPU
-    initializeBuffers();
+    // Index generation: 2 triangles per quad (i,j) to (i+1,j+1)
+    for (int i = 0; i < stacks; ++i) {
+        for (int j = 0; j < slices; ++j) {
+            const int current = i * (slices + 1) + j;
+            const int next = (i + 1) * (slices + 1) + j;
 
-    // Mark loaded
+            // Triangle 1
+            indices.push_back(current);
+            indices.push_back(next);
+            indices.push_back(current + 1);
+
+            // Triangle 2
+            indices.push_back(current + 1);
+            indices.push_back(next);
+            indices.push_back(next + 1);
+        }
+    }
+
+    initializeBuffers();
     loaded = true;
 }
 
-Sphere::~Sphere() {
-}
+Sphere::~Sphere() = default;

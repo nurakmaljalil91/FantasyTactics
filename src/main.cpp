@@ -10,6 +10,8 @@
 #include "graphics/cameras/IsometricCamera.h"
 #include "graphics/renderers/Texture2D.h"
 #include "graphics/cameras/OrbitCamera.h"
+#include "graphics/meshes/Ellipsoid.h"
+#include "graphics/meshes/Sphere.h"
 
 auto APP_TITLE = "Fantasy Tactics";
 constexpr int windowWidth = 1200;
@@ -49,7 +51,8 @@ int main() {
     glm::vec3 cubePosition(0.0f, 0.0f, 0.0f);
 
     // Create a sphere
-    // Sphere sphere;
+    Sphere sphere;
+    glm::vec3 spherePosition(0.0f, 1.5f, 0.0f);
 
     Texture2D texture;
     texture.loadTexture("resources/textures/crate.jpg", true);
@@ -59,19 +62,6 @@ int main() {
     // near=0.1, far=100.0
     // Instead of (-2,2), try something bigger:
     IsometricCamera isometricCamera({0.0f, 0.0f, 0.0f}, 5.0f, 5.0f);
-
-
-    // 3) Position and angles. For a typical isometric angle:
-    // isometricCamera.setPosition(glm::vec3(0.f, 0.f, 5.f)); // "pull back" a bit
-    // isometricCamera.setAngles(45.f, 35.264f);
-
-    // OrbitCamera orbitCamera({0.0f, 0.0f, 0.0f}, 10.0f);
-
-    // glfwSetWindowUserPointer(glfwWindow, &orbitCamera);
-    // glfwSetCursorPosCallback(glfwWindow, OrbitCamera::mouseCallback);
-    // glfwSetScrollCallback(glfwWindow, OrbitCamera::scrollCallback);
-    // // optionally hide the cursor while dragging
-    // glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // glfwSetWindowUserPointer(glfwWindow, &glfwWindow);
     glfwSetWindowUserPointer(glfwWindow, &isometricCamera);
@@ -89,10 +79,10 @@ int main() {
         lastTime = currentTime;
 
         // Handle input
-        // if (glfwGetKey(glfwWindow, GLFW_KEY_W) == GLFW_PRESS) cubePosition.z -= moveSpeed * deltaTime;
-        // if (glfwGetKey(glfwWindow, GLFW_KEY_S) == GLFW_PRESS) cubePosition.z += moveSpeed * deltaTime;
-        // if (glfwGetKey(glfwWindow, GLFW_KEY_A) == GLFW_PRESS) cubePosition.x -= moveSpeed * deltaTime;
-        // if (glfwGetKey(glfwWindow, GLFW_KEY_D) == GLFW_PRESS) cubePosition.x += moveSpeed * deltaTime;
+        if (glfwGetKey(glfwWindow, GLFW_KEY_W) == GLFW_PRESS) cubePosition.z -= moveSpeed * deltaTime;
+        if (glfwGetKey(glfwWindow, GLFW_KEY_S) == GLFW_PRESS) cubePosition.z += moveSpeed * deltaTime;
+        if (glfwGetKey(glfwWindow, GLFW_KEY_A) == GLFW_PRESS) cubePosition.x -= moveSpeed * deltaTime;
+        if (glfwGetKey(glfwWindow, GLFW_KEY_D) == GLFW_PRESS) cubePosition.x += moveSpeed * deltaTime;
 
         isometricCamera.updateCamera();
         // Render commands here
@@ -138,6 +128,11 @@ int main() {
         // Draw the sphere
         cube.draw();
 
+        model = glm::mat4(1.0f); // reset model matrix
+        model = glm::translate(model, spherePosition);
+        glUniformMatrix4fv(static_cast<int>(modelLocation), 1, GL_FALSE, glm::value_ptr(model));
+        sphere.draw();
+
         // function to swap the front and back buffers
         glfwSwapBuffers(glfwWindow);
         // Check events are triggered (like input, etc)
@@ -147,6 +142,22 @@ int main() {
     }
 
     // optional: de-allocate all resources once they've outlived their purpose:
+    Logger::log()->info("Exiting Fantasy Tactics...");
+    glfwDestroyWindow(glfwWindow);
+    Logger::log()->info("Terminating GLFW");
+    // Terminate GLFW, clearing any resources allocated by GLFW.
+    if (glfwWindow) {
+        glfwSetWindowUserPointer(glfwWindow, nullptr);
+    }
+    gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
+    if (glfwWindow) {
+        glfwSetKeyCallback(glfwWindow, nullptr);
+        glfwSetFramebufferSizeCallback(glfwWindow, nullptr);
+        glfwSetScrollCallback(glfwWindow, nullptr);
+    }
+    Logger::log()->info("GLFW Terminated");
+    Logger::log()->info("Fantasy Tactics has exited successfully");
+    Logger::log()->info("Goodbye!");
 
     glfwTerminate();
     return 0;
@@ -173,7 +184,7 @@ bool initOpenGL() {
         GL_TRUE);
 
     // create a windowed mode window and its OpenGL context
-    // Create an OpenGL 3.3 core, forward compatible context full screen application
+    // Create an OpenGL 3.3 core, forward compatible context full-screen application
     if (fullscreen) {
         GLFWmonitor *monitor = glfwGetPrimaryMonitor();
         if (const GLFWvidmode *vMode = glfwGetVideoMode(monitor)) {
@@ -309,8 +320,4 @@ void framebuffer_size_callback(GLFWwindow *window, const int width, const int he
 }
 
 void glfw_onMouseScroll(GLFWwindow *window, double deltaX, double deltaY) {
-}
-
-// Update stuff every frame
-void update(double elapsedTime) {
 }
