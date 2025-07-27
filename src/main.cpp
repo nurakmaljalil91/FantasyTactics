@@ -44,7 +44,7 @@ int main() {
 
     // Build and compile our shader program
     ShaderProgram shader;
-    shader.loadShaders("resources/shaders/cel_shading_texture.vert", "resources/shaders/cel_shading_texture.frag");
+    shader.loadShaders("resources/shaders/default.vert", "resources/shaders/default.frag");
 
     // Create a cube
     Cube cube;
@@ -120,9 +120,9 @@ int main() {
         glUniformMatrix4fv(static_cast<int>(projectionLocation), 1, GL_FALSE, glm::value_ptr(projection));
 
         // Cel shading lighting uniforms
-        glm::vec3 lightDir(1.0f, 1.0f, 1.0f);
+        glm::vec3 lightDirection( -10.f, -10.0f, -1.0f );
         const GLuint lightDirectionLocation = glGetUniformLocation(shader.getProgram(), "lightDir");
-        glUniform3fv(static_cast<int>(lightDirectionLocation), 1, glm::value_ptr(lightDir));
+        glUniform3fv(static_cast<int>(lightDirectionLocation), 1, glm::value_ptr(lightDirection));
 
         glm::vec3 baseColor(0.8f, 0.8f, 0.1f);
         const GLuint baseColorLocation = glGetUniformLocation(shader.getProgram(), "baseColor");

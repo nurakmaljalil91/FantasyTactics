@@ -1,23 +1,35 @@
 #version 330 core
 
-in vec2 TexCoord;
-out vec4 frag_color;
+in vec3 Normal;
+in vec2 TexCoords;
 
-// #1 Method for setting samplers
-uniform sampler2D texSampler1;
-uniform sampler2D texSampler2;
+out vec4 FragColor;
 
-// #2 Method for setting samplers (uncomment these lines and comment the previous two lines to try the second method
-// Make sure to do the same in Textures_2.cpp and rebuild)
-//layout (binding = 0) uniform sampler2D texSampler1;
-//layout (binding = 1) uniform sampler2D texSampler2;
+uniform sampler2D diffuseTexture;  // your 2D texture
+uniform bool        uUseTexture;   // toggle: true = sample texture, false = use baseColor
+uniform vec3        baseColor;     // fallback flat color
+uniform vec3        lightDir;      // direction _to_ the light
+uniform float       ambientStrength; // e.g. 0.2–0.3
 
 void main()
 {
-    // Texturing - Part 1
-    //frag_color = texture(texSampler1, TexCoord);
-    //frag_color = texelFetch(texSampler1, ivec2(gl_FragCoord.xy), 0);
+    // 1. pick your color source
+    vec3 color = uUseTexture
+    ? texture(diffuseTexture, TexCoords).rgb
+    : baseColor;
 
-    // Texturing - Part 2
-    frag_color = mix(texture(texSampler1, TexCoord), texture(texSampler2, TexCoord), 0.2);
+    // 2. normalize vectors
+    vec3 N = normalize(Normal);
+    vec3 L = normalize(-lightDir);
+
+    // 3. ambient term
+    vec3 ambient = ambientStrength * color;
+
+    // 4. diffuse term (Lambert)
+    float diff = max(dot(N, L), 0.0);
+    vec3 diffuse = diff * color;
+
+    // 5. combine
+    vec3 result = ambient + diffuse;
+    FragColor = vec4(result, 1.0);
 }
