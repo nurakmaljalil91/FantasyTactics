@@ -94,12 +94,15 @@ int main() {
         // Use the Cel shader
         shader.use();
 
+        GLint useTexLocation = glGetUniformLocation(shader.getProgram(), "uUseTexture");
+
         // Bind the crate texture to texture unit 0
         texture.bind(0);
 
         // Tell the fragment shader that diffuseTexture is in GL_TEXTURE0
         const GLuint diffuseLocation = glGetUniformLocation(shader.getProgram(), "diffuseTexture");
         glUniform1i(static_cast<int>(diffuseLocation), 0);
+        glUniform1f(useTexLocation, 1.0f); // Use texture
 
         // Build model/view/projection
         auto model = glm::mat4(1.0f);
@@ -127,6 +130,11 @@ int main() {
 
         // Draw the sphere
         cube.draw();
+
+        // disable texturing
+        glUniform1i(useTexLocation, 0);
+        // set flat white (or any color you like)
+        glUniform3f(baseColorLocation, 1.0f, 1.0f, 1.0f);
 
         model = glm::mat4(1.0f); // reset model matrix
         model = glm::translate(model, spherePosition);

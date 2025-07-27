@@ -6,15 +6,16 @@ in vec2 TexCoords;
 
 out vec4 FragColor;
 
-uniform sampler2D diffuseTexture;  // texture sampler
+uniform sampler2D diffuseTexture;// texture sampler
 uniform vec3 lightDir;
 uniform vec3 baseColor;
+uniform bool uUseTexture;
 
 void main()
 {
+    // compute cel‐shade intensity
     float intensity = max(dot(normalize(Normal), normalize(-lightDir)), 0.0);
 
-    // Basic "stepped" cel shading
     if (intensity > 0.95)
     intensity = 1.0;
     else if (intensity > 0.5)
@@ -24,10 +25,10 @@ void main()
     else
     intensity = 0.2;
 
-    // Sample the texture color
-    vec3 texColor = texture(diffuseTexture, TexCoords).rgb;
-    // Combine with the cel shading intensity
-    vec3 finalColor = texColor * intensity;
+    // choose texture or flat color
+    vec3 color = uUseTexture
+    ? texture(diffuseTexture, TexCoords).rgb
+    : baseColor;
 
-    FragColor = vec4(finalColor, 1.0);
+    FragColor = vec4(color * intensity, 1.0);
 }
