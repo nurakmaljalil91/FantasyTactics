@@ -9,6 +9,7 @@
 #include "Mesh.h"
 #include <sstream>
 #include <fstream>
+#include <numeric>
 
 /**
  * @brief  Splits string according to some substring and returns it as a vector.
@@ -19,7 +20,7 @@
 std::vector<std::string> splitString(std::string stringData, const std::string &delimiter) {
     std::vector<std::string> results;
     while (true) {
-        const int pos = stringData.find(delimiter);
+        const int pos = static_cast<int>(stringData.find(delimiter));
         if (pos == -1) {
             results.push_back(stringData);
             break;
@@ -94,15 +95,15 @@ bool Mesh::loadObj(const std::string &filename) {
                 while (ss >> faceData) {
                     std::vector<std::string> data = splitString(faceData, "/");
 
-                    if (data[0].size() > 0) {
+                    if (!data[0].empty()) {
                         sscanf_s(data[0].c_str(), "%d", &vertexIndex);
                         vertexIndices.push_back(vertexIndex);
                     }
 
-                    if (data.size() >= 1) {
+                    if (!data.empty()) {
                         // Is face format v//vn?  If data[1] is empty string, then
                         // this vertex has no texture coordinate
-                        if (data[1].size() > 0) {
+                        if (!data[1].empty()) {
                             sscanf_s(data[1].c_str(), "%d", &uvIndex);
                             uvIndices.push_back(uvIndex);
                         }
@@ -110,7 +111,7 @@ bool Mesh::loadObj(const std::string &filename) {
 
                     if (data.size() >= 2) {
                         // Does this vertex have normal?
-                        if (data[2].size() > 0) {
+                        if (!data[2].empty()) {
                             sscanf_s(data[2].c_str(), "%d", &normalIndex);
                             normalIndices.push_back(normalIndex);
                         }
@@ -124,27 +125,30 @@ bool Mesh::loadObj(const std::string &filename) {
 
         // For each vertex of each triangle
         for (unsigned int i = 0; i < vertexIndices.size(); i++) {
-            Vertex meshVertex;
+            Vertex meshVertex{};
 
             // Get the attributes using the indices
 
-            if (tempVertices.size() > 0) {
+            if (!tempVertices.empty()) {
                 glm::vec3 vertex = tempVertices[vertexIndices[i] - 1];
                 meshVertex.position = vertex;
             }
 
-            if (tempNormals.size() > 0) {
+            if (!tempNormals.empty()) {
                 glm::vec3 normal = tempNormals[normalIndices[i] - 1];
                 meshVertex.normal = normal;
             }
 
-            if (tempUVs.size() > 0) {
+            if (!tempUVs.empty()) {
                 glm::vec2 uv = tempUVs[uvIndices[i] - 1];
                 meshVertex.textureCoordinates = uv;
             }
 
             vertices.push_back(meshVertex);
         }
+
+        indices.resize(vertices.size());
+        std::iota(indices.begin(), indices.end(), 0u);
 
         // Create and initialize the buffers
         initializeBuffers();
@@ -161,11 +165,11 @@ void Mesh::initializeBuffers() {
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, static_cast<int>(vertices.size() * sizeof(Vertex)), &vertices[0], GL_STATIC_DRAW);
 
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, static_cast<int>(indices.size() * sizeof(unsigned int)), &indices[0], GL_STATIC_DRAW);
 
     // Vertex Positions
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), static_cast<GLvoid *>(nullptr));
@@ -187,6 +191,6 @@ void Mesh::draw() {
     if (!loaded) return;
 
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, static_cast<int>(indices.size()), GL_UNSIGNED_INT, nullptr);
     glBindVertexArray(0);
 }

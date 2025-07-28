@@ -67,6 +67,15 @@ int main() {
     Texture2D buttonTex;
     buttonTex.loadTexture("resources/textures/crate.jpg", true);
 
+    // load robot
+    Mesh robotMesh;
+
+    if (!robotMesh.loadObj("resources/models/robot.obj")) {
+        Logger::log()->error("Failed to load robot mesh");
+    } else {
+        Logger::log()->info("Robot mesh loaded successfully");
+    }
+
     // Create a quad
     float quadVertices[] = {
         // positions    // texCoords
@@ -180,6 +189,19 @@ int main() {
             -1.0f, 1.0f
         );
 
+        // disable texturing
+        glUniform1i(useTexLocation, 0);
+        // set flat white (or any color you like)
+        glUniform3f(static_cast<GLint>(baseColorLocation), 1.0f, 1.0f, 1.0f);
+        // Render the robot mesh
+        model = glm::mat4(1.0f); // reset model matrix
+        model = glm::translate(model, glm::vec3(2.0f, 0.0f, -1.0f));
+        model = glm::scale(model, glm::vec3(0.5f)); // Scale down the robot
+
+        // pass matrices to the shader
+        glUniformMatrix4fv(static_cast<int>(modelLocation), 1, GL_FALSE, glm::value_ptr(model));
+        robotMesh.draw();
+
         glEnable(GL_DEPTH_TEST);
 
         glDisable(GL_DEPTH_TEST);
@@ -197,7 +219,6 @@ int main() {
         glBindVertexArray(quadVAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
-
         float padding = 10.0f;
         textRenderer.renderText(
             "Play",
@@ -206,7 +227,6 @@ int main() {
             1.0f,
             glm::vec3(1.0f) // white text
         );
-
 
         glDisable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
