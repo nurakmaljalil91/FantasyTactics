@@ -46,6 +46,9 @@ int main() {
     ShaderProgram shader;
     shader.loadShaders("resources/shaders/default.vert", "resources/shaders/default.frag");
 
+    ShaderProgram uiShader;
+    uiShader.loadShaders("resources/shaders/ui.vert", "resources/shaders/ui.frag");
+
     // Create a cube
     Cube cube;
     glm::vec3 cubePosition(0.0f, 0.0f, 0.0f);
@@ -56,6 +59,36 @@ int main() {
 
     Texture2D texture;
     texture.loadTexture("resources/textures/crate.jpg", true);
+
+    Texture2D buttonTex;
+    buttonTex.loadTexture("resources/textures/crate.jpg", true);
+
+    // Create a quad
+    float quadVertices[] = {
+        // positions    // texCoords
+        0.0f, 1.0f, 0.0f, 1.0f, // top-left
+        1.0f, 0.0f, 1.0f, 0.0f, // bottom-right
+        0.0f, 0.0f, 0.0f, 0.0f, // bottom-left
+
+        0.0f, 1.0f, 0.0f, 1.0f, // top-left
+        1.0f, 1.0f, 1.0f, 1.0f, // top-right
+        1.0f, 0.0f, 1.0f, 0.0f // bottom-right
+    };
+
+
+    GLuint quadVAO, quadVBO;
+    glGenVertexArrays(1, &quadVAO);
+    glGenBuffers(1, &quadVBO);
+    glBindVertexArray(quadVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+
+    // position
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), static_cast<void *>(nullptr));
+    glEnableVertexAttribArray(0);
+    // texCoord
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(2 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // Construct your isometric camera
     // Suppose you want an ortho box from -2..2 horizontally, -2..2 vertically
@@ -75,8 +108,6 @@ int main() {
 
         const double currentTime = glfwGetTime();
         auto deltaTime = static_cast<float>(currentTime - lastTime);
-
-        lastTime = currentTime;
 
         // Handle input
         if (glfwGetKey(glfwWindow, GLFW_KEY_W) == GLFW_PRESS) cubePosition.z -= moveSpeed * deltaTime;
@@ -120,7 +151,7 @@ int main() {
         glUniformMatrix4fv(static_cast<int>(projectionLocation), 1, GL_FALSE, glm::value_ptr(projection));
 
         // Cel shading lighting uniforms
-        glm::vec3 lightDirection( -10.f, -10.0f, -1.0f );
+        glm::vec3 lightDirection(-10.f, -10.0f, -1.0f);
         const GLuint lightDirectionLocation = glGetUniformLocation(shader.getProgram(), "lightDir");
         glUniform3fv(static_cast<int>(lightDirectionLocation), 1, glm::value_ptr(lightDirection));
 
@@ -134,12 +165,38 @@ int main() {
         // disable texturing
         glUniform1i(useTexLocation, 0);
         // set flat white (or any color you like)
-        glUniform3f(baseColorLocation, 1.0f, 1.0f, 1.0f);
+        glUniform3f(static_cast<GLint>(baseColorLocation), 1.0f, 1.0f, 1.0f);
 
         model = glm::mat4(1.0f); // reset model matrix
         model = glm::translate(model, spherePosition);
         glUniformMatrix4fv(static_cast<int>(modelLocation), 1, GL_FALSE, glm::value_ptr(model));
         sphere.draw();
+        glm::mat4 orthoProjection = glm::ortho(
+            0.0f, static_cast<float>(windowWidth), // left → right
+            0.0f, static_cast<float>(windowHeight), // bottom → top
+            -1.0f, 1.0f
+        );
+
+        glEnable(GL_DEPTH_TEST);
+
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        uiShader.use();
+        uiShader.setUniform("uProjection", orthoProjection);
+        glm::vec2 buttonPosition(100.0f,50.0f); // Y = height - (buttonHeight + margin)
+        glm::vec2 buttonSize(200.0f, 64.0f); // Size in pixels
+        buttonTex.bind(0);
+        uiShader.setUniform("uTexture", 0);
+        uiShader.setUniform("uPosition", buttonPosition);
+        uiShader.setUniform("uSize", buttonSize);
+
+        // Draw the quad as a button
+        glBindVertexArray(quadVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        glDisable(GL_BLEND);
+        glEnable(GL_DEPTH_TEST);
 
         // function to swap the front and back buffers
         glfwSwapBuffers(glfwWindow);
@@ -248,7 +305,7 @@ void glfw_onKey(GLFWwindow *window, const int key, int scancode, const int actio
         return;
     }
 
-    auto camera = static_cast<IsometricCamera *>(glfwGetWindowUserPointer(window));
+    const auto camera = static_cast<IsometricCamera *>(glfwGetWindowUserPointer(window));
     if (!camera) {
         return;
     }
@@ -322,10 +379,4 @@ void showFPS(GLFWwindow *window) {
 // Is called when the pWindow is resized
 void framebuffer_size_callback(GLFWwindow *window, const int width, const int height) {
     glViewport(0, 0, width, height);
-
-    const float aspect = static_cast<float>(width) / static_cast<float>(height);
-    float scale = 5.0f;
-}
-
-void glfw_onMouseScroll(GLFWwindow *window, double deltaX, double deltaY) {
 }
