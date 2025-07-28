@@ -15,6 +15,7 @@ add_library(engine
 
         # renderers
         src/graphics/renderers/ShaderProgram.cpp
+        src/graphics/renderers/TextRenderer.cpp
         src/graphics/renderers/Texture2D.cpp
 
         # utilities
@@ -37,6 +38,7 @@ target_link_libraries(engine
         glfw3
         opengl32
         spdlog::spdlog
+        Freetype::Freetype
         $<$<BOOL:${MINGW}>:ws2_32>
 )
 

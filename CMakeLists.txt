@@ -29,6 +29,15 @@ set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${spdlog_PATH})
 
 find_package(spdlog REQUIRED)
 
+# set FreeType path
+set(FREETYPE_PATH vendors/freetype)
+include_directories(${FREETYPE_PATH}/include/freetype2)
+link_directories(${FREETYPE_PATH}/lib)
+
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${FREETYPE_PATH})
+
+find_package(Freetype REQUIRED)
+
 # set glad path (Move to engine CMakeLists.txt)
 # This is commented out because glad is now included in the engine subdirectory
 # If you want to use glad directly, uncomment the following lines:

@@ -1,17 +1,18 @@
 #include <glad/glad.h> // must be included before GLFW
 #include <GLFW/glfw3.h>
 #include <sstream>
-#include "../../engine/src/utilities/Logger.h"
-#include "../../engine/src/graphics/renderers/ShaderProgram.h"
-#include "../../engine/src/graphics/meshes/Cube.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "../../engine/src/utilities/Logger.h"
+#include "../../engine/src/graphics/renderers/ShaderProgram.h"
+#include "../../engine/src/graphics/meshes/Cube.h"
 #include "../../engine/src/graphics/cameras/IsometricCamera.h"
 #include "../../engine/src/graphics/renderers/Texture2D.h"
 #include "../../engine/src/graphics/cameras/OrbitCamera.h"
 #include "../../engine/src/graphics/meshes/Ellipsoid.h"
 #include "../../engine/src/graphics/meshes/Sphere.h"
+#include "graphics/renderers/TextRenderer.h"
 
 auto APP_TITLE = "Fantasy Tactics";
 constexpr int windowWidth = 1200;
@@ -49,6 +50,9 @@ int main() {
     ShaderProgram uiShader;
     uiShader.loadShaders("resources/shaders/ui.vert", "resources/shaders/ui.frag");
 
+    TextRenderer textRenderer(windowWidth, windowHeight);
+    textRenderer.loadFont("resources/fonts/Amble.ttf", 24);
+
     // Create a cube
     Cube cube;
     glm::vec3 cubePosition(0.0f, 0.0f, 0.0f);
@@ -74,7 +78,6 @@ int main() {
         1.0f, 1.0f, 1.0f, 1.0f, // top-right
         1.0f, 0.0f, 1.0f, 0.0f // bottom-right
     };
-
 
     GLuint quadVAO, quadVBO;
     glGenVertexArrays(1, &quadVAO);
@@ -184,16 +187,26 @@ int main() {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         uiShader.use();
         uiShader.setUniform("uProjection", orthoProjection);
-        glm::vec2 buttonPosition(100.0f,50.0f); // Y = height - (buttonHeight + margin)
+        glm::vec2 buttonPosition(100.0f, 50.0f); // Y = height - (buttonHeight + margin)
         glm::vec2 buttonSize(200.0f, 64.0f); // Size in pixels
         buttonTex.bind(0);
         uiShader.setUniform("uTexture", 0);
         uiShader.setUniform("uPosition", buttonPosition);
         uiShader.setUniform("uSize", buttonSize);
-
         // Draw the quad as a button
         glBindVertexArray(quadVAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
+
+
+        float padding = 10.0f;
+        textRenderer.renderText(
+            "Play",
+            buttonPosition.x + padding,
+            buttonPosition.y + padding,
+            1.0f,
+            glm::vec3(1.0f) // white text
+        );
+
 
         glDisable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
