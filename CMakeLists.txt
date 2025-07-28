@@ -29,9 +29,11 @@ set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${spdlog_PATH})
 
 find_package(spdlog REQUIRED)
 
-# set glad path
-set(GLAD_PATH vendors/glad)
-include_directories(${GLAD_PATH}/include)
+# set glad path (Move to engine CMakeLists.txt)
+# This is commented out because glad is now included in the engine subdirectory
+# If you want to use glad directly, uncomment the following lines:
+#set(GLAD_PATH vendors/glad)
+#include_directories(${GLAD_PATH}/include)
 
 # set rapidjson path
 set(RAPIDJSON_PATH vendors/rapidjson)
@@ -42,57 +44,8 @@ set(STB_IMAGE_PATH vendors/stb)
 include_directories(${STB_IMAGE_PATH})
 
 # add resources folder
-file(COPY src/resources DESTINATION ${CMAKE_BINARY_DIR})
+file(COPY engine/resources DESTINATION ${CMAKE_BINARY_DIR})
 
-set(CAMERA_SOURCE_DIR
-        src/graphics/cameras/Camera.cpp
-        src/graphics/cameras/Camera.h
-        src/graphics/cameras/OrbitCamera.cpp
-        src/graphics/cameras/OrbitCamera.h
-        src/graphics/cameras/IsometricCamera.cpp
-        src/graphics/cameras/IsometricCamera.h
-        src/graphics/cameras/FirstPersonCamera.cpp
-        src/graphics/cameras/FirstPersonCamera.h
-)
+add_subdirectory(engine)
 
-set(MESHES_SOURCE_DIR
-        src/graphics/meshes/Circle.cpp
-        src/graphics/meshes/Circle.h
-        src/graphics/meshes/Cube.cpp
-        src/graphics/meshes/Cube.h
-        src/graphics/meshes/Ellipsoid.cpp
-        src/graphics/meshes/Ellipsoid.h
-        src/graphics/meshes/Mesh.cpp
-        src/graphics/meshes/Mesh.h
-        src/graphics/meshes/Sphere.cpp
-        src/graphics/meshes/Sphere.h
-)
-
-set(RENDERERS_SOURCE_DIR
-        src/graphics/renderers/ShaderProgram.cpp
-        src/graphics/renderers/ShaderProgram.h
-        src/graphics/renderers/Texture2D.cpp
-        src/graphics/renderers/Texture2D.h
-)
-
-set(UTILITIES_SOURCE_DIR
-        src/utilities/Logger.cpp
-        src/utilities/Logger.h
-)
-
-# Add source to this project's executable.
-add_executable(
-        FantasyTactics
-        ${GLAD_PATH}/src/glad.c
-        ${CAMERA_SOURCE_DIR}
-        ${MESHES_SOURCE_DIR}
-        ${RENDERERS_SOURCE_DIR}
-        ${UTILITIES_SOURCE_DIR}
-        src/Game.cpp
-        src/Game.h
-        src/main.cpp
-)
-
-# add link libraries
-#target_link_libraries(FantasyTactics PRIVATE glfw3 opengl32)
-target_link_libraries(FantasyTactics PRIVATE glfw3 opengl32 spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
+add_subdirectory(game)

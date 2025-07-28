@@ -1,17 +1,17 @@
 #include <glad/glad.h> // must be included before GLFW
 #include <GLFW/glfw3.h>
 #include <sstream>
-#include "utilities/logger.h"
-#include "graphics/renderers/ShaderProgram.h"
-#include "graphics/meshes/Cube.h"
+#include "../../engine/src/utilities/Logger.h"
+#include "../../engine/src/graphics/renderers/ShaderProgram.h"
+#include "../../engine/src/graphics/meshes/Cube.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "graphics/cameras/IsometricCamera.h"
-#include "graphics/renderers/Texture2D.h"
-#include "graphics/cameras/OrbitCamera.h"
-#include "graphics/meshes/Ellipsoid.h"
-#include "graphics/meshes/Sphere.h"
+#include "../../engine/src/graphics/cameras/IsometricCamera.h"
+#include "../../engine/src/graphics/renderers/Texture2D.h"
+#include "../../engine/src/graphics/cameras/OrbitCamera.h"
+#include "../../engine/src/graphics/meshes/Ellipsoid.h"
+#include "../../engine/src/graphics/meshes/Sphere.h"
 
 auto APP_TITLE = "Fantasy Tactics";
 constexpr int windowWidth = 1200;
