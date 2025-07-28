@@ -12,6 +12,8 @@
 #include "../../engine/src/graphics/cameras/OrbitCamera.h"
 #include "../../engine/src/graphics/meshes/Ellipsoid.h"
 #include "../../engine/src/graphics/meshes/Sphere.h"
+#include "graphics/meshes/Quad.h"
+#include "../../engine/src/graphics/ui/Quad2D.h"
 #include "graphics/renderers/TextRenderer.h"
 
 auto APP_TITLE = "Fantasy Tactics";
@@ -76,32 +78,6 @@ int main() {
         Logger::log()->info("Robot mesh loaded successfully");
     }
 
-    // Create a quad
-    float quadVertices[] = {
-        // positions    // texCoords
-        0.0f, 1.0f, 0.0f, 1.0f, // top-left
-        1.0f, 0.0f, 1.0f, 0.0f, // bottom-right
-        0.0f, 0.0f, 0.0f, 0.0f, // bottom-left
-
-        0.0f, 1.0f, 0.0f, 1.0f, // top-left
-        1.0f, 1.0f, 1.0f, 1.0f, // top-right
-        1.0f, 0.0f, 1.0f, 0.0f // bottom-right
-    };
-
-    GLuint quadVAO, quadVBO;
-    glGenVertexArrays(1, &quadVAO);
-    glGenBuffers(1, &quadVBO);
-    glBindVertexArray(quadVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
-
-    // position
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), static_cast<void *>(nullptr));
-    glEnableVertexAttribArray(0);
-    // texCoord
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), reinterpret_cast<void *>(2 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-
     // Construct your isometric camera
     // Suppose you want an ortho box from -2..2 horizontally, -2..2 vertically
     // near=0.1, far=100.0
@@ -114,6 +90,7 @@ int main() {
 
     // Render loop
     while (!glfwWindowShouldClose(glfwWindow)) {
+        Quad2D buttonQuad;
         float aspect = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
         constexpr float moveSpeed = 3.0f;
         showFPS(glfwWindow);
@@ -216,8 +193,7 @@ int main() {
         uiShader.setUniform("uPosition", buttonPosition);
         uiShader.setUniform("uSize", buttonSize);
         // Draw the quad as a button
-        glBindVertexArray(quadVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        buttonQuad.draw();
 
         float padding = 10.0f;
         textRenderer.renderText(

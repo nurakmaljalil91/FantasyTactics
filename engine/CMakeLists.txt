@@ -11,6 +11,7 @@ add_library(engine
         src/graphics/meshes/Cube.cpp
         src/graphics/meshes/Ellipsoid.cpp
         src/graphics/meshes/Mesh.cpp
+        src/graphics/meshes/Quad.cpp
         src/graphics/meshes/Sphere.cpp
 
         # renderers
@@ -20,6 +21,9 @@ add_library(engine
 
         # utilities
         src/utilities/Logger.cpp
+
+        # UI components
+        src/graphics/ui/Quad2D.cpp
 )
 
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

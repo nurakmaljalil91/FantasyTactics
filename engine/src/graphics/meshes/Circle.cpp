@@ -32,7 +32,7 @@ Circle::Circle(float radius, int segments) {
         v.normal = glm::vec3(0.0f, 0.0f, 1.0f);
         // Simple UV mapping: center at (0.5, 0.5), radius 0.5
         v.textureCoordinates = glm::vec2(0.5f + 0.5f * std::cos(angle),
-                                0.5f + 0.5f * std::sin(angle));
+                                         0.5f + 0.5f * std::sin(angle));
         vertices.push_back(v);
     }
 
@@ -43,8 +43,7 @@ Circle::Circle(float radius, int segments) {
     loaded = true;
 }
 
-Circle::~Circle() {
-}
+Circle::~Circle() = default;
 
 
 // Override draw():
