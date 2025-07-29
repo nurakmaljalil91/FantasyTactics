@@ -1,5 +1,11 @@
 # engine/CMakeLists.txt
 add_library(engine
+        # core
+        src/core/Application.cpp
+        src/core/Scene.cpp
+        src/core/SceneManager.cpp
+        src/core/Window.cpp
+
         # camera code
         src/graphics/cameras/Camera.cpp
         src/graphics/cameras/OrbitCamera.cpp
