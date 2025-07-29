@@ -12,7 +12,6 @@
 #include "../../engine/src/graphics/cameras/OrbitCamera.h"
 #include "../../engine/src/graphics/meshes/Ellipsoid.h"
 #include "../../engine/src/graphics/meshes/Sphere.h"
-#include "graphics/meshes/Quad.h"
 #include "../../engine/src/graphics/ui/Quad2D.h"
 #include "graphics/renderers/TextRenderer.h"
 
@@ -68,6 +67,9 @@ int main() {
 
     Texture2D buttonTex;
     buttonTex.loadTexture("resources/textures/crate.jpg", true);
+
+    Texture2D robotTexture;
+    robotTexture.loadTexture("resources/textures/robot_diffuse.jpg", true);
 
     // load robot
     Mesh robotMesh;
@@ -166,10 +168,14 @@ int main() {
             -1.0f, 1.0f
         );
 
-        // disable texturing
-        glUniform1i(useTexLocation, 0);
-        // set flat white (or any color you like)
-        glUniform3f(static_cast<GLint>(baseColorLocation), 1.0f, 1.0f, 1.0f);
+        // Bind the crate texture to texture unit 0
+        robotTexture.bind(0);
+
+        // Tell the fragment shader that diffuseTexture is in GL_TEXTURE0
+        const GLuint robotDiffuseLocation = glGetUniformLocation(shader.getProgram(), "diffuseTexture");
+        glUniform1i(static_cast<int>(robotDiffuseLocation), 0);
+        glUniform1f(useTexLocation, 1.0f); // Use texture
+
         // Render the robot mesh
         model = glm::mat4(1.0f); // reset model matrix
         model = glm::translate(model, glm::vec3(2.0f, 0.0f, -1.0f));
