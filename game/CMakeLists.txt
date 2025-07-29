@@ -1,8 +1,9 @@
 # game/CMakeLists.txt
 add_executable(FantasyTactics
+        # scenes
+        src/scenes/MenuScene.cpp
+
         src/main.cpp
-        src/Game.cpp
-        src/Game.h
 )
 # force its .exe into the top-level build dir
 set_target_properties(FantasyTactics PROPERTIES
