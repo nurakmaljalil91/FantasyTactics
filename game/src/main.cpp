@@ -1,11 +1,12 @@
 #include <iostream>
 #include <ostream>
-
 #include "core/Application.h"
+#include "scenes/MenuScene.h"
 
 int main() {
     try {
         Application app(1200, 800, "Fantasy Tactics");
+        app.getSceneManager()->addScene(std::make_shared<MenuScene>());
         app.run();
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;

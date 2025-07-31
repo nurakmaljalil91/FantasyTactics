@@ -38,6 +38,12 @@ public:
      */
     void run();
 
+    /**
+     * Get SceneManager instance.
+     * @return Reference to the SceneManager instance.
+     */
+    SceneManager *getSceneManager();
+
 private:
     Window _window;
     SceneManager _scenesManager;

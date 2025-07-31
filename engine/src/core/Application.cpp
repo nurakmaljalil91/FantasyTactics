@@ -42,6 +42,10 @@ void Application::run() {
     }
 }
 
+SceneManager *Application::getSceneManager() {
+    return &_scenesManager;
+}
+
 void Application::_initialize() {
     // initialize scene manager
     Logger::log()->info("Initializing SceneManager");
@@ -70,8 +74,8 @@ void Application::_processInput(float deltaTime) {
     if (glfwGetKey(window, GLFW_KEY_F11) == GLFW_PRESS && !f11Handled) {
         _fullscreen = !_fullscreen;
         if (_fullscreen) {
-            GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-            const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+            GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+            const GLFWvidmode *mode = glfwGetVideoMode(monitor);
             glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
         } else {
             glfwSetWindowMonitor(window, nullptr, 100, 100, _windowedWidth, _windowedHeight, 0);
