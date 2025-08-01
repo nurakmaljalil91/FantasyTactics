@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7ecamera_0',['~Camera',['../da/dbb/class_camera.html#adcb96efefa7af58e3ee6534b15d4979b',1,'Camera']]]
+  ['ellipsoid_0',['Ellipsoid',['../d9/d84/class_ellipsoid.html#a0932956e04834c0f0092de4bb927aa5f',1,'Ellipsoid']]]
 ];

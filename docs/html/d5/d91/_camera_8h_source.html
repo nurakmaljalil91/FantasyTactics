@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Fantasy Tactics: src/graphics/cameras/Camera.h Source File</title>
+<title>Fantasy Tactics: engine/src/graphics/cameras/Camera.h Source File</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -116,11 +116,11 @@ $(function(){initNavTree('d5/d91/_camera_8h_source.html','../../',''); });
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span></div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <a class="code hl_function" href="../../da/dbb/class_camera.html#ae23af4d7cab430c77d537621cdd16b3f">Camera</a>(<span class="keyword">const</span> glm::vec3 &amp;position,</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>           <span class="keyword">const</span> glm::vec3 &amp;worldUp,</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>           <span class="keyword">const</span> <span class="keywordtype">float</span> yawDegrees = -90.0f, <span class="comment">// default look toward -Z</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>           <span class="keyword">const</span> <span class="keywordtype">float</span> pitchDegrees = 0.0f,</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>           <span class="keyword">const</span> <span class="keywordtype">float</span> movementSpeed = 2.5f,</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>           <span class="keyword">const</span> <span class="keywordtype">float</span> mouseSensitivity = 0.1f,</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>           <span class="keyword">const</span> <span class="keywordtype">float</span> zoomDegrees = 45.0f);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>           <span class="keywordtype">float</span> yawDegrees = -90.0f, <span class="comment">// default look toward -Z</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>           <span class="keywordtype">float</span> pitchDegrees = 0.0f,</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>           <span class="keywordtype">float</span> movementSpeed = 2.5f,</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>           <span class="keywordtype">float</span> mouseSensitivity = 0.1f,</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>           <span class="keywordtype">float</span> zoomDegrees = 45.0f);</div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span></div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    [[nodiscard]] glm::mat4 <a class="code hl_function" href="../../da/dbb/class_camera.html#a2f90e661a78172675ca06ea69667b531">getViewMatrix</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span></div>
@@ -132,7 +132,7 @@ $(function(){initNavTree('d5/d91/_camera_8h_source.html','../../',''); });
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span></div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../da/dbb/class_camera.html#a067090ee525389944ba3bacaa62f7632">processMouseScroll</a>(<span class="keywordtype">float</span> yOffset);</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="../../da/dbb/class_camera.html#aa9dc951f8d6e7082233786438139c51d">  102</a></span>    glm::vec3 <a class="code hl_function" href="../../da/dbb/class_camera.html#aa9dc951f8d6e7082233786438139c51d">getPosition</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> _position; }</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="../../da/dbb/class_camera.html#aa9dc951f8d6e7082233786438139c51d">  102</a></span>    [[nodiscard]] glm::vec3 <a class="code hl_function" href="../../da/dbb/class_camera.html#aa9dc951f8d6e7082233786438139c51d">getPosition</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> _position; }</div>
 <div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="keyword">protected</span>:</div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../da/dbb/class_camera.html#ad424b8b92e580508caf21337b69b93fa">updateCameraVectors</a>();</div>
@@ -163,7 +163,7 @@ $(function(){initNavTree('d5/d91/_camera_8h_source.html','../../',''); });
 <div class="ttc" id="aclass_camera_html_aa2ed9d27803f5edc824e4afe8cbbbfbc"><div class="ttname"><a href="../../da/dbb/class_camera.html#aa2ed9d27803f5edc824e4afe8cbbbfbc">Camera::getProjectionMatrix</a></div><div class="ttdeci">glm::mat4 getProjectionMatrix(float aspectRatio) const</div><div class="ttdoc">Returns the perspective projection matrix.</div><div class="ttdef"><b>Definition</b> Camera.cpp:48</div></div>
 <div class="ttc" id="aclass_camera_html_aa9dc951f8d6e7082233786438139c51d"><div class="ttname"><a href="../../da/dbb/class_camera.html#aa9dc951f8d6e7082233786438139c51d">Camera::getPosition</a></div><div class="ttdeci">glm::vec3 getPosition() const</div><div class="ttdoc">Retrieves the camera’s current world-space position.</div><div class="ttdef"><b>Definition</b> Camera.h:102</div></div>
 <div class="ttc" id="aclass_camera_html_ac028c5a8dd6b3d3aed476eb30e8f2980"><div class="ttname"><a href="../../da/dbb/class_camera.html#ac028c5a8dd6b3d3aed476eb30e8f2980">Camera::processMouseMovement</a></div><div class="ttdeci">void processMouseMovement(float xOffset, float yOffset)</div><div class="ttdoc">Rotates the camera based on mouse movement.</div><div class="ttdef"><b>Definition</b> Camera.cpp:61</div></div>
-<div class="ttc" id="aclass_camera_html_ad424b8b92e580508caf21337b69b93fa"><div class="ttname"><a href="../../da/dbb/class_camera.html#ad424b8b92e580508caf21337b69b93fa">Camera::updateCameraVectors</a></div><div class="ttdeci">void updateCameraVectors()</div><div class="ttdoc">Recalculates _front, _right, and _up vectors from current yaw &amp; pitch.</div><div class="ttdef"><b>Definition</b> Camera.cpp:79</div></div>
+<div class="ttc" id="aclass_camera_html_ad424b8b92e580508caf21337b69b93fa"><div class="ttname"><a href="../../da/dbb/class_camera.html#ad424b8b92e580508caf21337b69b93fa">Camera::updateCameraVectors</a></div><div class="ttdeci">void updateCameraVectors()</div><div class="ttdoc">Recalculates front, right, and up vectors from current yaw and pitch.</div><div class="ttdef"><b>Definition</b> Camera.cpp:79</div></div>
 <div class="ttc" id="aclass_camera_html_adcb96efefa7af58e3ee6534b15d4979b"><div class="ttname"><a href="../../da/dbb/class_camera.html#adcb96efefa7af58e3ee6534b15d4979b">Camera::~Camera</a></div><div class="ttdeci">~Camera()=default</div></div>
 <div class="ttc" id="aclass_camera_html_ae1f762466898a785731558d93373f5f0"><div class="ttname"><a href="../../da/dbb/class_camera.html#ae1f762466898a785731558d93373f5f0">Camera::processKeyboard</a></div><div class="ttdeci">void processKeyboard(float deltaTime, bool forward, bool backward, bool left, bool right)</div><div class="ttdoc">Moves the camera based on keyboard input.</div><div class="ttdef"><b>Definition</b> Camera.cpp:52</div></div>
 <div class="ttc" id="aclass_camera_html_ae23af4d7cab430c77d537621cdd16b3f"><div class="ttname"><a href="../../da/dbb/class_camera.html#ae23af4d7cab430c77d537621cdd16b3f">Camera::Camera</a></div><div class="ttdeci">Camera()=default</div></div>
@@ -173,7 +173,7 @@ $(function(){initNavTree('d5/d91/_camera_8h_source.html','../../',''); });
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="../../dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="../../dir_560415a5d2bc4999842279f4fc1debef.html">graphics</a></li><li class="navelem"><a href="../../dir_3adfb512bd1dae405aa37381e893a373.html">cameras</a></li><li class="navelem"><a href="../../d5/d91/_camera_8h.html">Camera.h</a></li>
+    <li class="navelem"><a href="../../dir_996f45160da62e1a3d7f6046fad68f51.html">engine</a></li><li class="navelem"><a href="../../dir_3d9126aa00c041bc0b8f859d1965a0f4.html">src</a></li><li class="navelem"><a href="../../dir_d7958bfcefb379efaec3d62a179a1d24.html">graphics</a></li><li class="navelem"><a href="../../dir_c8da6ed00ae71b6406e1d7a8a240caf3.html">cameras</a></li><li class="navelem"><a href="../../d5/d91/_camera_8h.html">Camera.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
   </ul>
 </div>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Fantasy Tactics: src/graphics/cameras/OrbitCamera.h Source File</title>
+<title>Fantasy Tactics: engine/src/graphics/cameras/OrbitCamera.h Source File</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -91,46 +91,64 @@ $(function(){initNavTree('d5/def/_orbit_camera_8h_source.html','../../',''); });
   <div class="headertitle"><div class="title">OrbitCamera.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// Created by User on 8/1/2024.</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">//</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#ifndef ORBITCAMERA_H</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#define ORBITCAMERA_H</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="../../d5/d91/_camera_8h.html">Camera.h</a>&quot;</span></div>
+<a href="../../d5/def/_orbit_camera_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="foldopen" id="foldopen00010" data-start="{" data-end="};">
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno"><a class="line" href="../../da/d51/class_orbit_camera.html">   10</a></span><span class="keyword">class </span>OrbitCamera : <span class="keyword">public</span> <a class="code hl_function" href="../../da/dbb/class_camera.html#ae23af4d7cab430c77d537621cdd16b3f">Camera</a> {</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    OrbitCamera();</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> rotate(<span class="keywordtype">float</span> yaw, <span class="keywordtype">float</span> pitch); <span class="comment">// in degrees</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="comment">// Camera Controls</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">void</span> setLookAt(<span class="keyword">const</span> glm::vec3 &amp;target);</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordtype">void</span> setRadius(<span class="keywordtype">float</span> radius);</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordtype">void</span> _updateCameraVectors();</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="comment">// Camera parameters</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordtype">float</span> mRadius;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>};</div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#ifndef ORBITCAMERA_H</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#define ORBITCAMERA_H</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="../../d5/d91/_camera_8h.html">Camera.h</a>&quot;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;GLFW/glfw3.h&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="foldopen" id="foldopen00033" data-start="{" data-end="};">
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="../../da/d51/class_orbit_camera.html">   33</a></span><span class="keyword">class </span>OrbitCamera : <span class="keyword">public</span> <a class="code hl_function" href="../../da/dbb/class_camera.html#ae23af4d7cab430c77d537621cdd16b3f">Camera</a> {</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keyword">explicit</span> OrbitCamera(</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        <span class="keyword">const</span> glm::vec3 &amp;target = glm::vec3(0.0f),</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="keywordtype">float</span> distance = 10.0f,</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keywordtype">float</span> yawDegrees = -90.0f,</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <span class="keywordtype">float</span> pitchDegrees = 0.0f,</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keywordtype">float</span> mouseSensitivity = 0.1f,</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keywordtype">float</span> scrollSensitivity = 1.0f</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    );</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../da/d51/class_orbit_camera.html#a4e5f2a6fe814473dece67dd4e2e52007">updateCameraPosition</a>();</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../da/d51/class_orbit_camera.html#aa722b4ec8adb95c6ee1c994758c958c3">processMouseMovement</a>(<span class="keywordtype">float</span> xOffset, <span class="keywordtype">float</span> yOffset);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../da/d51/class_orbit_camera.html#ad8193762e9e1264571f43b0c3ad71ac3">processMouseScroll</a>(<span class="keywordtype">float</span> yOffset);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../da/d51/class_orbit_camera.html#a6d09e1118ec82c05d1694e91a0b905c8">mouseCallback</a>(GLFWwindow *window, <span class="keywordtype">double</span> xPosition, <span class="keywordtype">double</span> yPosition);</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../da/d51/class_orbit_camera.html#aa7233187c85db74341e510d9db3a046d">scrollCallback</a>(GLFWwindow *window, <span class="keywordtype">double</span> xOffset, <span class="keywordtype">double</span> yOffset);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    glm::vec3 _target;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keywordtype">float</span> _distance;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordtype">float</span> _scrollSensitivity;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="comment">// for first‐time mouse initialization</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> _firstMouse;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keyword">static</span> <span class="keywordtype">float</span> _lastX, _lastY;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>};</div>
 </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#endif </span><span class="comment">//ORBITCAMERA_H</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="preprocessor">#endif </span><span class="comment">//ORBITCAMERA_H</span></div>
 <div class="ttc" id="a_camera_8h_html"><div class="ttname"><a href="../../d5/d91/_camera_8h.html">Camera.h</a></div><div class="ttdoc">Header file for the Camera class.</div></div>
 <div class="ttc" id="aclass_camera_html_ae23af4d7cab430c77d537621cdd16b3f"><div class="ttname"><a href="../../da/dbb/class_camera.html#ae23af4d7cab430c77d537621cdd16b3f">Camera::Camera</a></div><div class="ttdeci">Camera()=default</div></div>
+<div class="ttc" id="aclass_orbit_camera_html_a4e5f2a6fe814473dece67dd4e2e52007"><div class="ttname"><a href="../../da/d51/class_orbit_camera.html#a4e5f2a6fe814473dece67dd4e2e52007">OrbitCamera::updateCameraPosition</a></div><div class="ttdeci">void updateCameraPosition()</div><div class="ttdoc">Call each frame before rendering to recompute _position/vectors.</div><div class="ttdef"><b>Definition</b> OrbitCamera.cpp:28</div></div>
+<div class="ttc" id="aclass_orbit_camera_html_a6d09e1118ec82c05d1694e91a0b905c8"><div class="ttname"><a href="../../da/d51/class_orbit_camera.html#a6d09e1118ec82c05d1694e91a0b905c8">OrbitCamera::mouseCallback</a></div><div class="ttdeci">static void mouseCallback(GLFWwindow *window, double xPosition, double yPosition)</div><div class="ttdoc">GLFW cursor‐move callback.</div><div class="ttdef"><b>Definition</b> OrbitCamera.cpp:58</div></div>
+<div class="ttc" id="aclass_orbit_camera_html_aa722b4ec8adb95c6ee1c994758c958c3"><div class="ttname"><a href="../../da/d51/class_orbit_camera.html#aa722b4ec8adb95c6ee1c994758c958c3">OrbitCamera::processMouseMovement</a></div><div class="ttdeci">void processMouseMovement(float xOffset, float yOffset)</div><div class="ttdoc">Override to adjust yaw/pitch based on mouse drag.</div><div class="ttdef"><b>Definition</b> OrbitCamera.cpp:42</div></div>
+<div class="ttc" id="aclass_orbit_camera_html_aa7233187c85db74341e510d9db3a046d"><div class="ttname"><a href="../../da/d51/class_orbit_camera.html#aa7233187c85db74341e510d9db3a046d">OrbitCamera::scrollCallback</a></div><div class="ttdeci">static void scrollCallback(GLFWwindow *window, double xOffset, double yOffset)</div><div class="ttdoc">GLFW scroll‐wheel callback.</div><div class="ttdef"><b>Definition</b> OrbitCamera.cpp:76</div></div>
+<div class="ttc" id="aclass_orbit_camera_html_ad8193762e9e1264571f43b0c3ad71ac3"><div class="ttname"><a href="../../da/d51/class_orbit_camera.html#ad8193762e9e1264571f43b0c3ad71ac3">OrbitCamera::processMouseScroll</a></div><div class="ttdeci">void processMouseScroll(float yOffset)</div><div class="ttdoc">Override to adjust distance based on scroll.</div><div class="ttdef"><b>Definition</b> OrbitCamera.cpp:53</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="../../dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="../../dir_560415a5d2bc4999842279f4fc1debef.html">graphics</a></li><li class="navelem"><a href="../../dir_3adfb512bd1dae405aa37381e893a373.html">cameras</a></li><li class="navelem"><b>OrbitCamera.h</b></li>
+    <li class="navelem"><a href="../../dir_996f45160da62e1a3d7f6046fad68f51.html">engine</a></li><li class="navelem"><a href="../../dir_3d9126aa00c041bc0b8f859d1965a0f4.html">src</a></li><li class="navelem"><a href="../../dir_d7958bfcefb379efaec3d62a179a1d24.html">graphics</a></li><li class="navelem"><a href="../../dir_c8da6ed00ae71b6406e1d7a8a240caf3.html">cameras</a></li><li class="navelem"><a href="../../d5/def/_orbit_camera_8h.html">OrbitCamera.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
   </ul>
 </div>

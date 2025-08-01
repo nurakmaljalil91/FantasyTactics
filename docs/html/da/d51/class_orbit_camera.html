@@ -91,6 +91,11 @@ $(function(){initNavTree('da/d51/class_orbit_camera.html','../../','d3/d07/class
   <div class="headertitle"><div class="title">OrbitCamera Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>A camera that orbits around a fixed target point.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="../../d5/def/_orbit_camera_8h_source.html">OrbitCamera.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for OrbitCamera:</div>
 <div class="dyncontent">
@@ -104,19 +109,24 @@ Collaboration diagram for OrbitCamera:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:abb43fee4a3a812be41c8b273a5b17321" id="r_abb43fee4a3a812be41c8b273a5b17321"><td class="memItemLeft" align="right" valign="top"><a id="abb43fee4a3a812be41c8b273a5b17321" name="abb43fee4a3a812be41c8b273a5b17321"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>rotate</b> (float yaw, float pitch)</td></tr>
-<tr class="memitem:a4d1545f7b05a0a3db63adb3cb742ed39" id="r_a4d1545f7b05a0a3db63adb3cb742ed39"><td class="memItemLeft" align="right" valign="top"><a id="a4d1545f7b05a0a3db63adb3cb742ed39" name="a4d1545f7b05a0a3db63adb3cb742ed39"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setLookAt</b> (const glm::vec3 &amp;target)</td></tr>
-<tr class="memitem:a7fe2e5fb61bc5fecbc3322ed79ca71c9" id="r_a7fe2e5fb61bc5fecbc3322ed79ca71c9"><td class="memItemLeft" align="right" valign="top"><a id="a7fe2e5fb61bc5fecbc3322ed79ca71c9" name="a7fe2e5fb61bc5fecbc3322ed79ca71c9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setRadius</b> (float radius)</td></tr>
+<tr class="memitem:aa7691d8c4e7e6295ac3a230e96ef1a91" id="r_aa7691d8c4e7e6295ac3a230e96ef1a91"><td class="memItemLeft" align="right" valign="top"><a id="aa7691d8c4e7e6295ac3a230e96ef1a91" name="aa7691d8c4e7e6295ac3a230e96ef1a91"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>OrbitCamera</b> (const glm::vec3 &amp;target=glm::vec3(0.0f), float distance=10.0f, float yawDegrees=-90.0f, float pitchDegrees=0.0f, float mouseSensitivity=0.1f, float scrollSensitivity=1.0f)</td></tr>
+<tr class="memitem:a4e5f2a6fe814473dece67dd4e2e52007" id="r_a4e5f2a6fe814473dece67dd4e2e52007"><td class="memItemLeft" align="right" valign="top"><a id="a4e5f2a6fe814473dece67dd4e2e52007" name="a4e5f2a6fe814473dece67dd4e2e52007"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>updateCameraPosition</b> ()</td></tr>
+<tr class="memdesc:a4e5f2a6fe814473dece67dd4e2e52007"><td class="mdescLeft">&#160;</td><td class="mdescRight">Call each frame before rendering to recompute <span class="tt">_position</span>/vectors. <br /></td></tr>
+<tr class="memitem:aa722b4ec8adb95c6ee1c994758c958c3" id="r_aa722b4ec8adb95c6ee1c994758c958c3"><td class="memItemLeft" align="right" valign="top"><a id="aa722b4ec8adb95c6ee1c994758c958c3" name="aa722b4ec8adb95c6ee1c994758c958c3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>processMouseMovement</b> (float xOffset, float yOffset)</td></tr>
+<tr class="memdesc:aa722b4ec8adb95c6ee1c994758c958c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override to adjust yaw/pitch based on mouse drag. <br /></td></tr>
+<tr class="memitem:ad8193762e9e1264571f43b0c3ad71ac3" id="r_ad8193762e9e1264571f43b0c3ad71ac3"><td class="memItemLeft" align="right" valign="top"><a id="ad8193762e9e1264571f43b0c3ad71ac3" name="ad8193762e9e1264571f43b0c3ad71ac3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>processMouseScroll</b> (float yOffset)</td></tr>
+<tr class="memdesc:ad8193762e9e1264571f43b0c3ad71ac3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Override to adjust distance based on scroll. <br /></td></tr>
 <tr class="inherit_header pub_methods_class_camera"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_class_camera')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="../../da/dbb/class_camera.html">Camera</a></td></tr>
 <tr class="memitem:ae23af4d7cab430c77d537621cdd16b3f inherit pub_methods_class_camera" id="r_ae23af4d7cab430c77d537621cdd16b3f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbb/class_camera.html#ae23af4d7cab430c77d537621cdd16b3f">Camera</a> ()=default</td></tr>
 <tr class="memitem:adcb96efefa7af58e3ee6534b15d4979b inherit pub_methods_class_camera" id="r_adcb96efefa7af58e3ee6534b15d4979b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbb/class_camera.html#adcb96efefa7af58e3ee6534b15d4979b">~Camera</a> ()=default</td></tr>
 <tr class="memitem:a1cbea0f4112c15b87d5ec0d9784745a4 inherit pub_methods_class_camera" id="r_a1cbea0f4112c15b87d5ec0d9784745a4"><td class="memItemLeft" align="right" valign="top">
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setup</b> (glm::vec3 position, glm::vec3 worldUp, float yawDegrees, float pitchDegrees, float movementSpeed=2.5f, float mouseSensitivity=0.1f, float zoomDegrees=45.0f)</td></tr>
-<tr class="memitem:a9d26f138aa6aaf13f1a7fd2a4c1d292b inherit pub_methods_class_camera" id="r_a9d26f138aa6aaf13f1a7fd2a4c1d292b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbb/class_camera.html#a9d26f138aa6aaf13f1a7fd2a4c1d292b">Camera</a> (const glm::vec3 &amp;position, const glm::vec3 &amp;worldUp, const float yawDegrees=-90.0f, const float pitchDegrees=0.0f, const float movementSpeed=2.5f, const float mouseSensitivity=0.1f, const float zoomDegrees=45.0f)</td></tr>
-<tr class="memdesc:a9d26f138aa6aaf13f1a7fd2a4c1d292b inherit pub_methods_class_camera"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs and initializes a camera in one call.  <br /></td></tr>
+<tr class="memitem:a070fcddcb590c3226e85bc72290227b4 inherit pub_methods_class_camera" id="r_a070fcddcb590c3226e85bc72290227b4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbb/class_camera.html#a070fcddcb590c3226e85bc72290227b4">Camera</a> (const glm::vec3 &amp;position, const glm::vec3 &amp;worldUp, float yawDegrees=-90.0f, float pitchDegrees=0.0f, float movementSpeed=2.5f, float mouseSensitivity=0.1f, float zoomDegrees=45.0f)</td></tr>
+<tr class="memdesc:a070fcddcb590c3226e85bc72290227b4 inherit pub_methods_class_camera"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs and initializes a camera in one call.  <br /></td></tr>
 <tr class="memitem:a2f90e661a78172675ca06ea69667b531 inherit pub_methods_class_camera" id="r_a2f90e661a78172675ca06ea69667b531"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbb/class_camera.html#a2f90e661a78172675ca06ea69667b531">getViewMatrix</a> () const</td></tr>
 <tr class="memdesc:a2f90e661a78172675ca06ea69667b531 inherit pub_methods_class_camera"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the view matrix, computed with glm::lookAt.  <br /></td></tr>
 <tr class="memitem:aa2ed9d27803f5edc824e4afe8cbbbfbc inherit pub_methods_class_camera" id="r_aa2ed9d27803f5edc824e4afe8cbbbfbc"><td class="memItemLeft" align="right" valign="top">glm::mat4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbb/class_camera.html#aa2ed9d27803f5edc824e4afe8cbbbfbc">getProjectionMatrix</a> (float aspectRatio) const</td></tr>
@@ -130,12 +140,21 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setup</b> (glm::vec3 
 <tr class="memitem:aa9dc951f8d6e7082233786438139c51d inherit pub_methods_class_camera" id="r_aa9dc951f8d6e7082233786438139c51d"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../da/dbb/class_camera.html#aa9dc951f8d6e7082233786438139c51d">getPosition</a> () const</td></tr>
 <tr class="memdesc:aa9dc951f8d6e7082233786438139c51d inherit pub_methods_class_camera"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the camera’s current world-space position.  <br /></td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a6d09e1118ec82c05d1694e91a0b905c8" id="r_a6d09e1118ec82c05d1694e91a0b905c8"><td class="memItemLeft" align="right" valign="top"><a id="a6d09e1118ec82c05d1694e91a0b905c8" name="a6d09e1118ec82c05d1694e91a0b905c8"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>mouseCallback</b> (GLFWwindow *window, double xPosition, double yPosition)</td></tr>
+<tr class="memdesc:a6d09e1118ec82c05d1694e91a0b905c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">GLFW cursor‐move callback. <br /></td></tr>
+<tr class="memitem:aa7233187c85db74341e510d9db3a046d" id="r_aa7233187c85db74341e510d9db3a046d"><td class="memItemLeft" align="right" valign="top"><a id="aa7233187c85db74341e510d9db3a046d" name="aa7233187c85db74341e510d9db3a046d"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>scrollCallback</b> (GLFWwindow *window, double xOffset, double yOffset)</td></tr>
+<tr class="memdesc:aa7233187c85db74341e510d9db3a046d"><td class="mdescLeft">&#160;</td><td class="mdescRight">GLFW scroll‐wheel callback. <br /></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-inherited" class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_methods_class_camera"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_class_camera')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Protected Member Functions inherited from <a class="el" href="../../da/dbb/class_camera.html">Camera</a></td></tr>
 <tr class="memitem:ad424b8b92e580508caf21337b69b93fa inherit pro_methods_class_camera" id="r_ad424b8b92e580508caf21337b69b93fa"><td class="memItemLeft" align="right" valign="top">
 void&#160;</td><td class="memItemRight" valign="bottom"><b>updateCameraVectors</b> ()</td></tr>
-<tr class="memdesc:ad424b8b92e580508caf21337b69b93fa inherit pro_methods_class_camera"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recalculates _front, _right, and _up vectors from current yaw &amp; pitch. <br /></td></tr>
+<tr class="memdesc:ad424b8b92e580508caf21337b69b93fa inherit pro_methods_class_camera"><td class="mdescLeft">&#160;</td><td class="mdescRight">Recalculates front, right, and up vectors from current yaw and pitch. <br /></td></tr>
 <tr class="inherit_header pro_attribs_class_camera"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_attribs_class_camera')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Protected Attributes inherited from <a class="el" href="../../da/dbb/class_camera.html">Camera</a></td></tr>
 <tr class="memitem:a0a931ed2051befaad1f482b3b5e98ca0 inherit pro_attribs_class_camera" id="r_a0a931ed2051befaad1f482b3b5e98ca0"><td class="memItemLeft" align="right" valign="top">
 glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><b>_position</b> = glm::vec3(0.0f)</td></tr>
@@ -163,9 +182,13 @@ float&#160;</td><td class="memItemRight" valign="bottom"><b>_mouseSensitivity</b
 float&#160;</td><td class="memItemRight" valign="bottom"><b>_zoom</b> = 45.0f</td></tr>
 <tr class="memdesc:a468cc68ddf381d2c99a00ce8d9ee0bf8 inherit pro_attribs_class_camera"><td class="mdescLeft">&#160;</td><td class="mdescRight">Field‑of‑view (degrees) <br /></td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
-<li>src/graphics/cameras/<a class="el" href="../../d5/def/_orbit_camera_8h_source.html">OrbitCamera.h</a></li>
-<li>src/graphics/cameras/<b>OrbitCamera.cpp</b></li>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>A camera that orbits around a fixed target point. </p>
+<p>Usage: <a class="el" href="../../da/d51/class_orbit_camera.html" title="A camera that orbits around a fixed target point.">OrbitCamera</a> orbitCam({0.0f, 0.0f, 0.0f}, 10.0f); // after creating GLFW window: glfwSetWindowUserPointer(window, &amp;orbitCam); glfwSetCursorPosCallback(window, OrbitCamera::mouseCallback); glfwSetScrollCallback(window,  OrbitCamera::scrollCallback); // (optionally) glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);</p>
+<p>// In your render loop: orbitCam.updateCameraPosition(); glm::mat4 view = orbitCam.getViewMatrix(); glm::mat4 proj = orbitCam.getProjectionMatrix(float(width)/height); </p>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
+<li>engine/src/graphics/cameras/<a class="el" href="../../d5/def/_orbit_camera_8h_source.html">OrbitCamera.h</a></li>
+<li>engine/src/graphics/cameras/<b>OrbitCamera.cpp</b></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

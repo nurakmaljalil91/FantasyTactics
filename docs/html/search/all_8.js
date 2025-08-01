@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['getposition_0',['getPosition',['../da/dbb/class_camera.html#aa9dc951f8d6e7082233786438139c51d',1,'Camera']]],
-  ['getprojectionmatrix_1',['getProjectionMatrix',['../da/dbb/class_camera.html#aa2ed9d27803f5edc824e4afe8cbbbfbc',1,'Camera']]],
-  ['getviewmatrix_2',['getViewMatrix',['../da/dbb/class_camera.html#a2f90e661a78172675ca06ea69667b531',1,'Camera']]]
+  ['ellipsoid_0',['Ellipsoid',['../d9/d84/class_ellipsoid.html',1,'Ellipsoid'],['../d9/d84/class_ellipsoid.html#a0932956e04834c0f0092de4bb927aa5f',1,'Ellipsoid::Ellipsoid()']]],
+  ['ellipsoid_2ecpp_1',['Ellipsoid.cpp',['../de/dd4/_ellipsoid_8cpp.html',1,'']]],
+  ['ellipsoid_2eh_2',['Ellipsoid.h',['../d3/d9b/_ellipsoid_8h.html',1,'']]]
 ];

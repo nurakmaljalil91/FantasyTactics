@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['processkeyboard_0',['processKeyboard',['../da/dbb/class_camera.html#ae1f762466898a785731558d93373f5f0',1,'Camera']]],
-  ['processmousemovement_1',['processMouseMovement',['../da/dbb/class_camera.html#ac028c5a8dd6b3d3aed476eb30e8f2980',1,'Camera']]],
-  ['processmousescroll_2',['processMouseScroll',['../da/dbb/class_camera.html#a067090ee525389944ba3bacaa62f7632',1,'Camera']]]
+  ['camera_0',['Camera',['../da/dbb/class_camera.html#ae23af4d7cab430c77d537621cdd16b3f',1,'Camera::Camera()=default'],['../da/dbb/class_camera.html#a070fcddcb590c3226e85bc72290227b4',1,'Camera::Camera(const glm::vec3 &amp;position, const glm::vec3 &amp;worldUp, float yawDegrees=-90.0f, float pitchDegrees=0.0f, float movementSpeed=2.5f, float mouseSensitivity=0.1f, float zoomDegrees=45.0f)']]]
 ];

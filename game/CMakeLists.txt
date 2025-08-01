@@ -4,6 +4,8 @@ add_executable(FantasyTactics
         src/scenes/MenuScene.cpp
 
         src/main.cpp
+        src/scenes/PlayScene.cpp
+        src/scenes/PlayScene.h
 )
 # force its .exe into the top-level build dir
 set_target_properties(FantasyTactics PROPERTIES

@@ -2,7 +2,7 @@ var class_camera =
 [
     [ "Camera", "da/dbb/class_camera.html#ae23af4d7cab430c77d537621cdd16b3f", null ],
     [ "~Camera", "da/dbb/class_camera.html#adcb96efefa7af58e3ee6534b15d4979b", null ],
-    [ "Camera", "da/dbb/class_camera.html#a9d26f138aa6aaf13f1a7fd2a4c1d292b", null ],
+    [ "Camera", "da/dbb/class_camera.html#a070fcddcb590c3226e85bc72290227b4", null ],
     [ "getPosition", "da/dbb/class_camera.html#aa9dc951f8d6e7082233786438139c51d", null ],
     [ "getProjectionMatrix", "da/dbb/class_camera.html#aa2ed9d27803f5edc824e4afe8cbbbfbc", null ],
     [ "getViewMatrix", "da/dbb/class_camera.html#a2f90e661a78172675ca06ea69667b531", null ],

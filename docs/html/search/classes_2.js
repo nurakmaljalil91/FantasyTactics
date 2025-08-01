@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['isometriccamera_0',['IsometricCamera',['../dd/d5e/class_isometric_camera.html',1,'']]]
+  ['ellipsoid_0',['Ellipsoid',['../d9/d84/class_ellipsoid.html',1,'']]]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.14.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Fantasy Tactics: src/graphics/cameras/IsometricCamera.h Source File</title>
+<title>Fantasy Tactics: engine/src/graphics/cameras/IsometricCamera.h Source File</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -91,72 +91,84 @@ $(function(){initNavTree('de/da8/_isometric_camera_8h_source.html','../../','');
   <div class="headertitle"><div class="title">IsometricCamera.h</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// Created by User on 26/3/2025.</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">//</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#ifndef FANTASYTACTICS_ISOMETRICCAMERA_H</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#define FANTASYTACTICS_ISOMETRICCAMERA_H</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;glm/gtc/matrix_transform.hpp&gt;</span></div>
+<a href="../../de/da8/_isometric_camera_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">//</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">// A basic isometric camera using an orthographic projection.</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">// By default, we rotate ~35.264° around X, then 45° around Y.</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">//</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">// Usage:</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">// IsometricCamera isoCam(-10.f, 10.f, -10.f, 10.f, 0.1f, 100.f);</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">// isoCam.setPosition({ 0.f, 0.f, 10.f }); // optional</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">// isoCam.setAngles(45.f, 35.264f);        // optional</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#ifndef FANTASYTACTICS_ISOMETRICCAMERA_H</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#define FANTASYTACTICS_ISOMETRICCAMERA_H</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &lt;glm/glm.hpp&gt;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &lt;glm/gtc/matrix_transform.hpp&gt;</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#include &quot;<a class="code" href="../../d5/d91/_camera_8h.html">Camera.h</a>&quot;</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &quot;GLFW/glfw3.h&quot;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">//</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">// // Then in your render loop:</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">// glm::mat4 view = isoCam.getViewMatrix();</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">// glm::mat4 proj = isoCam.getProjectionMatrix();</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">// // pass them to your shader as &quot;uView&quot;, &quot;uProjection&quot;, etc.</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">//</span></div>
-<div class="foldopen" id="foldopen00025" data-start="{" data-end="};">
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno"><a class="line" href="../../dd/d5e/class_isometric_camera.html">   25</a></span><span class="keyword">class </span>IsometricCamera {</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    IsometricCamera(<span class="keywordtype">float</span> left, <span class="keywordtype">float</span> right, <span class="keywordtype">float</span> bottom, <span class="keywordtype">float</span> top, <span class="keywordtype">float</span> nearPlane, <span class="keywordtype">float</span> farPlane);</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keywordtype">void</span> setPosition(<span class="keyword">const</span> glm::vec3&amp; pos);</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">void</span> setAngles(<span class="keywordtype">float</span> angleY, <span class="keywordtype">float</span> angleX);</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="comment">// Accessors for final matrices</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keyword">const</span> glm::mat4&amp; getViewMatrix()<span class="keyword"> const       </span>{ <span class="keywordflow">return</span> mViewMatrix; }</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keyword">const</span> glm::mat4&amp; getProjectionMatrix()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> mProjectionMatrix; }</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keywordtype">void</span> _updateViewMatrix();</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">void</span> _updateProjectionMatrix();</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="comment">// Projection params</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">float</span> mLeft, mRight, mBottom, mTop, mNear, mFar;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="comment">// Euler angles (in degrees) for isometric tilt</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keywordtype">float</span> mAngleY = 45.0f;     <span class="comment">// around Y axis</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">float</span> mAngleX = 35.264f;   <span class="comment">// around X axis (approx classic 7:4 isometric angle)</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="comment">// Camera position</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    glm::vec3 mPosition = glm::vec3(0.0f);</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="comment">// Final matrices</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    glm::mat4 mViewMatrix       = glm::mat4(1.0f);</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    glm::mat4 mProjectionMatrix = glm::mat4(1.0f);</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>};</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">// A basic isometric camera using an orthographic projection.</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">// By default, we rotate ~35.264° around X, then 45° around Y.</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">//</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">// Usage:</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">// IsometricCamera isoCam(-10.f, 10.f, -10.f, 10.f, 0.1f, 100.f);</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">// isoCam.setPosition({ 0.f, 0.f, 10.f }); // optional</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">// isoCam.setAngles(45.f, 35.264f);        // optional</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">//</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">// // Then in your render loop:</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">// glm::mat4 view = isoCam.getViewMatrix();</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">// glm::mat4 proj = isoCam.getProjectionMatrix();</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">// // pass them to your shader as &quot;uView&quot;, &quot;uProjection&quot;, etc.</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">//</span></div>
+<div class="foldopen" id="foldopen00033" data-start="{" data-end="};">
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="../../dd/d5e/class_isometric_camera.html">   33</a></span><span class="keyword">class </span><a class="code hl_function" href="../../dd/d5e/class_isometric_camera.html#a826189c6de5f553e57bb7ea3623e02f0">IsometricCamera</a> : <span class="keyword">public</span> <a class="code hl_function" href="../../da/dbb/class_camera.html#ae23af4d7cab430c77d537621cdd16b3f">Camera</a> {</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keyword">explicit</span> <a class="code hl_function" href="../../dd/d5e/class_isometric_camera.html#a826189c6de5f553e57bb7ea3623e02f0">IsometricCamera</a>(</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keyword">const</span> glm::vec3 &amp;center = glm::vec3(0.0f),</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keywordtype">float</span> size = 10.0f,</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="keywordtype">float</span> distance = 20.0f</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    );</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../dd/d5e/class_isometric_camera.html#a2be71d661a60d609e8672a647f11e26f">updateCamera</a>();</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../dd/d5e/class_isometric_camera.html#a699337ecba4b514f346f1dcf7f9a7147">processMouseScroll</a>(<span class="keywordtype">float</span> yOffset);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="../../dd/d5e/class_isometric_camera.html#ac0413e557ccefb29879afaccd54a287d">scrollCallback</a>(GLFWwindow *window, <span class="keywordtype">double</span> <span class="comment">/*dx*/</span>, <span class="keywordtype">double</span> dy);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    [[nodiscard]] glm::mat4 <a class="code hl_function" href="../../dd/d5e/class_isometric_camera.html#a705bfabd4e78ff20b4fc58080121a1e8">getProjectionMatrix</a>(<span class="keywordtype">float</span> aspectRatio) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../dd/d5e/class_isometric_camera.html#a4474da1b183a9242a05e8b75ecd4c8dc">setAngles</a>(<span class="keywordtype">float</span> yaw, <span class="keywordtype">float</span> pitch);</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="../../dd/d5e/class_isometric_camera.html#a3e1a217bead2e40f9ae6fb5f223d169a">rotateYaw</a>(<span class="keywordtype">float</span> delta);</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno"><a class="line" href="../../dd/d5e/class_isometric_camera.html#a0858495dd2cc18c3709a71729cc5ef22">   86</a></span>    [[nodiscard]] <span class="keywordtype">float</span> <a class="code hl_function" href="../../dd/d5e/class_isometric_camera.html#a0858495dd2cc18c3709a71729cc5ef22">getYaw</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="../../da/dbb/class_camera.html#a20b2e0a12e053acd7cb5bf7acc1e36ba">_yaw</a>; }</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="../../dd/d5e/class_isometric_camera.html#af85176aa9bc0f109a68698ac2931ed7c">   92</a></span>    [[nodiscard]] <span class="keywordtype">float</span> <a class="code hl_function" href="../../dd/d5e/class_isometric_camera.html#af85176aa9bc0f109a68698ac2931ed7c">getPitch</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code hl_variable" href="../../da/dbb/class_camera.html#a685190408518a0fac51af843fb6a5473">_pitch</a>; }</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    glm::vec3 _center; </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="keywordtype">float</span> _size; </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keywordtype">float</span> _distance; </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>};</div>
 </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="preprocessor">#endif </span><span class="comment">//FANTASYTACTICS_ISOMETRICCAMERA_H</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="preprocessor">#endif </span><span class="comment">//FANTASYTACTICS_ISOMETRICCAMERA_H</span></div>
+<div class="ttc" id="a_camera_8h_html"><div class="ttname"><a href="../../d5/d91/_camera_8h.html">Camera.h</a></div><div class="ttdoc">Header file for the Camera class.</div></div>
+<div class="ttc" id="aclass_camera_html_a20b2e0a12e053acd7cb5bf7acc1e36ba"><div class="ttname"><a href="../../da/dbb/class_camera.html#a20b2e0a12e053acd7cb5bf7acc1e36ba">Camera::_yaw</a></div><div class="ttdeci">float _yaw</div><div class="ttdoc">Yaw angle, initialized to look toward -Z.</div><div class="ttdef"><b>Definition</b> Camera.h:117</div></div>
+<div class="ttc" id="aclass_camera_html_a685190408518a0fac51af843fb6a5473"><div class="ttname"><a href="../../da/dbb/class_camera.html#a685190408518a0fac51af843fb6a5473">Camera::_pitch</a></div><div class="ttdeci">float _pitch</div><div class="ttdoc">Pitch angle.</div><div class="ttdef"><b>Definition</b> Camera.h:118</div></div>
+<div class="ttc" id="aclass_camera_html_ae23af4d7cab430c77d537621cdd16b3f"><div class="ttname"><a href="../../da/dbb/class_camera.html#ae23af4d7cab430c77d537621cdd16b3f">Camera::Camera</a></div><div class="ttdeci">Camera()=default</div></div>
+<div class="ttc" id="aclass_isometric_camera_html_a0858495dd2cc18c3709a71729cc5ef22"><div class="ttname"><a href="../../dd/d5e/class_isometric_camera.html#a0858495dd2cc18c3709a71729cc5ef22">IsometricCamera::getYaw</a></div><div class="ttdeci">float getYaw() const</div><div class="ttdoc">gets the current yaw angle.</div><div class="ttdef"><b>Definition</b> IsometricCamera.h:86</div></div>
+<div class="ttc" id="aclass_isometric_camera_html_a2be71d661a60d609e8672a647f11e26f"><div class="ttname"><a href="../../dd/d5e/class_isometric_camera.html#a2be71d661a60d609e8672a647f11e26f">IsometricCamera::updateCamera</a></div><div class="ttdeci">void updateCamera()</div><div class="ttdoc">Recompute _position, _right, _up based on center/direction. Call once per frame before getViewMatrix(...</div><div class="ttdef"><b>Definition</b> IsometricCamera.cpp:21</div></div>
+<div class="ttc" id="aclass_isometric_camera_html_a3e1a217bead2e40f9ae6fb5f223d169a"><div class="ttname"><a href="../../dd/d5e/class_isometric_camera.html#a3e1a217bead2e40f9ae6fb5f223d169a">IsometricCamera::rotateYaw</a></div><div class="ttdeci">void rotateYaw(float delta)</div><div class="ttdoc">Rotates the camera around the Y axis (yaw).</div><div class="ttdef"><b>Definition</b> IsometricCamera.cpp:57</div></div>
+<div class="ttc" id="aclass_isometric_camera_html_a4474da1b183a9242a05e8b75ecd4c8dc"><div class="ttname"><a href="../../dd/d5e/class_isometric_camera.html#a4474da1b183a9242a05e8b75ecd4c8dc">IsometricCamera::setAngles</a></div><div class="ttdeci">void setAngles(float yaw, float pitch)</div><div class="ttdoc">Sets the camera&#39;s yaw and pitch angles.</div><div class="ttdef"><b>Definition</b> IsometricCamera.cpp:50</div></div>
+<div class="ttc" id="aclass_isometric_camera_html_a699337ecba4b514f346f1dcf7f9a7147"><div class="ttname"><a href="../../dd/d5e/class_isometric_camera.html#a699337ecba4b514f346f1dcf7f9a7147">IsometricCamera::processMouseScroll</a></div><div class="ttdeci">void processMouseScroll(float yOffset)</div><div class="ttdoc">Zooms the ortho volume in/out.</div><div class="ttdef"><b>Definition</b> IsometricCamera.cpp:30</div></div>
+<div class="ttc" id="aclass_isometric_camera_html_a705bfabd4e78ff20b4fc58080121a1e8"><div class="ttname"><a href="../../dd/d5e/class_isometric_camera.html#a705bfabd4e78ff20b4fc58080121a1e8">IsometricCamera::getProjectionMatrix</a></div><div class="ttdeci">glm::mat4 getProjectionMatrix(float aspectRatio) const</div><div class="ttdoc">Returns an orthographic projection matrix.</div><div class="ttdef"><b>Definition</b> IsometricCamera.cpp:41</div></div>
+<div class="ttc" id="aclass_isometric_camera_html_a826189c6de5f553e57bb7ea3623e02f0"><div class="ttname"><a href="../../dd/d5e/class_isometric_camera.html#a826189c6de5f553e57bb7ea3623e02f0">IsometricCamera::IsometricCamera</a></div><div class="ttdeci">IsometricCamera(const glm::vec3 &amp;center=glm::vec3(0.0f), float size=10.0f, float distance=20.0f)</div><div class="ttdoc">Constructs an isometric camera.</div><div class="ttdef"><b>Definition</b> IsometricCamera.cpp:10</div></div>
+<div class="ttc" id="aclass_isometric_camera_html_ac0413e557ccefb29879afaccd54a287d"><div class="ttname"><a href="../../dd/d5e/class_isometric_camera.html#ac0413e557ccefb29879afaccd54a287d">IsometricCamera::scrollCallback</a></div><div class="ttdeci">static void scrollCallback(GLFWwindow *window, double, double dy)</div><div class="ttdef"><b>Definition</b> IsometricCamera.cpp:35</div></div>
+<div class="ttc" id="aclass_isometric_camera_html_af85176aa9bc0f109a68698ac2931ed7c"><div class="ttname"><a href="../../dd/d5e/class_isometric_camera.html#af85176aa9bc0f109a68698ac2931ed7c">IsometricCamera::getPitch</a></div><div class="ttdeci">float getPitch() const</div><div class="ttdoc">gets the current pitch angle.</div><div class="ttdef"><b>Definition</b> IsometricCamera.h:92</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="../../dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a href="../../dir_560415a5d2bc4999842279f4fc1debef.html">graphics</a></li><li class="navelem"><a href="../../dir_3adfb512bd1dae405aa37381e893a373.html">cameras</a></li><li class="navelem"><b>IsometricCamera.h</b></li>
+    <li class="navelem"><a href="../../dir_996f45160da62e1a3d7f6046fad68f51.html">engine</a></li><li class="navelem"><a href="../../dir_3d9126aa00c041bc0b8f859d1965a0f4.html">src</a></li><li class="navelem"><a href="../../dir_d7958bfcefb379efaec3d62a179a1d24.html">graphics</a></li><li class="navelem"><a href="../../dir_c8da6ed00ae71b6406e1d7a8a240caf3.html">cameras</a></li><li class="navelem"><a href="../../de/da8/_isometric_camera_8h.html">IsometricCamera.h</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="../../doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
   </ul>
 </div>

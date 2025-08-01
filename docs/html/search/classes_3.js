@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['logger_0',['Logger',['../d3/d42/class_logger.html',1,'']]]
+  ['firstpersoncamera_0',['FirstPersonCamera',['../db/dd6/class_first_person_camera.html',1,'']]]
 ];

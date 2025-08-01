@@ -88,9 +88,12 @@ $(function(){initNavTree('d9/dbf/class_cube.html','../../','d9/da4/class_cube-me
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">Cube Class Reference</div></div>
+  <div class="headertitle"><div class="title">Cube Class Reference<span class="mlabels"><span class="mlabel final">final</span></span></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class representing a simple cube mesh.  
+ <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="../../db/d6b/_cube_8h_source.html">Cube.h</a>&gt;</code></p>
 <div class="dynheader">
@@ -107,26 +110,35 @@ Collaboration diagram for Cube:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-inherited" class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_methods_class_mesh"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_class_mesh')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="../../dc/dbe/class_mesh.html">Mesh</a></td></tr>
-<tr class="memitem:aaaab885ddfdf5fb54fdb796b4a2c1141 inherit pub_methods_class_mesh" id="r_aaaab885ddfdf5fb54fdb796b4a2c1141"><td class="memItemLeft" align="right" valign="top">
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>loadObj</b> (const std::string &amp;filename)</td></tr>
-<tr class="memitem:a996a8668fa2ca7d95d6d10744c833bc8 inherit pub_methods_class_mesh" id="r_a996a8668fa2ca7d95d6d10744c833bc8"><td class="memItemLeft" align="right" valign="top">
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>draw</b> ()</td></tr>
+<tr class="memitem:a2af137f1571af89172b9c102302c416b inherit pub_methods_class_mesh" id="r_a2af137f1571af89172b9c102302c416b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/dbe/class_mesh.html#a2af137f1571af89172b9c102302c416b">Mesh</a> ()</td></tr>
+<tr class="memitem:a5efe4da1a4c0971cfb037bd70304c303 inherit pub_methods_class_mesh" id="r_a5efe4da1a4c0971cfb037bd70304c303"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/dbe/class_mesh.html#a5efe4da1a4c0971cfb037bd70304c303">~Mesh</a> ()</td></tr>
+<tr class="memitem:aaaab885ddfdf5fb54fdb796b4a2c1141 inherit pub_methods_class_mesh" id="r_aaaab885ddfdf5fb54fdb796b4a2c1141"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/dbe/class_mesh.html#aaaab885ddfdf5fb54fdb796b4a2c1141">loadObj</a> (const std::string &amp;filename)</td></tr>
+<tr class="memdesc:aaaab885ddfdf5fb54fdb796b4a2c1141 inherit pub_methods_class_mesh"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads a Wavefront OBJ model from a file.  <br /></td></tr>
+<tr class="memitem:a996a8668fa2ca7d95d6d10744c833bc8 inherit pub_methods_class_mesh" id="r_a996a8668fa2ca7d95d6d10744c833bc8"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/dbe/class_mesh.html#a996a8668fa2ca7d95d6d10744c833bc8">draw</a> ()</td></tr>
+<tr class="memdesc:a996a8668fa2ca7d95d6d10744c833bc8 inherit pub_methods_class_mesh"><td class="mdescLeft">&#160;</td><td class="mdescRight">Renders the mesh using OpenGL.  <br /></td></tr>
 <tr class="inherit_header pro_methods_class_mesh"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_methods_class_mesh')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Protected Member Functions inherited from <a class="el" href="../../dc/dbe/class_mesh.html">Mesh</a></td></tr>
-<tr class="memitem:a8a4d366e9e5dd3d67e0b461cd1eabaf5 inherit pro_methods_class_mesh" id="r_a8a4d366e9e5dd3d67e0b461cd1eabaf5"><td class="memItemLeft" align="right" valign="top">
-void&#160;</td><td class="memItemRight" valign="bottom"><b>initializeBuffers</b> ()</td></tr>
+<tr class="memitem:a8a4d366e9e5dd3d67e0b461cd1eabaf5 inherit pro_methods_class_mesh" id="r_a8a4d366e9e5dd3d67e0b461cd1eabaf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/dbe/class_mesh.html#a8a4d366e9e5dd3d67e0b461cd1eabaf5">initializeBuffers</a> ()</td></tr>
+<tr class="memdesc:a8a4d366e9e5dd3d67e0b461cd1eabaf5 inherit pro_methods_class_mesh"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes OpenGL buffers for the mesh.  <br /></td></tr>
 <tr class="inherit_header pro_attribs_class_mesh"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pro_attribs_class_mesh')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Protected Attributes inherited from <a class="el" href="../../dc/dbe/class_mesh.html">Mesh</a></td></tr>
-<tr class="memitem:a1bad8bb82d9ec131c77b2a8d7d137408 inherit pro_attribs_class_mesh" id="r_a1bad8bb82d9ec131c77b2a8d7d137408"><td class="memItemLeft" align="right" valign="top">
-std::vector&lt; <a class="el" href="../../d7/d62/struct_vertex.html">Vertex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>mVertices</b></td></tr>
-<tr class="memitem:afea79764d692eec8ab35e7ea67b36851 inherit pro_attribs_class_mesh" id="r_afea79764d692eec8ab35e7ea67b36851"><td class="memItemLeft" align="right" valign="top">
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>mLoaded</b></td></tr>
-<tr class="memitem:af91cbd56f50283b3a7bb2fa9c2399dd2 inherit pro_attribs_class_mesh" id="r_af91cbd56f50283b3a7bb2fa9c2399dd2"><td class="memItemLeft" align="right" valign="top">
-GLuint&#160;</td><td class="memItemRight" valign="bottom"><b>mVAO</b></td></tr>
+<tr class="memitem:a6465a888c97232a39e12aad008c969c3 inherit pro_attribs_class_mesh" id="r_a6465a888c97232a39e12aad008c969c3"><td class="memItemLeft" align="right" valign="top">
+std::vector&lt; <a class="el" href="../../d7/d62/struct_vertex.html">Vertex</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>vertices</b></td></tr>
+<tr class="memitem:a26632e27b772f24b069a738e7983b9da inherit pro_attribs_class_mesh" id="r_a26632e27b772f24b069a738e7983b9da"><td class="memItemLeft" align="right" valign="top">
+std::vector&lt; unsigned int &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>indices</b></td></tr>
+<tr class="memitem:abc9d8a553261bf01c7e758ba2142c7fc inherit pro_attribs_class_mesh" id="r_abc9d8a553261bf01c7e758ba2142c7fc"><td class="memItemLeft" align="right" valign="top">
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>loaded</b></td></tr>
+<tr class="memitem:a09b989b9d4df8ae595d7e80e091a4a5b inherit pro_attribs_class_mesh" id="r_a09b989b9d4df8ae595d7e80e091a4a5b"><td class="memItemLeft" align="right" valign="top">
+GLuint&#160;</td><td class="memItemRight" valign="bottom"><b>VAO</b></td></tr>
+<tr class="memitem:a0d28b2c6fee628a13f43cae3f858569b inherit pro_attribs_class_mesh" id="r_a0d28b2c6fee628a13f43cae3f858569b"><td class="memItemLeft" align="right" valign="top">
+GLuint&#160;</td><td class="memItemRight" valign="bottom"><b>VBO</b></td></tr>
+<tr class="memitem:a894c6723c0172f4e38b2509582abfa6c inherit pro_attribs_class_mesh" id="r_a894c6723c0172f4e38b2509582abfa6c"><td class="memItemLeft" align="right" valign="top">
+GLuint&#160;</td><td class="memItemRight" valign="bottom"><b>EBO</b></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A simple cube mesh, 1×1×1, centered at the origin. </p>
+<div class="textblock"><p>Class representing a simple cube mesh. </p>
+<p>This class initializes a cube mesh with predefined vertices, normals, and texture coordinates. The cube is centered at the origin and has a size of 1 unit. </p>
 </div><hr/>The documentation for this class was generated from the following files:<ul>
-<li>src/graphics/<a class="el" href="../../db/d6b/_cube_8h_source.html">Cube.h</a></li>
-<li>src/graphics/<b>Cube.cpp</b></li>
+<li>engine/src/graphics/meshes/<a class="el" href="../../db/d6b/_cube_8h_source.html">Cube.h</a></li>
+<li>engine/src/graphics/meshes/<a class="el" href="../../d1/d5e/_cube_8cpp.html">Cube.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

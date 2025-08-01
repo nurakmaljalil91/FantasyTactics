@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mesh_0',['Mesh',['../dc/dbe/class_mesh.html',1,'']]]
+  ['isometriccamera_0',['IsometricCamera',['../dd/d5e/class_isometric_camera.html',1,'']]]
 ];
