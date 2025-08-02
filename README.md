@@ -60,3 +60,11 @@ git clone https://github.com/nothings/stb.git
 
 - Copy the stb_image.h file into the project include directory
 - You do not need other header files from the stb repository
+
+## Documentation
+
+- The documentation is generated using Doxygen. To generate the documentation, run the following command in the project root directory:
+```bash
+doxygen Doxyfile
+```
+- The documentation will be generated in the `docs/html` directory. Open the `index.html` file in a web browser to view the documentation.
