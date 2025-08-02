@@ -11,10 +11,10 @@
 #ifndef FANTASYTACTICS_ISOMETRICCAMERA_H
 #define FANTASYTACTICS_ISOMETRICCAMERA_H
 
+#include "OpenGLInclude.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Camera.h"
-#include "GLFW/glfw3.h"
 
 //
 // A basic isometric camera using an orthographic projection.

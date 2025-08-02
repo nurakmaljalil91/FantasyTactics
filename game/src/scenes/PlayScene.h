@@ -10,6 +10,11 @@
 #define PLAYSCENE_H
 
 #include "core/Scene.h"
+#include "graphics/cameras/IsometricCamera.h"
+#include "graphics/meshes/Cube.h"
+#include "graphics/meshes/Sphere.h"
+#include "graphics/renderers/ShaderProgram.h"
+#include "graphics/renderers/Texture2D.h"
 
 /**
  * @class PlayScene
@@ -22,6 +27,19 @@ public:
     void update(float deltaTime) override;
 
     void render() override;
+
+private:
+    ShaderProgram _shader;
+    IsometricCamera _isometricCamera{
+        {0.0f, 0.0f, 0.0f}, 5.0f, 5.0f
+    };
+    Cube _cube;
+    Sphere _sphere;
+    glm::vec3 _cubePosition{0.0f, 0.0f, 0.0f};
+    glm::vec3 _spherePosition{0.0f, 1.5f, 0.0f};
+    Texture2D _texture;
+    Texture2D _robotTexture;
+    Mesh _robotMesh;
 };
 
 

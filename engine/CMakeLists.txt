@@ -30,6 +30,7 @@ add_library(engine
 
         # UI components
         src/graphics/ui/Quad2D.cpp
+        src/OpenGLInclude.h
 )
 
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

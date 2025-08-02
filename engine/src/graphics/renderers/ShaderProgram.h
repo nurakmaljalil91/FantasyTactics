@@ -9,7 +9,7 @@
 #ifndef FANTASYTACTICS_SHADER_H
 #define FANTASYTACTICS_SHADER_H
 
-#include "glad/glad.h"
+#include "OpenGLInclude.h"
 #include <string>
 #include "glm/glm.hpp"
 #include <map>

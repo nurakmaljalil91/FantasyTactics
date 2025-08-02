@@ -13,7 +13,7 @@
 #ifndef FANTASYTACTICS_TEXTURE_2D_H
 #define FANTASYTACTICS_TEXTURE_2D_H
 
-#include "glad/glad.h"
+#include "OpenGLInclude.h"
 #include <string>
 #include <iostream>
 

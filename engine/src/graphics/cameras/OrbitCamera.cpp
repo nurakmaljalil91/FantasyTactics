@@ -7,7 +7,6 @@
  */
 
 #include "OrbitCamera.h"
-
 #include <cmath>
 
 bool OrbitCamera::_firstMouse = true;

@@ -11,9 +11,9 @@
 
 #include <vector>
 #include <string>
-#include <glad/glad.h>
 #include <glm/glm.hpp>
 #include "../../utilities/Logger.h"
+#include "OpenGLInclude.h"
 
 /**
  * @struct  Vertex

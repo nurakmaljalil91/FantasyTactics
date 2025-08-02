@@ -25,7 +25,7 @@
 #include <map>
 
 #include "ShaderProgram.h"
-#include "glad/glad.h"
+#include "OpenGLInclude.h"
 #include "glm/vec2.hpp"
 
 /**

@@ -30,7 +30,7 @@
 #ifndef Quad2D_H
 #define Quad2D_H
 
-#include "glad/glad.h"
+#include "OpenGLInclude.h"
 
 class Quad2D {
 public:
