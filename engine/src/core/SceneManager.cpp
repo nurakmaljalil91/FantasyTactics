@@ -9,25 +9,46 @@
  */
 
 #include "SceneManager.h"
+#include "utilities/Logger.h"
 
-void SceneManager::addScene(const std::shared_ptr<Scene> &scene) {
-    _scenes.push_back(scene);
+SceneManager::SceneManager(): _currentScene(nullptr) {
+}
+
+void SceneManager::addScene(const std::string &name, std::shared_ptr<Scene> scene) {
+    if (_scenes.find(name) != _scenes.end()) {
+        Logger::log()->error("Scene '{}' already exists in SceneManager", name);
+        return; // Scene with this name already exists
+    }
+    _scenes[name] = std::move(scene);
+}
+
+std::string SceneManager::getActiveScene() {
+    for (const auto &[name, scene]: _scenes) {
+        if (scene == _currentScene) {
+            return name; // Return the name of the active scene
+        }
+    }
+    return "";
+}
+
+void SceneManager::setActiveScene(const std::string &name) {
+    if (_scenes.find(name) != _scenes.end()) {
+        _currentScene = _scenes[name];
+        _currentScene->initialize();
+    } else {
+        Logger::log()->error("Scene '{}' not found in SceneManager", name);
+        _currentScene = nullptr;
+    }
 }
 
 void SceneManager::update(const float deltaTime) const {
-    if (_scenes.empty()) {
-        return; // No scenes to update
-    }
-    for (const auto &scene: _scenes) {
-        scene->update(deltaTime);
+    if (_currentScene) {
+        _currentScene->update(deltaTime);
     }
 }
 
 void SceneManager::render() const {
-    if (_scenes.empty()) {
-        return; // No scenes to update
-    }
-    for (const auto &scene: _scenes) {
-        scene->render();
+    if (_currentScene) {
+        _currentScene->render();
     }
 }

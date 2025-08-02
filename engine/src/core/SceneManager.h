@@ -9,9 +9,9 @@
 #ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
 
+#include <string>
 #include <memory>
-#include <vector>
-
+#include <unordered_map>
 #include "Scene.h"
 
 /**
@@ -25,10 +25,31 @@
 class SceneManager {
 public:
     /**
+     * Default constructor.
+     * @details Initializes an empty SceneManager with no scenes.
+     */
+    SceneManager();
+
+    ~SceneManager() = default;
+
+    /**
      * Add a scene to the manager.
+     * @param name  Name of the scene to be added.
      * @param scene scene to be added.
      */
-    void addScene(const std::shared_ptr<Scene> &scene);
+    void addScene(const std::string &name, std::shared_ptr<Scene> scene);
+
+    /**
+     * Get the current active scene.
+     * @return A name of the current active scene.
+     */
+    [[nodiscard]] std::string getActiveScene();
+
+    /**
+     * Set the active scene by name.
+     * @param name the name of the scene to be set as active.
+     */
+    void setActiveScene(const std::string &name);
 
     /**
      * Update all scenes in the manager.
@@ -43,7 +64,8 @@ public:
     void render() const;
 
 private:
-    std::vector<std::shared_ptr<Scene> > _scenes;
+    std::unordered_map<std::string, std::shared_ptr<Scene> > _scenes;
+    std::shared_ptr<Scene> _currentScene;
 };
 
 
