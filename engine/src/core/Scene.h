@@ -46,6 +46,30 @@ public:
      * @details This method is called to render the scene, drawing all game objects and UI elements.
      */
     virtual void render() = 0;
+
+    /**
+     * Sets the window size for the scene.
+     * @param width  Width of the window in pixels.
+     * @param height Height of the window in pixels.
+     * @details This method is used to set the dimensions of the window in which the scene will be rendered.
+     */
+    void setWindowSize(int width, int height);
+
+protected:
+    /**
+     * Gets the width of the window.
+     * @return Width of the window in pixels.
+     */
+    [[nodiscard]] int getWindowWidth() const;
+
+    /**
+     * Gets the height of the window.
+     * @return Height of the window in pixels.
+     */
+    [[nodiscard]] int getWindowHeight() const;
+
+private:
+    int _windowWidth = 0, _windowHeight = 0;
 };
 
 

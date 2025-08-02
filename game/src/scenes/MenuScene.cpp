@@ -11,11 +11,10 @@
 #include "glm/ext/matrix_clip_space.hpp"
 #include "graphics/renderers/TextRenderer.h"
 #include "graphics/ui/Quad2D.h"
-#include "utilities/Logger.h"
 
 void MenuScene::initialize() {
     _uiShader.loadShaders("resources/shaders/ui.vert", "resources/shaders/ui.frag");
-    _textRenderer.loadFont("resources/fonts/Amble.ttf", 24);
+    _textRenderer.loadFont("resources/fonts/Amble.ttf", 50);
     _buttonTex.loadTexture("resources/textures/crate.jpg", true);
 }
 
@@ -28,9 +27,10 @@ void MenuScene::render() {
         0.0f, static_cast<float>(800), // bottom → top
         -1.0f, 1.0f
     );
-
+    glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     _uiShader.use();
     _uiShader.setUniform("uProjection", orthoProjection);
     constexpr glm::vec2 buttonPosition(100.0f, 50.0f); // Y = height - (buttonHeight + margin)

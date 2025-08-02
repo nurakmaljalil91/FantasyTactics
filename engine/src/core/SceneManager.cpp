@@ -47,8 +47,9 @@ void SceneManager::update(const float deltaTime) const {
     }
 }
 
-void SceneManager::render() const {
+void SceneManager::render(int windowWidth, int windowHeight) const {
     if (_currentScene) {
+        _currentScene->setWindowSize(windowWidth, windowHeight);
         _currentScene->render();
     }
 }

@@ -60,8 +60,10 @@ public:
     /**
      * Render all scenes in the manager.
      * @details This method calls the render method of each scene in the manager.
+     * @param windowWidth  Width of the window in pixels.
+     * @param windowHeight Height of the window in pixels.
      */
-    void render() const;
+    void render(int windowWidth, int windowHeight) const;
 
 private:
     std::unordered_map<std::string, std::shared_ptr<Scene> > _scenes;

@@ -35,7 +35,10 @@ void Application::run() {
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        _scenesManager.render();
+
+        int windowWidth, windowHeight;
+        glfwGetFramebufferSize(_window.getHandle(), &windowWidth, &windowHeight);
+        _scenesManager.render(windowWidth, windowHeight);
 
         _window.swapBuffers();
         _window.pollEvents();
