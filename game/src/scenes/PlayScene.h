@@ -21,7 +21,7 @@ public:
 
     void update(float deltaTime) override;
 
-    void render() const override;
+    void render() override;
 };
 
 

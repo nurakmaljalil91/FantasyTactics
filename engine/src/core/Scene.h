@@ -45,7 +45,7 @@ public:
      * Renders the scene.
      * @details This method is called to render the scene, drawing all game objects and UI elements.
      */
-    virtual void render() const = 0;
+    virtual void render() = 0;
 };
 
 

@@ -13,5 +13,5 @@ void PlayScene::initialize() {
 void PlayScene::update(float deltaTime) {
 }
 
-void PlayScene::render() const {
+void PlayScene::render() {
 }

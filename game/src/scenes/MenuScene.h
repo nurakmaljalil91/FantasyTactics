@@ -9,6 +9,10 @@
 #define MENUSCENE_H
 
 #include "core/Scene.h"
+#include "graphics/renderers/ShaderProgram.h"
+#include "graphics/renderers/TextRenderer.h"
+#include "graphics/renderers/Texture2D.h"
+#include "graphics/ui/Quad2D.h"
 
 /**
  * @class MenuScene
@@ -27,7 +31,13 @@ public:
 
     void update(float deltaTime) override;
 
-    void render() const override;
+    void render() override;
+
+private:
+    ShaderProgram _uiShader;
+    TextRenderer _textRenderer{1200, 800};
+    Quad2D _buttonQuad;
+    Texture2D _buttonTex;
 };
 
 
