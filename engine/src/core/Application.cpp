@@ -51,7 +51,7 @@ SceneManager *Application::getSceneManager() {
 
 void Application::_initialize() {
     // initialize scene manager
-    Logger::log()->info("Initializing SceneManager");
+    _scenesManager.initialize(_window.getHandle());
 }
 
 void Application::_processInput(float deltaTime) {

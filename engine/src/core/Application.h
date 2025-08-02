@@ -8,9 +8,9 @@
 
 #ifndef APPLICATION_H
 #define APPLICATION_H
-#include "SceneManager.h"
-#include "Window.h"
 
+#include "Window.h"
+#include "SceneManager.h"
 
 /**
  * @class Application

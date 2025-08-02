@@ -30,7 +30,17 @@ public:
      */
     SceneManager();
 
+    /**
+     * Default destructor.
+     * @details Cleans up resources used by the SceneManager.
+     */
     ~SceneManager() = default;
+
+    /**
+     * Initialize the SceneManager with a GLFW window.
+     * @param window specifies the GLFW window to be used by the SceneManager.
+     */
+    void initialize(GLFWwindow *window);
 
     /**
      * Add a scene to the manager.
@@ -68,6 +78,7 @@ public:
 private:
     std::unordered_map<std::string, std::shared_ptr<Scene> > _scenes;
     std::shared_ptr<Scene> _currentScene;
+    GLFWwindow *_window{nullptr};
 };
 
 

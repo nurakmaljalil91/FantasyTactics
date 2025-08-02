@@ -14,6 +14,10 @@
 SceneManager::SceneManager(): _currentScene(nullptr) {
 }
 
+void SceneManager::initialize(GLFWwindow *window) {
+    _window = window;
+}
+
 void SceneManager::addScene(const std::string &name, std::shared_ptr<Scene> scene) {
     if (_scenes.find(name) != _scenes.end()) {
         Logger::log()->error("Scene '{}' already exists in SceneManager", name);
@@ -34,6 +38,7 @@ std::string SceneManager::getActiveScene() {
 void SceneManager::setActiveScene(const std::string &name) {
     if (_scenes.find(name) != _scenes.end()) {
         _currentScene = _scenes[name];
+        _currentScene->setWindow(_window);
         _currentScene->initialize();
     } else {
         Logger::log()->error("Scene '{}' not found in SceneManager", name);

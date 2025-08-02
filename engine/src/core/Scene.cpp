@@ -8,9 +8,17 @@
 
 #include "Scene.h"
 
-void Scene::setWindowSize(int width, int height) {
+void Scene::setWindowSize(const int width, const int height) {
     _windowHeight = height;
     _windowWidth = width;
+}
+
+void Scene::setWindow(GLFWwindow *window) {
+    _window = window;
+}
+
+GLFWwindow *Scene::getWindow() const {
+    return _window;
 }
 
 int Scene::getWindowWidth() const {

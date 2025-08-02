@@ -19,15 +19,8 @@ void PlayScene::initialize() {
         Logger::log()->info("Robot mesh loaded successfully");
     }
 
-    // Construct your isometric camera
-    // Suppose you want an ortho box from -2..2 horizontally, -2..2 vertically
-    // near=0.1, far=100.0
-    // Instead of (-2,2), try something bigger:
-
-
-    // glfwSetWindowUserPointer(glfwWindow, &glfwWindow);
-    // glfwSetWindowUserPointer(glfwWindow, &isometricCamera);
-    // glfwSetScrollCallback(glfwWindow, IsometricCamera::scrollCallback);
+    glfwSetWindowUserPointer(getWindow(), &_isometricCamera);
+    glfwSetScrollCallback(getWindow(), IsometricCamera::scrollCallback);
 }
 
 

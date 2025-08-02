@@ -9,6 +9,8 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "OpenGLInclude.h"
+
 /**
  * @class Scene
  * @brief Scene class for managing game scenes.
@@ -48,14 +50,27 @@ public:
     virtual void render() = 0;
 
     /**
+   * Sets the GLFW window associated with the scene.
+   * @param window Pointer to the GLFW window.
+   * @details This method is used to associate a GLFW window with the scene, allowing the scene to access window properties and events.
+   */
+    void setWindow(GLFWwindow *window);
+
+    /**
      * Sets the window size for the scene.
      * @param width  Width of the window in pixels.
-     * @param height Height of the window in pixels.
+     * @param height of the window in pixels.
      * @details This method is used to set the dimensions of the window in which the scene will be rendered.
      */
     void setWindowSize(int width, int height);
 
 protected:
+    /**
+     * Gets the GLFW window associated with the scene.
+     * @return Pointer to the GLFW window.
+     */
+    [[nodiscard]] GLFWwindow *getWindow() const;
+
     /**
      * Gets the width of the window.
      * @return Width of the window in pixels.
@@ -70,6 +85,7 @@ protected:
 
 private:
     int _windowWidth = 0, _windowHeight = 0;
+    GLFWwindow *_window = nullptr; // Pointer to the GLFW window associated with the scene
 };
 
 

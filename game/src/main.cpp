@@ -9,7 +9,7 @@ int main() {
         Application app(1200, 800, "Fantasy Tactics");
         app.getSceneManager()->addScene("MenuScene", std::make_shared<MenuScene>());
         app.getSceneManager()->addScene("PlayScene", std::make_shared<PlayScene>());
-        app.getSceneManager()->setActiveScene("MenuScene");
+        app.getSceneManager()->setActiveScene("PlayScene");
         app.run();
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;

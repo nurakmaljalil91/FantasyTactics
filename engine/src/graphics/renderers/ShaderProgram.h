@@ -13,7 +13,6 @@
 #include <string>
 #include "glm/glm.hpp"
 #include <map>
-
 #include "../../utilities/Logger.h"
 
 /**
