@@ -14,6 +14,10 @@
 SceneManager::SceneManager(): _currentScene(nullptr) {
 }
 
+SceneManager::~SceneManager() {
+    cleanup();
+}
+
 void SceneManager::initialize(GLFWwindow *window) {
     _window = window;
 }
@@ -56,5 +60,11 @@ void SceneManager::render(int windowWidth, int windowHeight) const {
     if (_currentScene) {
         _currentScene->setWindowSize(windowWidth, windowHeight);
         _currentScene->render();
+    }
+}
+
+void SceneManager::cleanup() const {
+    if (_currentScene) {
+        _currentScene->cleanup();
     }
 }

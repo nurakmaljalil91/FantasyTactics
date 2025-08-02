@@ -13,6 +13,18 @@ void Scene::setWindowSize(const int width, const int height) {
     _windowWidth = width;
 }
 
+void Scene::update(float deltaTime) {
+    _world.update(deltaTime);
+}
+
+void Scene::render() {
+    _world.render();
+}
+
+void Scene::cleanup() {
+    _world.cleanup();
+}
+
 void Scene::setWindow(GLFWwindow *window) {
     _window = window;
 }
@@ -27,4 +39,8 @@ int Scene::getWindowWidth() const {
 
 int Scene::getWindowHeight() const {
     return _windowHeight;
+}
+
+EntityComponentSystem &Scene::getWorld() {
+    return _world;
 }

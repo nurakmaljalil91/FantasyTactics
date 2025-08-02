@@ -34,7 +34,7 @@ public:
      * Default destructor.
      * @details Cleans up resources used by the SceneManager.
      */
-    ~SceneManager() = default;
+    ~SceneManager();
 
     /**
      * Initialize the SceneManager with a GLFW window.
@@ -74,6 +74,13 @@ public:
      * @param windowHeight Height of the window in pixels.
      */
     void render(int windowWidth, int windowHeight) const;
+
+    /**
+     * Clean up resources used by the SceneManager.
+     * @details This method cleans up resources used by the SceneManager, such as destroying scenes and freeing memory.
+     */
+    void cleanup() const;
+
 
 private:
     std::unordered_map<std::string, std::shared_ptr<Scene> > _scenes;

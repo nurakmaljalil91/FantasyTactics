@@ -6,6 +6,10 @@ add_library(engine
         src/core/SceneManager.cpp
         src/core/Window.cpp
 
+        # ecs
+        src/ecs/EntityComponentSystem.cpp
+        src/ecs/GameObject.cpp
+
         # camera code
         src/graphics/cameras/Camera.cpp
         src/graphics/cameras/OrbitCamera.cpp
@@ -27,10 +31,14 @@ add_library(engine
 
         # utilities
         src/utilities/Logger.cpp
+        src/utilities/UUIDGenerator.cpp
 
         # UI components
         src/graphics/ui/Quad2D.cpp
+
+        # OpenGL includes
         src/OpenGLInclude.h
+        src/ecs/Components.h
 )
 
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

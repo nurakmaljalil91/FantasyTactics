@@ -10,6 +10,7 @@
 #define SCENE_H
 
 #include "OpenGLInclude.h"
+#include "ecs/EntityComponentSystem.h"
 
 /**
  * @class Scene
@@ -41,13 +42,20 @@ public:
      * @param deltaTime Time since the last update in seconds.
      * @details This method is called to update the scene logic, handle input, and perform any necessary updates.
      */
-    virtual void update(float deltaTime) = 0;
+    virtual void update(float deltaTime);
 
     /**
      * Renders the scene.
      * @details This method is called to render the scene, drawing all game objects and UI elements.
      */
-    virtual void render() = 0;
+    virtual void render();
+
+    /**
+     * Cleans up the scene.
+     * @details This method is called to clean up resources used by the scene, such as textures, shaders, and game objects.
+     *          It should be called when the scene is no longer needed, such as when switching scenes or exiting the application.
+     */
+    void cleanup();
 
     /**
    * Sets the GLFW window associated with the scene.
@@ -83,9 +91,17 @@ protected:
      */
     [[nodiscard]] int getWindowHeight() const;
 
+    /**
+     * Gets the EntityComponentSystem associated with the scene.
+     * @return Reference to the EntityComponentSystem instance.
+     * @details This method provides access to the ECS, allowing the scene to manage game objects and their components.
+     */
+    [[nodiscard]] EntityComponentSystem &getWorld();
+
 private:
     int _windowWidth = 0, _windowHeight = 0;
     GLFWwindow *_window = nullptr; // Pointer to the GLFW window associated with the scene
+    EntityComponentSystem _world;
 };
 
 

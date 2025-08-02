@@ -48,12 +48,18 @@ find_package(Freetype REQUIRED)
 set(RAPIDJSON_PATH vendors/rapidjson)
 include_directories(${RAPIDJSON_PATH}/include)
 
+# set entt path
+include_directories(vendors/entt)
+
 # set stb_image path
 set(STB_IMAGE_PATH vendors/stb)
 include_directories(${STB_IMAGE_PATH})
 
 # add resources folder
 file(COPY engine/resources DESTINATION ${CMAKE_BINARY_DIR})
+
+# add assets folder
+file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 
 add_subdirectory(engine)
 

@@ -8,6 +8,8 @@
 
 #include "MenuScene.h"
 
+#include "ecs/Components.h"
+#include "ecs/GameObject.h"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "graphics/renderers/TextRenderer.h"
 #include "graphics/ui/Quad2D.h"
@@ -16,6 +18,8 @@ void MenuScene::initialize() {
     _uiShader.loadShaders("resources/shaders/ui.vert", "resources/shaders/ui.frag");
     _textRenderer.loadFont("resources/fonts/Amble.ttf", 50);
     _buttonTex.loadTexture("resources/textures/crate.jpg", true);
+
+    getWorld().createGameObject("Test GameObject");
 }
 
 void MenuScene::update(float deltaTime) {
