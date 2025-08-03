@@ -10,51 +10,34 @@
 
 #include "ecs/Components.h"
 #include "ecs/GameObject.h"
-#include "glm/ext/matrix_clip_space.hpp"
-#include "graphics/renderers/TextRenderer.h"
-#include "graphics/ui/Quad2D.h"
 
 void MenuScene::initialize() {
-    _uiShader.loadShaders("resources/shaders/ui.vert", "resources/shaders/ui.frag");
-    _textRenderer.loadFont("resources/fonts/Amble.ttf", 50);
-    _buttonTex.loadTexture("resources/textures/crate.jpg", true);
+    constexpr float titleWidth = 512.0f;
+    // assuming your logo image is 512×128px
+    constexpr float titleHeight = 128.0f;
 
-    getWorld().createGameObject("Test GameObject");
+    // compute the bottom-left so that the quad is centered
+    constexpr float screenW = 1200.0f;
+    constexpr float screenH = 800.0f;
+
+    constexpr float px = (screenW - titleWidth) * 0.5f;
+    constexpr float py = (screenH - titleHeight) * 0.5f;
+
+    getWorld().createGameObject("FantasyTacticTitle")
+            .addComponent<TransformComponent>(
+                glm::vec3(px, py, 0.0f), // Position
+                glm::vec3(0.0f, 0.0f, 0.0f), // Rotation
+                glm::vec3(titleWidth, titleHeight, 1.0f) // Scale
+            ).addComponent<TextureComponent>("assets/branding/fantasy_tactic_title.png");
 }
 
 void MenuScene::update(float deltaTime) {
+    Scene::update(deltaTime);
 }
 
 void MenuScene::render() {
-    const glm::mat4 orthoProjection = glm::ortho(
-        0.0f, static_cast<float>(1200), // left → right
-        0.0f, static_cast<float>(800), // bottom → top
-        -1.0f, 1.0f
-    );
-    glDisable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    _uiShader.use();
-    _uiShader.setUniform("uProjection", orthoProjection);
-    constexpr glm::vec2 buttonPosition(100.0f, 50.0f); // Y = height - (buttonHeight + margin)
-    constexpr glm::vec2 buttonSize(200.0f, 64.0f); // Size in pixels
-    _buttonTex.bind(0);
-    _uiShader.setUniform("uTexture", 0);
-    _uiShader.setUniform("uPosition", buttonPosition);
-    _uiShader.setUniform("uSize", buttonSize);
-    // Draw the quad as a button
-    _buttonQuad.draw();
-
-    constexpr float padding = 10.0f;
-    _textRenderer.renderText(
-        "Play",
-        buttonPosition.x + padding,
-        buttonPosition.y + padding,
-        1.0f,
-        glm::vec3(1.0f) // white text
-    );
-
-    glDisable(GL_BLEND);
-    glEnable(GL_DEPTH_TEST);
+    // set background white
+    // glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    Scene::render();
 }

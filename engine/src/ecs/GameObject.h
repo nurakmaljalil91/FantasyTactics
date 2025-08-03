@@ -55,19 +55,37 @@ public:
      * Add a component to the GameObject.
      * @tparam T The type of the component to be added.
      * @tparam Args Args The types of the arguments to be passed to the component's constructor.
-     * @return A reference to the added component.
+     * @return A reference to the GameObject itself, allowing for method chaining.
      */
     template<typename T, typename... Args>
-    T &addComponent(Args &&... args) {
+    GameObject &addComponent(Args &&... args) {
         // Check if the component already exists
         if (hasComponent<T>()) {
             Logger::log()->warn("Component already added");
-            return _system->_registry.get<T>(_entity);
+        } else {
+            _system->_registry.emplace<T>(_entity, std::forward<Args>(args)...);
         }
-
-        return _system->_registry.emplace<T>(_entity, std::forward<Args>(args)...);
+        return *this;
     }
 
+    /**
+     * Add multiple components to the GameObject.
+     * @tparam First The type of the first component to be added.
+     * @tparam Rest The types of the remaining components to be added.
+     * @param firstArgs Arguments for the first component's constructor.
+     * @param restArgs Arguments for the remaining components' constructors.
+     * @return A reference to the GameObject itself, allowing for method chaining.
+     * @details This method uses a fold-expression to add multiple components with their respective constructor arguments.
+     */
+    // template<typename First, typename... Rest>
+    // GameObject &addComponents(const typename First::Args &... firstArgs,
+    //                           const typename Rest::Args &... restArgs) {
+    //     // Add the very first component
+    //     addComponent<First>(firstArgs...);
+    //     // Fold‐expression to add all the rest with their own ctor args
+    //     (addComponent<Rest>(restArgs...), ...);
+    //     return *this;
+    // }
 
     /**
      * Get a component from the GameObject.

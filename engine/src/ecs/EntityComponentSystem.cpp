@@ -19,6 +19,7 @@ void EntityComponentSystem::update(float deltaTime) {
 }
 
 void EntityComponentSystem::render() {
+    _uiSystem.render();
 }
 
 void EntityComponentSystem::cleanup() {

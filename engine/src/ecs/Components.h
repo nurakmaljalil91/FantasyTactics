@@ -12,6 +12,8 @@
 
 #include <string>
 
+#include "glm/vec3.hpp"
+
 /**
  * Tag component for identifying entities.
  */
@@ -24,6 +26,24 @@ struct TagComponent {
  */
 struct IdComponent {
     std::string uuid;
+};
+
+/**
+ * Transform component for storing position, rotation, and scale of entities.
+ */
+struct TransformComponent {
+    glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+};
+
+struct TextureComponent {
+    std::string path;
+};
+
+struct RectangleComponent {
+    int width = 0;
+    int height = 0;
 };
 
 #endif //COMPONENTS_H

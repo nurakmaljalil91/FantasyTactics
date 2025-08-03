@@ -8,6 +8,7 @@
 
 #ifndef ENTITYCOMPONENTSYSTEM_H
 #define ENTITYCOMPONENTSYSTEM_H
+#include "UISystem.h"
 #include "entt/entt.hpp"
 #include "utilities/Logger.h"
 
@@ -184,6 +185,8 @@ public:
 private:
     entt::registry _registry;
     friend class GameObject;
+
+    UISystem _uiSystem{_registry};
 };
 
 

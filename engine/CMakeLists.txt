@@ -9,6 +9,7 @@ add_library(engine
         # ecs
         src/ecs/EntityComponentSystem.cpp
         src/ecs/GameObject.cpp
+        src/ecs/UISystem.cpp
 
         # camera code
         src/graphics/cameras/Camera.cpp
@@ -27,7 +28,7 @@ add_library(engine
         # renderers
         src/graphics/renderers/ShaderProgram.cpp
         src/graphics/renderers/TextRenderer.cpp
-        src/graphics/renderers/Texture2D.cpp
+#        src/graphics/renderers/Texture2D.cpp
 
         # utilities
         src/utilities/Logger.cpp
@@ -38,7 +39,8 @@ add_library(engine
 
         # OpenGL includes
         src/OpenGLInclude.h
-        src/ecs/Components.h
+        src/graphics/renderers/Texture.cpp
+        src/graphics/renderers/Texture.h
 )
 
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

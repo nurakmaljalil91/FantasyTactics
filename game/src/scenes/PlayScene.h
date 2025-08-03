@@ -14,7 +14,6 @@
 #include "graphics/meshes/Cube.h"
 #include "graphics/meshes/Sphere.h"
 #include "graphics/renderers/ShaderProgram.h"
-#include "graphics/renderers/Texture2D.h"
 
 /**
  * @class PlayScene
@@ -37,8 +36,8 @@ private:
     Sphere _sphere;
     glm::vec3 _cubePosition{0.0f, 0.0f, 0.0f};
     glm::vec3 _spherePosition{0.0f, 1.5f, 0.0f};
-    Texture2D _texture;
-    Texture2D _robotTexture;
+    Texture _texture;
+    Texture _robotTexture;
     Mesh _robotMesh;
 };
 

@@ -32,12 +32,30 @@
 
 #include "OpenGLInclude.h"
 
+/**
+ * @class Quad2D
+ * @brief Represents a simple 2D quad mesh used for rendering UI elements in OpenGL
+ */
 class Quad2D {
 public:
+    /**
+     * Default constructor.
+     * Initializes a quad mesh with predefined vertices and texture coordinates.
+     * The quad is centered at the origin and has a size of 1 unit.
+     */
     Quad2D();
 
+    /**
+     * Default destructor.
+     * Cleans up the OpenGL resources used by the quad mesh.
+     */
     ~Quad2D();
 
+    /**
+     * Renders the quad mesh using OpenGL.
+     * Binds the VAO and draws the quad using glDrawArrays.
+     * This method should be called within an OpenGL rendering context.
+     */
     void draw() const;
 
 private:

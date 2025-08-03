@@ -11,8 +11,8 @@
 
 void PlayScene::initialize() {
     _shader.loadShaders("resources/shaders/default.vert", "resources/shaders/default.frag");
-    _texture.loadTexture("resources/textures/crate.jpg", true);
-    _robotTexture.loadTexture("resources/textures/robot_diffuse.jpg", true);
+    _texture.loadTexture("resources/textures/crate.jpg");
+    _robotTexture.loadTexture("resources/textures/robot_diffuse.jpg");
     if (!_robotMesh.loadObj("resources/models/robot.obj")) {
         Logger::log()->error("Failed to load robot mesh");
     } else {
@@ -39,7 +39,7 @@ void PlayScene::render() {
     GLint useTexLocation = glGetUniformLocation(_shader.getProgram(), "uUseTexture");
 
     // Bind the crate texture to texture unit 0
-    _texture.bind(0);
+    _texture.bind();
 
     // Tell the fragment shader that diffuseTexture is in GL_TEXTURE0
     const GLuint diffuseLocation = glGetUniformLocation(_shader.getProgram(), "diffuseTexture");
@@ -85,7 +85,7 @@ void PlayScene::render() {
     _sphere.draw();
 
     // Bind the crate texture to texture unit 0
-    _robotTexture.bind(0);
+    _robotTexture.bind();
 
     // Tell the fragment shader that diffuseTexture is in GL_TEXTURE0
     const GLuint robotDiffuseLocation = glGetUniformLocation(_shader.getProgram(), "diffuseTexture");
