@@ -40,14 +40,11 @@ void UISystem::render() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    auto view = _registry.view<TransformComponent, TextureComponent>();
-    Logger::log()->info("Found {} UI quads", static_cast<int>(view.size_hint()));
-
     for (const auto entities: _registry.view<TransformComponent, TextureComponent>()) {
         auto &transform = _registry.get<TransformComponent>(entities);
-        auto &texture = _registry.get<TextureComponent>(entities);
+        auto &[path] = _registry.get<TextureComponent>(entities);
 
-        _drawQuad(texture.path, transform);
+        _drawQuad(path, transform);
         // _drawColorQuad(transform, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // Draw a white quad for now
     }
 
@@ -71,17 +68,20 @@ void UISystem::_drawQuad(std::string &texturePath, const TransformComponent &tra
 
     glActiveTexture(GL_TEXTURE0);
     _uiShader.setUniform("uTexture", 0);
-    glm::vec2 position{
+
+    const glm::vec2 position{
         transform.position.x,
         transform.position.y
     };
-    glm::vec2 size{
+
+    const glm::vec2 size{
         transform.scale.x,
         transform.scale.y
     };
+
     _uiShader.setUniform("uPosition", position);
+
     _uiShader.setUniform("uSize", size);
-    Logger::log()->debug("The model matrix for {} is: {}", texturePath, transform.scale.x);
 
     _quad2D.draw();
 }

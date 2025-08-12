@@ -39,8 +39,17 @@
  */
 class UISystem {
 public:
+    /**
+     * @brief Constructs a UISystem instance with the given registry.
+     * @param registry The entt registry to be used for managing entities and components.
+     */
     explicit UISystem(entt::registry &registry);
 
+    /**
+     * @brief Renders the user interface elements.
+     * @details This method iterates through all entities with TransformComponent and TextureComponent,
+     *          and draws the corresponding UI elements using the specified shaders.
+     */
     void render();
 
 private:
