@@ -19,7 +19,7 @@
 #include "glm/ext/matrix_transform.hpp"
 #include "utilities/Logger.h"
 
-UISystem::UISystem(entt::registry &registry): _registry(registry), _textRenderer(1200, 800) {
+UISystem::UISystem(entt::registry &registry) : _registry(registry), _textRenderer(1200, 800) {
     // Constructor implementation can be added here if needed
     _uiShader.loadShaders("resources/shaders/ui.vert", "resources/shaders/ui.frag");
     _uiColorShader.loadShaders("resources/shaders/color_ui.vert", "resources/shaders/color_ui.frag");
@@ -48,12 +48,26 @@ void UISystem::render() {
         // _drawColorQuad(transform, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // Draw a white quad for now
     }
 
+    for (const auto entities: _registry.view<TransformComponent, ButtonComponent>()) {
+        auto &transform = _registry.get<TransformComponent>(entities);
+        auto &button = _registry.get<ButtonComponent>(entities);
+
+        // check if it hover by mouse
+
+
+        if (button.isHovered) {
+            _drawColorQuad(transform, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        } else {
+            _drawColorQuad(transform, button.color);
+        }
+    }
+
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 }
 
 void UISystem::_drawQuad(std::string &texturePath, const TransformComponent &transform) {
-    auto [it, inserted] = _textures.try_emplace(texturePath);  // default‐constructs Texture
+    auto [it, inserted] = _textures.try_emplace(texturePath); // default‐constructs Texture
     if (inserted) {
         if (!it->second.loadTexture(texturePath)) {
             Logger::log()->error("Failed to load texture: {}", texturePath);

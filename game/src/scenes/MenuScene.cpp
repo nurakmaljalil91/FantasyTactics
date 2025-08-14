@@ -29,6 +29,14 @@ void MenuScene::initialize() {
                 glm::vec3(0.0f, 0.0f, 0.0f), // Rotation
                 glm::vec3(titleWidth, titleHeight, 1.0f) // Scale
             ).addComponent<TextureComponent>("assets/branding/fantasy_tactic_title.png");
+
+
+    getWorld().createGameObject("StartButton")
+    .addComponent<TransformComponent>(
+        glm::vec3(px - 200, py - 200, 0.0f),
+        glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::vec3(titleWidth, titleHeight, 1.0f)
+        ).addComponent<ButtonComponent>();
 }
 
 void MenuScene::update(float deltaTime) {

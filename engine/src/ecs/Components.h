@@ -13,6 +13,7 @@
 #include <string>
 
 #include "glm/vec3.hpp"
+#include "glm/vec4.hpp"
 
 /**
  * Tag component for identifying entities.
@@ -44,6 +45,13 @@ struct TextureComponent {
 struct RectangleComponent {
     int width = 0;
     int height = 0;
+};
+
+struct ButtonComponent {
+    std::string label;
+    glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f); // Default color is white
+    bool isPressed = false; // State of the button
+    bool isHovered = false; // State of the button when hovered
 };
 
 #endif //COMPONENTS_H
