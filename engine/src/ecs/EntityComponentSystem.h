@@ -30,6 +30,14 @@ public:
     EntityComponentSystem();
 
     /**
+     * Set the GLFW window for the EntityComponentSystem.
+     * @param window The GLFW window to be used for rendering and input handling.
+     * @details This method sets the GLFW window that will be used by the EntityComponentSystem for rendering
+     *          and handling user input. It is typically called during the initialization phase of the application.
+     */
+    void setWindow(GLFWwindow *window);
+
+    /**
      * Default destructor.
      * @details Cleans up resources used by the EntityComponentSystem.
      */
@@ -185,8 +193,9 @@ public:
 private:
     entt::registry _registry;
     friend class GameObject;
+    GLFWwindow *_window{nullptr};
 
-    UISystem _uiSystem{_registry};
+    UISystem _uiSystem{_window, _registry};
 };
 
 

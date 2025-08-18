@@ -12,6 +12,7 @@
 
 #include <string>
 
+#include "entt/entt.hpp"
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
 
@@ -52,6 +53,13 @@ struct ButtonComponent {
     glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f); // Default color is white
     bool isPressed = false; // State of the button
     bool isHovered = false; // State of the button when hovered
+
+    // Called when mouse goes from not-hovered -> hovered
+    std::function<void(entt::entity)> onHoverEnter = nullptr;
+    // Called when mouse goes from hovered -> not-hovered
+    std::function<void(entt::entity)> onHoverExit = nullptr;
+    // Called on mouse-up while hovered (i.e., a click)
+    std::function<void(entt::entity)> onClick = nullptr;
 };
 
 #endif //COMPONENTS_H

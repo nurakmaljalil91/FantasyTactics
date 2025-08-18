@@ -13,9 +13,15 @@
 
 EntityComponentSystem::EntityComponentSystem() = default;
 
+void EntityComponentSystem::setWindow(GLFWwindow *window) {
+    _window = window;
+    _uiSystem.setWindow(window);
+}
+
 EntityComponentSystem::~EntityComponentSystem() = default;
 
-void EntityComponentSystem::update(float deltaTime) {
+void EntityComponentSystem::update(const float deltaTime) {
+    _uiSystem.update(deltaTime);
 }
 
 void EntityComponentSystem::render() {
@@ -33,7 +39,7 @@ GameObject EntityComponentSystem::createGameObject(const std::string &tag) {
     return entity;
 }
 
-void EntityComponentSystem::destroyGameObject(GameObject gameObject) {
+void EntityComponentSystem::destroyGameObject(const GameObject gameObject) {
     _registry.destroy(gameObject.getEntity());
 }
 

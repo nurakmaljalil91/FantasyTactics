@@ -31,16 +31,28 @@ void MenuScene::initialize() {
             ).addComponent<TextureComponent>("assets/branding/fantasy_tactic_title.png");
 
 
-    getWorld().createGameObject("StartButton")
-    .addComponent<TransformComponent>(
-        glm::vec3(px - 200, py - 200, 0.0f),
-        glm::vec3(0.0f, 0.0f, 0.0f),
-        glm::vec3(titleWidth, titleHeight, 1.0f)
-        ).addComponent<ButtonComponent>();
+    _button = getWorld().createGameObject("StartButton")
+            .addComponent<TransformComponent>(
+                glm::vec3(px - 200, py - 200, 0.0f),
+                glm::vec3(0.f, 0.f, 0.0f),
+                glm::vec3(titleWidth, titleHeight, 1.0f)
+            ).addComponent<RectangleComponent>(240, 50).addComponent<ButtonComponent>();
 }
 
 void MenuScene::update(float deltaTime) {
     Scene::update(deltaTime);
+    auto buttonComponent = getWorld().getComponent<ButtonComponent>(_button.getEntity());
+    // buttonComponent.label = "Start Game";
+    // buttonComponent.color = glm::vec4(0.2f, 0.8f, 0.2f, 1.0f); // Green color
+    buttonComponent.onHoverEnter = [&](entt::entity) {
+        Logger::log()->info("Hovering over Start Game button");
+    };
+    buttonComponent.onHoverExit = [&](entt::entity) {
+        Logger::log()->info("Stopped hovering over Start Game button");
+    };
+    buttonComponent.onClick = [&](entt::entity) {
+        Logger::log()->info("Clicked on button");
+    };
 }
 
 void MenuScene::render() {

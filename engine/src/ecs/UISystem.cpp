@@ -16,14 +16,70 @@
 #include "UISystem.h"
 #include "Components.h"
 #include "glm/ext/matrix_clip_space.hpp"
-#include "glm/ext/matrix_transform.hpp"
 #include "utilities/Logger.h"
 
-UISystem::UISystem(entt::registry &registry) : _registry(registry), _textRenderer(1200, 800) {
+UISystem::UISystem(GLFWwindow *window, entt::registry &registry) : _registry(registry), _textRenderer(1200, 800),
+                                                                   _window(window) {
     // Constructor implementation can be added here if needed
     _uiShader.loadShaders("resources/shaders/ui.vert", "resources/shaders/ui.frag");
     _uiColorShader.loadShaders("resources/shaders/color_ui.vert", "resources/shaders/color_ui.frag");
     _textRenderer.loadFont("resources/fonts/Amble.ttf", 50);
+}
+
+void UISystem::setWindow(GLFWwindow *window) {
+    _window = window;
+}
+
+void UISystem::update(float deltaTime) {
+    int width, height;
+    glfwGetWindowSize(_window, &width, &height);
+    double mouseX, mouseY;
+    glfwGetCursorPos(_window, &mouseX, &mouseY);
+    _mouseX = mouseX;
+    _mouseY = mouseY;
+
+    const double uiX = _mouseX;
+    const double uiY = height - _mouseY; // Invert Y coordinate for UI
+
+    const bool mouseDown = glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
+    const bool mousePressedThisFrame = mouseDown && !_mouseDownLastFrame;
+    const bool mouseReleasedThisFrame = !mouseDown && _mouseDownLastFrame;
+
+    auto view = _registry.view<TransformComponent, RectangleComponent, ButtonComponent>();
+    for (auto entity: view) {
+        auto &transform = view.get<TransformComponent>(entity);
+        auto &rectangle = view.get<RectangleComponent>(entity);
+        auto &button = view.get<ButtonComponent>(entity);
+
+        const bool wasHovered = button.isHovered;
+        const bool nowHovered = _hitTest(transform, rectangle, uiX, uiY);
+
+        // Hover transition
+        button.isHovered = nowHovered;
+        if (!wasHovered && nowHovered && button.onHoverEnter) {
+            button.onHoverEnter(entity); // Call hover enter callback
+        } else if (wasHovered && !nowHovered && button.onHoverExit) {
+            button.onHoverExit(entity); // Call hover exit callback
+        }
+
+        // Press/Release state
+        if (nowHovered && mousePressedThisFrame) {
+            button.isPressed = true; // Button is pressed
+        } else if (nowHovered && mouseReleasedThisFrame) {
+            if (button.isPressed) {
+                // Button was pressed and released while hovered
+                button.isPressed = false; // Reset pressed state
+                // Call button action here if needed
+                if (nowHovered && button.onClick) {
+                    button.onClick(entity);
+                }
+            }
+        } else {
+            button.isPressed = false; // Reset pressed state if not hovered
+        }
+    }
+
+    _mouseDownLastFrame = mouseDown;
 }
 
 void UISystem::render() {
@@ -48,22 +104,42 @@ void UISystem::render() {
         // _drawColorQuad(transform, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // Draw a white quad for now
     }
 
-    for (const auto entities: _registry.view<TransformComponent, ButtonComponent>()) {
+    for (const auto entities: _registry.view<TransformComponent, RectangleComponent, ButtonComponent>()) {
         auto &transform = _registry.get<TransformComponent>(entities);
+        auto &rectangle = _registry.get<RectangleComponent>(entities);
         auto &button = _registry.get<ButtonComponent>(entities);
 
-        // check if it hover by mouse
-
-
-        if (button.isHovered) {
-            _drawColorQuad(transform, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+        TransformComponent sized = transform;
+        if (rectangle.width > 0) {
+            sized.scale.x = static_cast<float>(rectangle.width);
         } else {
-            _drawColorQuad(transform, button.color);
+            sized.scale.x = transform.scale.x; // Use original scale if width is not set
         }
+        if (rectangle.height > 0) {
+            sized.scale.y = static_cast<float>(rectangle.height);
+        } else {
+            sized.scale.y = transform.scale.y; // Use original scale if height is not set
+        }
+
+        // check if it hover by mouse
+        glm::vec4 color = button.color;
+        if (button.isHovered) color = glm::vec4(0.9f, 0.9f, 1.0f, 1.0f);
+        if (button.isPressed) color = glm::vec4(0.7f, 0.7f, 1.0f, 1.0f);
+
+        _drawColorQuad(sized, color);
     }
 
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
+}
+
+bool UISystem::_hitTest(const TransformComponent &transformComponent, const RectangleComponent &rectangleComponent,
+                        double uiX, double uiY) const {
+    const double x0 = transformComponent.position.x;
+    const double y0 = transformComponent.position.y;
+    const double x1 = x0 + (rectangleComponent.width > 0 ? rectangleComponent.width : transformComponent.scale.x);
+    const double y1 = y0 + (rectangleComponent.height > 0 ? rectangleComponent.height : transformComponent.scale.y);
+    return (uiX >= x0 && uiX <= x1 && uiY >= y0 && uiY <= y1);
 }
 
 void UISystem::_drawQuad(std::string &texturePath, const TransformComponent &transform) {

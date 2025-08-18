@@ -9,9 +9,7 @@
 #define MENUSCENE_H
 
 #include "core/Scene.h"
-#include "graphics/renderers/ShaderProgram.h"
-#include "graphics/renderers/TextRenderer.h"
-#include "graphics/ui/Quad2D.h"
+#include "ecs/GameObject.h"
 
 /**
  * @class MenuScene
@@ -31,6 +29,9 @@ public:
     void update(float deltaTime) override;
 
     void render() override;
+
+private:
+    GameObject _button;
 };
 
 

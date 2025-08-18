@@ -27,6 +27,7 @@ void Scene::cleanup() {
 
 void Scene::setWindow(GLFWwindow *window) {
     _window = window;
+    _world.setWindow(window);
 }
 
 GLFWwindow *Scene::getWindow() const {
