@@ -53,7 +53,7 @@ struct ButtonComponent {
     glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f); // Default color is white
     bool isPressed = false; // State of the button
     bool isHovered = false; // State of the button when hovered
-
+    bool isPressedInside = false; // True if mouse is pressed inside the button
     // Called when mouse goes from not-hovered -> hovered
     std::function<void(entt::entity)> onHoverEnter = nullptr;
     // Called when mouse goes from hovered -> not-hovered

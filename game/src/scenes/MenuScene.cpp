@@ -37,22 +37,19 @@ void MenuScene::initialize() {
                 glm::vec3(0.f, 0.f, 0.0f),
                 glm::vec3(titleWidth, titleHeight, 1.0f)
             ).addComponent<RectangleComponent>(240, 50).addComponent<ButtonComponent>();
+
+    auto &button = _button.getComponent<ButtonComponent>();
+
+    button.color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    button.label = "START";
+    // Handlers
+    button.onHoverEnter = [&](entt::entity) { Logger::log()->info("Hover enter: Start"); };
+    button.onHoverExit  = [&](entt::entity) { Logger::log()->info("Hover exit: Start"); };
+    button.onClick      = [&](entt::entity) { Logger::log()->info("CLICK: Start button"); };
 }
 
 void MenuScene::update(float deltaTime) {
     Scene::update(deltaTime);
-    auto buttonComponent = getWorld().getComponent<ButtonComponent>(_button.getEntity());
-    // buttonComponent.label = "Start Game";
-    // buttonComponent.color = glm::vec4(0.2f, 0.8f, 0.2f, 1.0f); // Green color
-    buttonComponent.onHoverEnter = [&](entt::entity) {
-        Logger::log()->info("Hovering over Start Game button");
-    };
-    buttonComponent.onHoverExit = [&](entt::entity) {
-        Logger::log()->info("Stopped hovering over Start Game button");
-    };
-    buttonComponent.onClick = [&](entt::entity) {
-        Logger::log()->info("Clicked on button");
-    };
 }
 
 void MenuScene::render() {

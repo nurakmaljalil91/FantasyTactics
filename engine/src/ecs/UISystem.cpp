@@ -18,8 +18,8 @@
 #include "glm/ext/matrix_clip_space.hpp"
 #include "utilities/Logger.h"
 
-UISystem::UISystem(GLFWwindow *window, entt::registry &registry) : _registry(registry), _textRenderer(1200, 800),
-                                                                   _window(window) {
+UISystem::UISystem(GLFWwindow *window, entt::registry &registry) : _window(window), _registry(registry),
+                                                                   _textRenderer(1200, 800) {
     // Constructor implementation can be added here if needed
     _uiShader.loadShaders("resources/shaders/ui.vert", "resources/shaders/ui.frag");
     _uiColorShader.loadShaders("resources/shaders/color_ui.vert", "resources/shaders/color_ui.frag");
@@ -45,8 +45,8 @@ void UISystem::update(float deltaTime) {
     const bool mousePressedThisFrame = mouseDown && !_mouseDownLastFrame;
     const bool mouseReleasedThisFrame = !mouseDown && _mouseDownLastFrame;
 
-    auto view = _registry.view<TransformComponent, RectangleComponent, ButtonComponent>();
-    for (auto entity: view) {
+    const auto view = _registry.view<TransformComponent, RectangleComponent, ButtonComponent>();
+    for (const auto entity: view) {
         auto &transform = view.get<TransformComponent>(entity);
         auto &rectangle = view.get<RectangleComponent>(entity);
         auto &button = view.get<ButtonComponent>(entity);
@@ -63,19 +63,21 @@ void UISystem::update(float deltaTime) {
         }
 
         // Press/Release state
-        if (nowHovered && mousePressedThisFrame) {
-            button.isPressed = true; // Button is pressed
-        } else if (nowHovered && mouseReleasedThisFrame) {
-            if (button.isPressed) {
-                // Button was pressed and released while hovered
-                button.isPressed = false; // Reset pressed state
-                // Call button action here if needed
-                if (nowHovered && button.onClick) {
-                    button.onClick(entity);
-                }
+        // Arm on press that begins inside.
+        if (mousePressedThisFrame) {
+            button.isPressedInside = nowHovered;
+        }
+
+        // Visual "down" while holding: only if press started inside and still hovered
+        button.isPressed = mouseDown && button.isPressedInside && nowHovered;
+
+        // Fire on release if the press started inside (release anywhere)
+        if (mouseReleasedThisFrame) {
+            if (button.isPressedInside) {
+                if (button.onClick) button.onClick(entity);
             }
-        } else {
-            button.isPressed = false; // Reset pressed state if not hovered
+            button.isPressed = false;
+            button.isPressedInside = false;
         }
     }
 
@@ -105,23 +107,23 @@ void UISystem::render() {
     }
 
     for (const auto entities: _registry.view<TransformComponent, RectangleComponent, ButtonComponent>()) {
-        auto &transform = _registry.get<TransformComponent>(entities);
-        auto &rectangle = _registry.get<RectangleComponent>(entities);
-        auto &button = _registry.get<ButtonComponent>(entities);
+        const auto &transform = _registry.get<TransformComponent>(entities);
+        auto &[rectangleWidth, rectangleHeight] = _registry.get<RectangleComponent>(entities);
+        const auto &button = _registry.get<ButtonComponent>(entities);
 
         TransformComponent sized = transform;
-        if (rectangle.width > 0) {
-            sized.scale.x = static_cast<float>(rectangle.width);
+        if (rectangleWidth > 0) {
+            sized.scale.x = static_cast<float>(rectangleWidth);
         } else {
             sized.scale.x = transform.scale.x; // Use original scale if width is not set
         }
-        if (rectangle.height > 0) {
-            sized.scale.y = static_cast<float>(rectangle.height);
+        if (rectangleHeight > 0) {
+            sized.scale.y = static_cast<float>(rectangleHeight);
         } else {
             sized.scale.y = transform.scale.y; // Use original scale if height is not set
         }
 
-        // check if it hover by mouse
+        // check if it hovers by mouse
         glm::vec4 color = button.color;
         if (button.isHovered) color = glm::vec4(0.9f, 0.9f, 1.0f, 1.0f);
         if (button.isPressed) color = glm::vec4(0.7f, 0.7f, 1.0f, 1.0f);
@@ -134,12 +136,16 @@ void UISystem::render() {
 }
 
 bool UISystem::_hitTest(const TransformComponent &transformComponent, const RectangleComponent &rectangleComponent,
-                        double uiX, double uiY) const {
+                        const double uiX, const double uiY) const {
     const double x0 = transformComponent.position.x;
     const double y0 = transformComponent.position.y;
-    const double x1 = x0 + (rectangleComponent.width > 0 ? rectangleComponent.width : transformComponent.scale.x);
-    const double y1 = y0 + (rectangleComponent.height > 0 ? rectangleComponent.height : transformComponent.scale.y);
-    return (uiX >= x0 && uiX <= x1 && uiY >= y0 && uiY <= y1);
+    const double x1 = x0 + (rectangleComponent.width > 0
+                                ? static_cast<float>(rectangleComponent.width)
+                                : transformComponent.scale.x);
+    const double y1 = y0 + (rectangleComponent.height > 0
+                                ? static_cast<float>(rectangleComponent.height)
+                                : transformComponent.scale.y);
+    return uiX >= x0 && uiX <= x1 && uiY >= y0 && uiY <= y1;
 }
 
 void UISystem::_drawQuad(std::string &texturePath, const TransformComponent &transform) {
