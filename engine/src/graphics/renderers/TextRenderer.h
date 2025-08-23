@@ -87,6 +87,13 @@ public:
      * @param color The color of the text as a glm::vec3 (RGB).
      */
     void renderText(const std::string &text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+
+    /**
+     * @brief Resizes the text rendering viewport to the specified width and height.
+     * @param width The new width of the viewport.
+     * @param height The new height of the viewport.
+     */
+    void resize(GLuint width, GLuint height);
 };
 
 

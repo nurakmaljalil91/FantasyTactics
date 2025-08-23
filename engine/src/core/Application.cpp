@@ -30,15 +30,17 @@ void Application::run() {
         lastTime = currentTime;
 
         _processInput(deltaTime);
+
+        int framebufferWidth, framebufferHeight;
+        glfwGetFramebufferSize(_window.getHandle(), &framebufferWidth, &framebufferHeight);
+        glViewport(0, 0, framebufferWidth, framebufferHeight);
+
         _scenesManager.update(deltaTime);
 
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-        int windowWidth, windowHeight;
-        glfwGetFramebufferSize(_window.getHandle(), &windowWidth, &windowHeight);
-        _scenesManager.render(windowWidth, windowHeight);
+        _scenesManager.render(framebufferWidth, framebufferHeight);
 
         _window.swapBuffers();
         _window.pollEvents();

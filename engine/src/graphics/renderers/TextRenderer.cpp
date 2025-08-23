@@ -10,7 +10,7 @@
 #include FT_FREETYPE_H
 #include "glm/ext/matrix_clip_space.hpp"
 
-TextRenderer::TextRenderer(const GLuint screenWidth, const GLuint screenHeight): VAO(0), VBO(0), EBO(0) {
+TextRenderer::TextRenderer(const GLuint screenWidth, const GLuint screenHeight) : VAO(0), VBO(0), EBO(0) {
     textShader.loadShaders("resources/shaders/text.vert", "resources/shaders/text.frag");
     textShader.use();
 
@@ -112,4 +112,12 @@ void TextRenderer::renderText(const std::string &text, GLfloat x, const GLfloat 
 
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void TextRenderer::resize(GLuint width, GLuint height) {
+    // update projection matrix
+    const glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(width), 0.0f,
+                                            static_cast<GLfloat>(height));
+    textShader.use();
+    textShader.setUniform("projection", projection);
 }

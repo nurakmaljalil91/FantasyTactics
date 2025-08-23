@@ -24,22 +24,53 @@ UISystem::UISystem(GLFWwindow *window, entt::registry &registry) : _window(windo
     _uiShader.loadShaders("resources/shaders/ui.vert", "resources/shaders/ui.frag");
     _uiColorShader.loadShaders("resources/shaders/color_ui.vert", "resources/shaders/color_ui.frag");
     _textRenderer.loadFont("resources/fonts/Amble.ttf", 50);
+
+    if (_window) {
+        int framebufferWidth, framebufferHeight;
+        glfwGetFramebufferSize(_window, &framebufferWidth, &framebufferHeight);
+        if (framebufferWidth <= 0) framebufferWidth = 1;
+        if (framebufferHeight <= 0) framebufferHeight = 1;
+        _textRenderer.resize(framebufferWidth, framebufferHeight);
+    }
 }
 
 void UISystem::setWindow(GLFWwindow *window) {
     _window = window;
+    if (_window) {
+        int framebufferWidth, framebufferHeight;
+        glfwGetFramebufferSize(_window, &framebufferWidth, &framebufferHeight);
+        if (framebufferWidth <= 0) framebufferWidth = 1;
+        if (framebufferHeight <= 0) framebufferHeight = 1;
+        _textRenderer.resize(framebufferWidth, framebufferHeight);
+    }
 }
 
 void UISystem::update(float deltaTime) {
-    int width, height;
-    glfwGetWindowSize(_window, &width, &height);
+    if (!_window) return;
+
+    int windowWidth, windowHeight, framebufferWidth, framebufferHeight;
+    glfwGetWindowSize(_window, &windowWidth, &windowHeight);
+    glfwGetFramebufferSize(_window, &framebufferWidth, &framebufferHeight);
+
+    // Fallback
+    if (windowWidth <= 0) windowWidth = 1;
+    if (windowHeight <= 0) windowHeight = 1;
+    if (framebufferWidth <= 0) framebufferWidth = 1;
+    if (framebufferHeight <= 0) framebufferHeight = 1;
+
+    // Scale from window space to framebuffer space (handle HiDPI/retina)
+    const float scaleX = static_cast<float>(framebufferWidth) / static_cast<float>(windowWidth);
+    const float scaleY = static_cast<float>(framebufferHeight) / static_cast<float>(windowHeight);
+
+    // Cursor in window coordinates (top-left is (0,0))
     double mouseX, mouseY;
     glfwGetCursorPos(_window, &mouseX, &mouseY);
     _mouseX = mouseX;
     _mouseY = mouseY;
 
-    const double uiX = _mouseX;
-    const double uiY = height - _mouseY; // Invert Y coordinate for UI
+    // Convert to framebuffer coordinates (top-left is (0,0))
+    _mouseX = mouseX * scaleX;
+    _mouseY = (windowHeight - _mouseY) * scaleY;
 
     const bool mouseDown = glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
     const bool mousePressedThisFrame = mouseDown && !_mouseDownLastFrame;
@@ -52,7 +83,7 @@ void UISystem::update(float deltaTime) {
         auto &button = view.get<ButtonComponent>(entity);
 
         const bool wasHovered = button.isHovered;
-        const bool nowHovered = _hitTest(transform, rectangle, uiX, uiY);
+        const bool nowHovered = _hitTest(transform, rectangle, _mouseX, _mouseY);
 
         // Hover transition
         button.isHovered = nowHovered;
