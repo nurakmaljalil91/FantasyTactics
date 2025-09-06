@@ -46,21 +46,11 @@ void UISystem::setWindow(GLFWwindow *window) {
 }
 
 void UISystem::update(float deltaTime) {
-    if (!_window) return;
-
-    int windowWidth, windowHeight, framebufferWidth, framebufferHeight;
-    glfwGetWindowSize(_window, &windowWidth, &windowHeight);
-    glfwGetFramebufferSize(_window, &framebufferWidth, &framebufferHeight);
-
-    // Fallback
-    if (windowWidth <= 0) windowWidth = 1;
-    if (windowHeight <= 0) windowHeight = 1;
-    if (framebufferWidth <= 0) framebufferWidth = 1;
-    if (framebufferHeight <= 0) framebufferHeight = 1;
+    _syncSize();
 
     // Scale from window space to framebuffer space (handle HiDPI/retina)
-    const float scaleX = static_cast<float>(framebufferWidth) / static_cast<float>(windowWidth);
-    const float scaleY = static_cast<float>(framebufferHeight) / static_cast<float>(windowHeight);
+    const float scaleX = static_cast<float>(_framebufferWidth) / static_cast<float>(_windowWidth);
+    const float scaleY = static_cast<float>(_framebufferHeight) / static_cast<float>(_windowHeight);
 
     // Cursor in window coordinates (top-left is (0,0))
     double mouseX, mouseY;
@@ -70,7 +60,7 @@ void UISystem::update(float deltaTime) {
 
     // Convert to framebuffer coordinates (top-left is (0,0))
     _mouseX = mouseX * scaleX;
-    _mouseY = (windowHeight - _mouseY) * scaleY;
+    _mouseY = (_windowHeight - _mouseY) * scaleY;
 
     const bool mouseDown = glfwGetMouseButton(_window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
     const bool mousePressedThisFrame = mouseDown && !_mouseDownLastFrame;
@@ -116,26 +106,32 @@ void UISystem::update(float deltaTime) {
 }
 
 void UISystem::render() {
+    _syncSize();
+
     const glm::mat4 orthoProjection = glm::ortho(
-        0.0f, static_cast<float>(1200), // left → right
-        0.0f, static_cast<float>(800), // bottom → top
+        0.0f, static_cast<float>(_framebufferWidth), // left → right
+        0.0f, static_cast<float>(_framebufferHeight), // bottom → top
         -1.0f, 1.0f
     );
-
-    _uiShader.use();
-    _uiShader.setUniform("uProjection", orthoProjection);
 
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    // Textured Quad
+    _uiShader.use();
+    _uiShader.setUniform("uProjection", orthoProjection);
+
     for (const auto entities: _registry.view<TransformComponent, TextureComponent>()) {
         auto &transform = _registry.get<TransformComponent>(entities);
         auto &[path] = _registry.get<TextureComponent>(entities);
 
-        _drawQuad(path, transform);
         // _drawColorQuad(transform, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f)); // Draw a white quad for now
+        _drawQuad(path, transform);
     }
+
+    _uiColorShader.use();
+    _uiColorShader.setUniform("uProjection", orthoProjection);
 
     for (const auto entities: _registry.view<TransformComponent, RectangleComponent, ButtonComponent>()) {
         const auto &transform = _registry.get<TransformComponent>(entities);
@@ -166,8 +162,21 @@ void UISystem::render() {
     glEnable(GL_DEPTH_TEST);
 }
 
+void UISystem::_syncSize() {
+    if (!_window) return;
+    glfwGetWindowSize(_window, &_windowWidth, &_windowHeight);
+    glfwGetFramebufferSize(_window, &_framebufferWidth, &_framebufferHeight);
+    _windowWidth = std::max(_windowWidth, 1);
+    _windowHeight = std::max(_windowHeight, 1);
+    _framebufferWidth = std::max(_framebufferWidth, 1);
+    _framebufferHeight = std::max(_framebufferHeight, 1);
+
+    glViewport(0, 0, _framebufferWidth, _framebufferHeight);
+    _textRenderer.resize(_framebufferWidth, _framebufferHeight);
+}
+
 bool UISystem::_hitTest(const TransformComponent &transformComponent, const RectangleComponent &rectangleComponent,
-                        const double uiX, const double uiY) const {
+                        const double uiX, const double uiY) {
     const double x0 = transformComponent.position.x;
     const double y0 = transformComponent.position.y;
     const double x1 = x0 + (rectangleComponent.width > 0
@@ -215,7 +224,7 @@ void UISystem::_drawQuad(std::string &texturePath, const TransformComponent &tra
 
 void UISystem::_drawColorQuad(const TransformComponent &transform, const glm::vec4 &color) {
     _uiColorShader.use();
-    _uiColorShader.setUniform("uProjection", glm::ortho(0.0f, 1200.0f, 0.0f, 800.0f, -1.0f, 1.0f));
+    // _uiColorShader.setUniform("uProjection", glm::ortho(0.0f, 1200.0f, 0.0f, 800.0f, -1.0f, 1.0f));
 
     const glm::vec2 position(transform.position.x, transform.position.y);
     const glm::vec2 size(transform.scale.x, transform.scale.y);

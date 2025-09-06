@@ -55,6 +55,7 @@ public:
      * @param window
      */
     void setWindow(GLFWwindow *window);
+
     /**
      * @brief Updates the UISystem.
      * @details This method is called to update the UISystem, allowing it to process any necessary logic or state changes.
@@ -79,14 +80,37 @@ private:
     Quad2D _quad2D;
     std::unordered_map<std::string, Texture> _textures;
 
+    // sizes window to keep in sync
+    int _windowWidth = 1, _windowHeight = 1;
+    int _framebufferWidth = 1, _framebufferHeight = 1;
+
     // Input state
     bool _mouseDownLastFrame = false; // Track if the mouse was down in the last frame
     double _mouseX = 0.0; // Mouse X position
     double _mouseY = 0.0; // Mouse Y position
 
-    bool _hitTest(const TransformComponent &transformComponent, const RectangleComponent &rectangleComponent,
-                  double uiX, double uiY) const;
+    /**
+     * @brief Synchronizes the size of the UISystem with the current window size.
+     * @details This method checks the current size of the GLFW window and updates the internal
+     *          framebuffer size accordingly. It ensures that the UISystem's rendering area matches
+     *          the window size, which is important for proper rendering of UI elements.
+     *          If the window size has changed, it also updates the TextRenderer's size to match
+     *          the new framebuffer dimensions.
+     * @note This method should be called whenever the window size may have changed, such as
+     *       during the update phase of the application.
+     */
+    void _syncSize();
 
+    /**
+     * @brief Checks if a point (uiX, uiY) hits the rectangle defined by the TransformComponent and RectangleComponent.
+     * @param transformComponent The TransformComponent containing position, rotation, and scale.
+     * @param rectangleComponent The RectangleComponent defining the rectangle's size.
+     * @param uiX The X coordinate of the point to test.
+     * @param uiY The Y coordinate of the point to test.
+     * @return True if the point hits the rectangle, false otherwise.
+     */
+    static bool _hitTest(const TransformComponent &transformComponent, const RectangleComponent &rectangleComponent,
+                         double uiX, double uiY);
 
     /**
      * Draws a quad with the specified texture and transform.

@@ -44,8 +44,10 @@ void MenuScene::initialize() {
     button.label = "START";
     // Handlers
     button.onHoverEnter = [&](entt::entity) { Logger::log()->info("Hover enter: Start"); };
-    button.onHoverExit  = [&](entt::entity) { Logger::log()->info("Hover exit: Start"); };
-    button.onClick      = [&](entt::entity) { Logger::log()->info("CLICK: Start button"); };
+    button.onHoverExit = [&](entt::entity) { Logger::log()->info("Hover exit: Start"); };
+    button.onClick = [&](entt::entity) {
+        Logger::log()->info("CLICK: Start button");
+    };
 }
 
 void MenuScene::update(float deltaTime) {
