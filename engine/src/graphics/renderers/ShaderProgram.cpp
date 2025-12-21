@@ -43,7 +43,7 @@ ShaderProgram::ShaderProgram()
     : _handle(0) {
 }
 
-ShaderProgram::ShaderProgram(const char *vsFilename, const char *fsFilename): _handle(0) {
+ShaderProgram::ShaderProgram(const char *vsFilename, const char *fsFilename) : _handle(0) {
     loadShaders(vsFilename, fsFilename);
 }
 
@@ -202,6 +202,11 @@ void ShaderProgram::setUniformSampler(const GLchar *name, const GLint &slot) {
 
     const GLint loc = _getUniformLocation(name);
     glUniform1i(loc, slot);
+}
+
+bool ShaderProgram::hasUniform(const GLchar *name) const {
+    const GLint loc = glGetUniformLocation(_handle, name);
+    return loc != -1;
 }
 
 // Returns the uniform identifier given its string name.

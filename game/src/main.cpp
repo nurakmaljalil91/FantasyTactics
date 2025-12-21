@@ -10,7 +10,7 @@ int main() {
             1200,
             800,
             "Fantasy Tactics",
-            false,
+            true,
             false,
             true
         };

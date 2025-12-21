@@ -72,6 +72,10 @@ public:
     void render();
 
 private:
+    struct UIRectangle {
+        float x, y, width, height; // framebuffer space; origin bottom-left
+    };
+
     GLFWwindow *_window{nullptr};
     entt::registry &_registry;
     ShaderProgram _uiShader;
@@ -102,6 +106,54 @@ private:
     void _syncSize();
 
     /**
+     * @brief Generates an orthographic projection matrix for UI rendering.
+     * @details This method creates an orthographic projection matrix based on the current
+     *          framebuffer dimensions. The matrix is used to transform UI elements from
+     *          screen space to normalized device coordinates for rendering.
+     * @return A glm::mat4 representing the orthographic projection matrix.
+     */
+    glm::mat4 _orthoMatrix() const;
+
+    /**
+     * @brief Computes the UIRectangle for the given entity based on its TransformComponent and RectangleComponent.
+     * @param entity The entity for which to compute the UIRectangle.
+     * @return A UIRectangle representing the position and size of the UI element in framebuffer space.
+     */
+    UIRectangle _computeRectangle(entt::entity entity) const;
+
+    /**
+     * @brief Checks if a point (uiX, uiY) hits the given UIRectangle.
+     * @param rectangle The UIRectangle to test against.
+     * @param uiX The X coordinate of the point to test.
+     * @param uiY The Y coordinate of the point to test.
+     * @return True if the point hits the rectangle, false otherwise.
+     */
+    bool _hit(const UIRectangle &rectangle, double uiX, double uiY) const;
+
+    /**
+     * @brief Dispatches pointer events to UI elements based on mouse input.
+     * @details This method checks the current mouse position and button states,
+     *          and dispatches events such as hover enter, hover exit, and click
+     *          to the appropriate UI elements based on hit testing.
+     */
+    void _dispatchPointerEvents();
+
+    /** @brief Renders colored rectangles for UI elements.
+     * @param projectionMatrix The orthographic projection matrix for UI rendering.
+     */
+    void _renderColorRectangles(const glm::mat4 &projectionMatrix);
+
+    /** @brief Renders images for UI elements.
+     * @param projectionMatrix The orthographic projection matrix for UI rendering.
+     */
+    void _renderImages(const glm::mat4 &projectionMatrix);
+
+    /** @brief Renders text for UI elements.
+     * @details This method iterates through all entities with TextComponent and TransformComponent,
+     */
+    void _renderText();
+
+    /**
      * @brief Checks if a point (uiX, uiY) hits the rectangle defined by the TransformComponent and RectangleComponent.
      * @param transformComponent The TransformComponent containing position, rotation, and scale.
      * @param rectangleComponent The RectangleComponent defining the rectangle's size.
@@ -121,10 +173,24 @@ private:
 
     /**
      * Draws a colored quad with the specified transform and color.
-     * @param transform The transform component containing position, rotation, and scale.
+     * @param x The x-coordinate of the bottom-left corner of the quad.
+     * @param y The y-coordinate of the bottom-left corner of the quad.
+     * @param w The width of the quad.
+     * @param h The height of the quad.
      * @param color The color to be used for the quad.
      */
-    void _drawColorQuad(const TransformComponent &transform, const glm::vec4 &color);
+    void _drawColorQuad(float x, float y, float w, float h, const glm::vec4 &color);
+
+    /**
+     * Draws an image quad with the specified texture, position, size, and tint color.
+     * @param texturePath The path to the texture to be used for the image quad.
+     * @param x The x-coordinate of the bottom-left corner of the image quad.
+     * @param y The y-coordinate of the bottom-left corner of the image quad.
+     * @param w The width of the image quad.
+     * @param h The height of the image quad.
+     * @param tint The tint color to be applied to the image quad.
+     */
+    void _drawImageQuad(const std::string &texturePath, float x, float y, float w, float h, const glm::vec4 &tint);
 };
 
 

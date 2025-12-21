@@ -134,6 +134,13 @@ public:
      */
     void setUniformSampler(const GLchar *name, const GLint &slot);
 
+    /**
+     * Checks if a uniform variable exists in the shader program.
+     * @param name The name of the uniform variable.
+     * @return True if the uniform exists in the shader program, false otherwise.
+     */
+    bool hasUniform(const GLchar *name) const;
+
 private:
     /**
      * Gets the contents of a file as a string.
