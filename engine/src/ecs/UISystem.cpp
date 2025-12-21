@@ -161,7 +161,13 @@ UISystem::UIRectangle UISystem::_computeRectangle(entt::entity entity) const {
                 break;
         }
 
-        // Apply offset
+        // Apply offset.
+        //
+        // NOTE: offsetPixel is interpreted in the same window/framebuffer coordinate
+        // system used to compute 'position'. In this system, the origin is at the
+        // bottom-left of the framebuffer and the Y axis increases upwards. This
+        // means that a positive offsetPixel.y will always move the UI element
+        // visually upwards from its anchor, regardless of which anchor is used.
         position += anchorComponent->offsetPixel;
     } else if (_registry.all_of<TransformComponent>(entity)) {
         const auto &transformComponent = _registry.get<TransformComponent>(entity);
