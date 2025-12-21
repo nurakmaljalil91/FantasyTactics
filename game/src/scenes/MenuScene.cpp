@@ -12,41 +12,28 @@
 #include "ecs/GameObject.h"
 
 void MenuScene::initialize() {
-    constexpr float titleWidth = 512.0f;
-    // assuming your logo image is 512×128px
-    constexpr float titleHeight = 128.0f;
+    auto title = getWorld().createGameObject("title")
+            .addComponent<UIAnchorComponent>(
+                UIAnchor::TopCenter,
+                glm::vec2(0.0f, -120.0f),
+                glm::vec2(512.0f, 128.0f),
+                0, true, false)
+            .addComponent<UIImageComponent>("assets/branding/fantasy_tactic_title.png");
 
-    // compute the bottom-left so that the quad is centered
-    constexpr float screenW = 1200.0f;
-    constexpr float screenH = 800.0f;
+    auto startButton = getWorld().createGameObject("startButton")
+            .addComponent<UIAnchorComponent>(
+                UIAnchor::Center,
+                glm::vec2(0.0f, -80.0f),
+                glm::vec2(240.0f, 50.0f),
+                10, true, true)
+            .addComponent<UIColorRectangleComponent>()
+            .addComponent<ButtonComponent>();
 
-    constexpr float px = (screenW - titleWidth) * 0.5f;
-    constexpr float py = (screenH - titleHeight) * 0.5f;
+    startButton.addComponent<UITextComponent>("START", 1.0f, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
-    getWorld().createGameObject("FantasyTacticTitle")
-            .addComponent<TransformComponent>(
-                glm::vec3(px, py, 0.0f), // Position
-                glm::vec3(0.0f, 0.0f, 0.0f), // Rotation
-                glm::vec3(titleWidth, titleHeight, 1.0f) // Scale
-            ).addComponent<TextureComponent>("assets/branding/fantasy_tactic_title.png");
-
-
-    _button = getWorld().createGameObject("StartButton")
-            .addComponent<TransformComponent>(
-                glm::vec3(px - 200, py - 200, 0.0f),
-                glm::vec3(0.f, 0.f, 0.0f),
-                glm::vec3(titleWidth, titleHeight, 1.0f)
-            ).addComponent<RectangleComponent>(240, 50).addComponent<ButtonComponent>();
-
-    auto &button = _button.getComponent<ButtonComponent>();
-
-    button.color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-    button.label = "START";
-    // Handlers
-    button.onHoverEnter = [&](entt::entity) { Logger::log()->info("Hover enter: Start"); };
-    button.onHoverExit = [&](entt::entity) { Logger::log()->info("Hover exit: Start"); };
+    auto &button = startButton.getComponent<ButtonComponent>();
     button.onClick = [&](entt::entity) {
-        Logger::log()->info("CLICK: Start button");
+        Logger::log()->info("Start button clicked! Transitioning to GameScene...");
     };
 }
 

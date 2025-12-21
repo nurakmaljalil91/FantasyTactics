@@ -87,6 +87,12 @@ void TextRenderer::renderText(const std::string &text, GLfloat x, const GLfloat 
     glBindVertexArray(VAO);
 
     for (auto c: text) {
+        auto it = Characters.find(c);
+        if (it == Characters.end()) {
+            continue;
+        }
+
+
         auto &[textureID, size, bearing, advance] = Characters[c];
         const GLfloat xPosition = x + bearing.x * scale;
         const GLfloat yPosition = y + (bearing.y - size.y) * scale;

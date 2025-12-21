@@ -11,7 +11,9 @@
 #include "GameObject.h"
 #include "utilities/UUIDGenerator.h"
 
-EntityComponentSystem::EntityComponentSystem() = default;
+EntityComponentSystem::EntityComponentSystem() : _uiSystem(nullptr, _registry) {
+    // Constructor implementation can be added here if needed
+}
 
 void EntityComponentSystem::setWindow(GLFWwindow *window) {
     _window = window;
