@@ -416,7 +416,6 @@ void UISystem::_renderText() {
     for (const auto &item: textEntities) {
         const auto entity = item.entity;
         const auto &anchorComponent = _registry.get<UIAnchorComponent>(entity);
-        if (!anchorComponent.visible) { continue; }
 
         const auto &textComponent = _registry.get<UITextComponent>(entity);
         const UIRectangle rectangle = _computeRectangle(entity);
