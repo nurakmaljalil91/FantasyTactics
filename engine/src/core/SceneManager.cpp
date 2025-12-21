@@ -40,13 +40,23 @@ std::string SceneManager::getActiveScene() {
 }
 
 void SceneManager::setActiveScene(const std::string &name) {
-    if (_scenes.find(name) != _scenes.end()) {
-        _currentScene = _scenes[name];
-        _currentScene->setWindow(_window);
-        _currentScene->initialize();
-    } else {
-        Logger::log()->error("Scene '{}' not found in SceneManager", name);
+    const auto scenes = _scenes.find(name);
+    if (scenes == _scenes.end()) {
+        Logger::log()->error("Scene '{}' does not exist in SceneManager", name);
         _currentScene = nullptr;
+        return; // Scene with this name does not exist
+    }
+
+    if (_currentScene) {
+        _currentScene->cleanup(); // Clean up the current scene before switching
+    }
+
+    _currentScene = scenes->second;
+
+    if (_currentScene) {
+        _currentScene->setSceneManager(this);
+        _currentScene->setWindow(_window);
+        _currentScene->initialize(); // Initialize the new current scene
     }
 }
 

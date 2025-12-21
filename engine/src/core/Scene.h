@@ -12,6 +12,8 @@
 #include "OpenGLInclude.h"
 #include "ecs/EntityComponentSystem.h"
 
+class SceneManager; // Forward declaration
+
 /**
  * @class Scene
  * @brief Scene class for managing game scenes.
@@ -72,8 +74,19 @@ public:
      */
     void setWindowSize(int width, int height);
 
+    /**
+   * Sets the SceneManager managing this scene.
+   * @param sceneManager Pointer to the SceneManager instance.
+   * @details This method is used to associate a SceneManager with the scene, allowing for scene management and transitions.
+   */
+    void setSceneManager(SceneManager *sceneManager) {
+        // Implementation can be added later
+        _sceneManager = sceneManager;
+    }
 
 protected:
+    SceneManager *_sceneManager = nullptr; // Pointer to the SceneManager managing this scene
+
     /**
      * Gets the GLFW window associated with the scene.
      * @return Pointer to the GLFW window.

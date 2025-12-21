@@ -8,6 +8,7 @@
 
 #include "MenuScene.h"
 
+#include "core/SceneManager.h"
 #include "ecs/Components.h"
 #include "ecs/GameObject.h"
 
@@ -34,6 +35,7 @@ void MenuScene::initialize() {
     auto &button = startButton.getComponent<ButtonComponent>();
     button.onClick = [&](entt::entity) {
         Logger::log()->info("Start button clicked! Transitioning to GameScene...");
+        _sceneManager->setActiveScene("PlayScene");
     };
 }
 
