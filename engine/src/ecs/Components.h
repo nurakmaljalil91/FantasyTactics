@@ -125,9 +125,9 @@ struct UIPointerCallbacksComponent {
     std::function<void(entt::entity)> onHoverExit = nullptr;
     // Called on mouse-up while hovered (i.e., a click)
     std::function<void(entt::entity)> onClick = nullptr;
-    // Called on mouse-down while hovered
+    // Called on mouse-up (release event)
     std::function<void(entt::entity)> onRelease = nullptr;
-    // Called on mouse-up while hovered
+    // Called on mouse-down (press event)
     std::function<void(entt::entity)> onPress = nullptr;
 };
 
