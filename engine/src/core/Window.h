@@ -13,6 +13,19 @@
 #include "OpenGLInclude.h"
 
 /**
+ * @struct WindowConfig
+ * @brief Configuration structure for creating a window.
+ */
+struct WindowConfig {
+    int width;
+    int height;
+    std::string title;
+    bool resizable = false;
+    bool fullscreen = false;
+    bool decorated = true;
+};
+
+/**
  * @class Window
  * @brief Represents a window in the application.
  * @details This class is currently a placeholder and does not implement any functionality.
@@ -33,12 +46,9 @@ public:
     /**
      * Default constructor.
      * Initializes an empty window object. The window will be created when the constructor with parameters is called.
-     * @param width      Width of the window in pixels.
-     * @param height     Height of the window in pixels.
-     * @param title      Title of the window.
-     * @param fullscreen If true, the window will be created in fullscreen mode; otherwise, it will be created in windowed mode.
+     * @param windowConfig Configuration for the window to be created.
      */
-    Window(int width, int height, const std::string &title, bool fullscreen = false);
+    Window(WindowConfig windowConfig);
 
     /**
      * Default destructor.

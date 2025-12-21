@@ -7,16 +7,17 @@
  */
 
 #include "Application.h"
-#include "utilities/Logger.h"
 
-Application::Application(const int width, const int height, const std::string &title,
-                         const bool fullscreen): _window(width, height, title, fullscreen),
-                                                 _wireframe(false),
-                                                 _fullscreen(fullscreen), _windowedWidth(width),
-                                                 _windowedHeight(height) {
+Application::Application(const WindowConfig &windowConfig) : _window(windowConfig),
+                                                             _wireframe(false),
+                                                             _fullscreen(windowConfig.fullscreen),
+                                                             _windowedWidth(windowConfig.width),
+                                                             _windowedHeight(windowConfig.height) {
     Logger::log()->info("Welcome to Fantasy Tactics!");
     _initialize();
 }
+
+#include "utilities/Logger.h"
 
 Application::~Application() = default;
 

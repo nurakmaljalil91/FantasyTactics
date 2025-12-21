@@ -9,8 +9,8 @@
 #include "Window.h"
 #include "utilities/Logger.h"
 
-Window::Window(const int width, const int height, const std::string &title, const bool fullscreen): _window(nullptr),
-    _isFullscreen(fullscreen) {
+Window::Window(WindowConfig windowConfig) : _window(nullptr),
+                                            _isFullscreen(windowConfig.fullscreen) {
     Logger::initialize(); // Initialize the logger
 
     if (!glfwInit()) {
@@ -31,18 +31,34 @@ Window::Window(const int width, const int height, const std::string &title, cons
         GLFW_OPENGL_FORWARD_COMPAT,
         GL_TRUE);
 
+    // Set window decoration
+    if (!windowConfig.decorated) {
+        glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+    }
+
+    // Set window resizable
+    if (!windowConfig.resizable) {
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
+    }
 
     // create a windowed mode window and its OpenGL context
     // Create an OpenGL 3.3 core, forward compatible context full-screen application
     if (_isFullscreen) {
         GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-        if (const GLFWvidmode *vMode = glfwGetVideoMode(monitor)) {
-            _window = glfwCreateWindow(vMode->width, vMode->height, title.c_str(), monitor, nullptr);
+        if (const GLFWvidmode *videoMode = glfwGetVideoMode(monitor)) {
+            _window = glfwCreateWindow(videoMode->width, videoMode->height, windowConfig.title.c_str(), monitor,
+                                       nullptr);
         }
     } else {
-        _window = glfwCreateWindow(width, height, title.c_str(), nullptr, nullptr);
+        _window = glfwCreateWindow(windowConfig.width, windowConfig.height, windowConfig.title.c_str(), nullptr,
+                                   nullptr);
     }
-    
+
+    if (!windowConfig.resizable) {
+        glfwSetWindowAttrib(_window, GLFW_RESIZABLE, GLFW_FALSE);
+    }
+
     if (!_window) {
         Logger::log()->error("Failed to create GLFW window");
         glfwTerminate();
@@ -52,11 +68,11 @@ Window::Window(const int width, const int height, const std::string &title, cons
         // Initialize GLAD to load OpenGL functions
         gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
         glfwSwapInterval(1); // Enable vsync
-        Logger::log()->info("Window created successfully: {}x{}", width, height);
+        Logger::log()->info("Window created successfully: {}x{}", windowConfig.width, windowConfig.height);
     }
 
     // specify the viewport of OpenGL in the window
-    glViewport(0, 0, width, height);
+    glViewport(0, 0, windowConfig.width, windowConfig.height);
     glEnable(GL_DEPTH_TEST); // Enable depth testing for 3D rendering
 }
 

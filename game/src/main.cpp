@@ -6,10 +6,21 @@
 
 int main() {
     try {
-        Application app(1200, 800, "Fantasy Tactics");
+        const WindowConfig windowConfig{
+            1200,
+            800,
+            "Fantasy Tactics",
+            false,
+            false,
+            true
+        };
+
+        Application app(windowConfig);
+
         app.getSceneManager()->addScene("MenuScene", std::make_shared<MenuScene>());
         app.getSceneManager()->addScene("PlayScene", std::make_shared<PlayScene>());
         app.getSceneManager()->setActiveScene("MenuScene");
+
         app.run();
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;

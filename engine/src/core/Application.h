@@ -20,12 +20,9 @@ class Application {
 public:
     /**
      * Constructor for the Application class.
-     * @param width      Width of the application window.
-     * @param height     Height of the application window.
-     * @param title      Title of the application window.
-     * @param fullscreen If true, the application will run in fullscreen mode; otherwise, it will run in windowed mode.
+     * @param windowConfig Configuration for the application window.
      */
-    Application(int width, int height, const std::string &title, bool fullscreen = false);
+    explicit Application(const WindowConfig &windowConfig);
 
     /**
      * Default destructor for the Application class.

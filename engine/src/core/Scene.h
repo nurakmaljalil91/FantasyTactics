@@ -72,6 +72,7 @@ public:
      */
     void setWindowSize(int width, int height);
 
+
 protected:
     /**
      * Gets the GLFW window associated with the scene.
