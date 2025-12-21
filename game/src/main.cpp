@@ -3,6 +3,7 @@
 #include "core/Application.h"
 #include "scenes/MenuScene.h"
 #include "scenes/PlayScene.h"
+#include "scenes/TestScene.h"
 
 int main() {
     try {
@@ -19,6 +20,7 @@ int main() {
 
         app.getSceneManager()->addScene("MenuScene", std::make_shared<MenuScene>());
         app.getSceneManager()->addScene("PlayScene", std::make_shared<PlayScene>());
+        app.getSceneManager()->addScene("TestScene", std::make_shared<TestScene>());
         app.getSceneManager()->setActiveScene("MenuScene");
 
         app.run();

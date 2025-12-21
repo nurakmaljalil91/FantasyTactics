@@ -13,7 +13,7 @@
 #include "ecs/GameObject.h"
 
 void MenuScene::initialize() {
-    auto title = getWorld().createGameObject("title")
+    getWorld().createGameObject("title")
             .addComponent<UIAnchorComponent>(
                 UIAnchor::TopCenter,
                 glm::vec2(0.0f, -120.0f),
