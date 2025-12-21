@@ -302,7 +302,7 @@ void UISystem::_dispatchPointerEvents() {
         }
     }
 
-    // Handle mouse release events after processing all entities
+    // Update mouse button state for next frame
     _mouseDownLastFrame = mouseDown;
 }
 
