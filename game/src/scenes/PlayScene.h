@@ -10,6 +10,7 @@
 #define PLAYSCENE_H
 
 #include "core/Scene.h"
+#include "graphics/cameras/IsometricCamera.h"
 
 /**
  * @class PlayScene
@@ -22,6 +23,12 @@ public:
     void update(float deltaTime) override;
 
     void render() override;
+
+private:
+    ShaderProgram _shader;
+    IsometricCamera _isometricCamera{
+            {0.0f, 0.0f, 0.0f}, 5.0f, 5.0f
+        };
 };
 
 
