@@ -17,16 +17,16 @@ void MenuScene::initialize() {
     getWorld().createGameObject("title")
             .addComponent<cbit::UIAnchorComponent>(
                 cbit::UIAnchor::TopCenter,
-                glm::vec2(0.0f, -120.0f),
-                glm::vec2(512.0f, 128.0f),
+                cbit::Vector2(0.0f, -120.0f),
+                cbit::Vector2(512.0f, 128.0f),
                 0, true, false)
             .addComponent<cbit::UIImageComponent>("assets/branding/fantasy_tactic_title.png");
 
     auto startButton = getWorld().createGameObject("startButton")
             .addComponent<cbit::UIAnchorComponent>(
                 cbit::UIAnchor::Center,
-                glm::vec2(0.0f, -80.0f),
-                glm::vec2(240.0f, 50.0f),
+                cbit::Vector2(0.0f, -80.0f),
+                cbit::Vector2(240.0f, 50.0f),
                 10, true, true)
             .addComponent<cbit::UIColorRectangleComponent>()
             .addComponent<cbit::ButtonComponent>()

@@ -14,15 +14,19 @@ void PlayScene::initialize() {
     _shader.loadShaders("resources/shaders/default.vert", "resources/shaders/default.frag");
     getWorld().createGameObject("Cube")
             .addComponent<cbit::TransformComponent>(
-                cbit::Vector(0.0f, 0.0f, 0.0f),
-                cbit::Vector(0.0f, 0.0f, 0.0f),
-                cbit::Vector(1.0f, 1.0f, 1.0f)
+                cbit::Vector3(0.0f, 0.0f, 0.0f),
+                cbit::Vector3(0.0f, 0.0f, 0.0f),
+                cbit::Vector3(1.0f, 1.0f, 1.0f)
             )
             .addComponent<cbit::CubeComponent>();
 }
 
 
 void PlayScene::update(float deltaTime) {
+    auto player = getWorld().getGameObject("Cube");
+    auto &transformComponent = player.getComponent<cbit::TransformComponent>();
+    transformComponent.position.x += 0.5f * deltaTime;
+
 }
 
 void PlayScene::render() {

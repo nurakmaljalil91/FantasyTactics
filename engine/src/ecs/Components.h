@@ -16,7 +16,8 @@
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
 #include "graphics/meshes/Cube.h"
-#include "math/Vector.h"
+#include "math/Vector2.h"
+#include "math/Vector3.h"
 
 namespace cbit {
 #pragma region DefaultComponents
@@ -41,9 +42,9 @@ namespace cbit {
      * @brief  Transform component for storing position, rotation, and scale of entities.
      */
     struct TransformComponent {
-        Vector position{0.0f, 0.0f, 0.0f};
-        Vector rotation{0.0f, 0.0f, 0.0f};
-        Vector scale{1.0f, 1.0f, 1.0f};
+        Vector3 position{0.0f, 0.0f, 0.0f};
+        Vector3 rotation{0.0f, 0.0f, 0.0f};
+        Vector3 scale{1.0f, 1.0f, 1.0f};
     };
 
 #pragma endregion DefaultComponents
@@ -100,8 +101,8 @@ namespace cbit {
     struct UIAnchorComponent {
         /** Anchor point for the UI element */
         UIAnchor anchor = UIAnchor::TopLeft;
-        glm::vec2 offsetPixel{0.0f, 0.0f}; // Offset in pixels from the anchor point
-        glm::vec2 sizePixel{0.0f, 0.0f}; // Size in pixels
+        Vector2 offsetPixel{0.0f, 0.0f}; // Offset in pixels from the anchor point
+        Vector2 sizePixel{0.0f, 0.0f}; // Size in pixels
         int zIndex = 0; // Layering order
         bool visible = true; // Visibility flag
         bool interactable = true; // Interactivity flag
@@ -117,9 +118,9 @@ namespace cbit {
         bool isPressed = false; // State of the button
         bool isHovered = false; // State of the button when hovered
         bool isPressedInside = false; // True if the mouse is pressed inside the button
-        // Called when mouse goes from not-hovered -> hovered
+        // Called when the mouse goes from not-hovered -> hovered
         std::function<void(entt::entity)> onHoverEnter = nullptr;
-        // Called when mouse goes from hovered -> not-hovered
+        // Called when the mouse goes from hovered -> not-hovered
         std::function<void(entt::entity)> onHoverExit = nullptr;
         // Called on mouse-up while hovered (i.e., a click)
         std::function<void(entt::entity)> onClick = nullptr;

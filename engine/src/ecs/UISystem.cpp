@@ -86,11 +86,11 @@ cbit::UISystem::UIRectangle cbit::UISystem::_computeRectangle(entt::entity entit
     glm::vec2 size{0.0f, 0.0f};
 
     if (const auto *anchorComponent = _registry.try_get<UIAnchorComponent>(entity)) {
-        if (anchorComponent->sizePixel.x > 0.0f) {
-            size.x = anchorComponent->sizePixel.x;
+        if (anchorComponent->sizePixel.toGLM().x > 0.0f) {
+            size.x = anchorComponent->sizePixel.toGLM().x;
         }
-        if (anchorComponent->sizePixel.y > 0.0f) {
-            size.y = anchorComponent->sizePixel.y;
+        if (anchorComponent->sizePixel.toGLM().y > 0.0f) {
+            size.y = anchorComponent->sizePixel.toGLM().y;
         }
     }
 
@@ -107,10 +107,10 @@ cbit::UISystem::UIRectangle cbit::UISystem::_computeRectangle(entt::entity entit
     if ((size.x <= 0.0f || size.y <= 0.0f) && _registry.all_of<TransformComponent>(entity)) {
         const auto &transformComponent = _registry.get<TransformComponent>(entity);
         if (size.x <= 0.0f) {
-            size.x = transformComponent.scale.data().x;
+            size.x = transformComponent.scale.toGLM().x;
         }
         if (size.y <= 0.0f) {
-            size.y = transformComponent.scale.data().y;
+            size.y = transformComponent.scale.toGLM().y;
         }
     }
 
@@ -168,11 +168,11 @@ cbit::UISystem::UIRectangle cbit::UISystem::_computeRectangle(entt::entity entit
         // bottom-left of the framebuffer and the Y axis increases upwards. This
         // means that a positive offsetPixel.y will always move the UI element
         // visually upwards from its anchor, regardless of which anchor is used.
-        position += anchorComponent->offsetPixel;
+        position += anchorComponent->offsetPixel.toGLM();
     } else if (_registry.all_of<TransformComponent>(entity)) {
         const auto &transformComponent = _registry.get<TransformComponent>(entity);
-        position.x = transformComponent.position.data().x;
-        position.y = transformComponent.position.data().y;
+        position.x = transformComponent.position.toGLM().x;
+        position.y = transformComponent.position.toGLM().y;
     }
 
     rectangle.x = position.x;
@@ -450,14 +450,14 @@ void cbit::UISystem::_renderText() {
 bool cbit::UISystem::_hitTest(const TransformComponent &transformComponent,
                               const RectangleComponent &rectangleComponent,
                               const double uiX, const double uiY) {
-    const double x0 = transformComponent.position.data().x;
-    const double y0 = transformComponent.position.data().y;
+    const double x0 = transformComponent.position.toGLM().x;
+    const double y0 = transformComponent.position.toGLM().y;
     const double x1 = x0 + (rectangleComponent.width > 0
                                 ? static_cast<float>(rectangleComponent.width)
-                                : transformComponent.scale.data().x);
+                                : transformComponent.scale.toGLM().x);
     const double y1 = y0 + (rectangleComponent.height > 0
                                 ? static_cast<float>(rectangleComponent.height)
-                                : transformComponent.scale.data().y);
+                                : transformComponent.scale.toGLM().y);
     return uiX >= x0 && uiX <= x1 && uiY >= y0 && uiY <= y1;
 }
 
@@ -479,13 +479,13 @@ void cbit::UISystem::_drawQuad(std::string &texturePath, const TransformComponen
     _uiShader.setUniform("uTexture", 0);
 
     const glm::vec2 position{
-        transform.position.data().x,
-        transform.position.data().y
+        transform.position.toGLM().x,
+        transform.position.toGLM().y
     };
 
     const glm::vec2 size{
-        transform.scale.data().x,
-        transform.scale.data().y
+        transform.scale.toGLM().x,
+        transform.scale.toGLM().y
     };
 
     _uiShader.setUniform("uPosition", position);

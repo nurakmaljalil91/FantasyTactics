@@ -9,6 +9,8 @@ add_library(engine
         # ecs
         src/ecs/EntityComponentSystem.cpp
         src/ecs/GameObject.cpp
+        src/ecs/MeshRenderSystem.cpp
+        src/ecs/MeshRenderSystem.h
         src/ecs/UISystem.cpp
 
         # camera code
@@ -28,7 +30,12 @@ add_library(engine
         # renderers
         src/graphics/renderers/ShaderProgram.cpp
         src/graphics/renderers/TextRenderer.cpp
-#        src/graphics/renderers/Texture2D.cpp
+        #        src/graphics/renderers/Texture2D.cpp
+
+        # math
+        src/math/Color.h
+        src/math/Vector2.h
+        src/math/Vector3.h
 
         # utilities
         src/utilities/Logger.cpp
@@ -41,10 +48,8 @@ add_library(engine
         src/OpenGLInclude.h
         src/graphics/renderers/Texture.cpp
         src/graphics/renderers/Texture.h
-        src/ecs/MeshRenderSystem.cpp
-        src/ecs/MeshRenderSystem.h
-        src/math/Vector.h
-        src/math/Color.h
+
+
 )
 
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
