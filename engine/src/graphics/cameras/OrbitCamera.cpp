@@ -9,12 +9,12 @@
 #include "OrbitCamera.h"
 #include <cmath>
 
-bool OrbitCamera::_firstMouse = true;
-float OrbitCamera::_lastX = 0.0f;
-float OrbitCamera::_lastY = 0.0f;
+bool cbit::OrbitCamera::_firstMouse = true;
+float cbit::OrbitCamera::_lastX = 0.0f;
+float cbit::OrbitCamera::_lastY = 0.0f;
 
-OrbitCamera::OrbitCamera(const glm::vec3 &target, float distance, float yawDegrees, float pitchDegrees,
-                         float mouseSensitivity, float scrollSensitivity)
+cbit::OrbitCamera::OrbitCamera(const glm::vec3 &target, float distance, float yawDegrees, float pitchDegrees,
+                               float mouseSensitivity, float scrollSensitivity)
 
     : Camera(glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f), yawDegrees, pitchDegrees, /*speed*/0.0f, mouseSensitivity,
              /*zoom*/45.0f)
@@ -24,7 +24,7 @@ OrbitCamera::OrbitCamera(const glm::vec3 &target, float distance, float yawDegre
     updateCameraPosition();
 }
 
-void OrbitCamera::updateCameraPosition() {
+void cbit::OrbitCamera::updateCameraPosition() {
     // spherical → Cartesian
     const float yawRad = glm::radians(_yaw);
     const float pitchRad = glm::radians(_pitch);
@@ -38,7 +38,7 @@ void OrbitCamera::updateCameraPosition() {
     _up = glm::normalize(glm::cross(_right, _front));
 }
 
-void OrbitCamera::processMouseMovement(float xOffset, float yOffset) {
+void cbit::OrbitCamera::processMouseMovement(float xOffset, float yOffset) {
     xOffset *= _mouseSensitivity;
     yOffset *= _mouseSensitivity;
 
@@ -49,12 +49,12 @@ void OrbitCamera::processMouseMovement(float xOffset, float yOffset) {
     _pitch = glm::clamp(_pitch, -89.0f, 89.0f);
 }
 
-void OrbitCamera::processMouseScroll(float yOffset) {
+void cbit::OrbitCamera::processMouseScroll(float yOffset) {
     _distance -= yOffset * _scrollSensitivity;
     _distance = glm::clamp(_distance, 1.0f, 100.0f);
 }
 
-void OrbitCamera::mouseCallback(GLFWwindow *window, double xPosition, double yPosition) {
+void cbit::OrbitCamera::mouseCallback(GLFWwindow *window, double xPosition, double yPosition) {
     if (_firstMouse) {
         _lastX = static_cast<float>(xPosition);
         _lastY = static_cast<float>(yPosition);
@@ -72,7 +72,7 @@ void OrbitCamera::mouseCallback(GLFWwindow *window, double xPosition, double yPo
     }
 }
 
-void OrbitCamera::scrollCallback(GLFWwindow *window, double xOffset, const double yOffset) {
+void cbit::OrbitCamera::scrollCallback(GLFWwindow *window, double xOffset, const double yOffset) {
     if (const auto camera = static_cast<OrbitCamera *>(glfwGetWindowUserPointer(window))) {
         camera->processMouseScroll(static_cast<float>(yOffset));
     }

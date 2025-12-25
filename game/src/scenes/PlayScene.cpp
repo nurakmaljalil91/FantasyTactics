@@ -8,7 +8,6 @@
 #include "PlayScene.h"
 
 #include "ecs/GameObject.h"
-#include "glm/ext/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.inl"
 
 void PlayScene::initialize() {

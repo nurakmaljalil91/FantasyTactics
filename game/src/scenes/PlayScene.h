@@ -26,7 +26,7 @@ public:
 
 private:
     ShaderProgram _shader;
-    IsometricCamera _isometricCamera{
+    cbit::IsometricCamera _isometricCamera{
             {0.0f, 0.0f, 0.0f}, 5.0f, 5.0f
         };
 };

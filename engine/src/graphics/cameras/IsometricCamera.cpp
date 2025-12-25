@@ -7,7 +7,7 @@
 
 #include "IsometricCamera.h"
 
-IsometricCamera::IsometricCamera(const glm::vec3 &center, float size, float distance): Camera(), _center(center),
+cbit::IsometricCamera::IsometricCamera(const glm::vec3 &center, float size, float distance) : Camera(), _center(center),
     _size(size), _distance(distance) {
     // classic isometric angles: yaw=225°, pitch=–35.264°
     _yaw = 225.0f;
@@ -18,7 +18,7 @@ IsometricCamera::IsometricCamera(const glm::vec3 &center, float size, float dist
     updateCamera();
 }
 
-void IsometricCamera::updateCamera() {
+void cbit::IsometricCamera::updateCamera() {
     // place camera at center minus front*distance
     // (front comes from base updateCameraVectors())
     _position = _center - _front * _distance;
@@ -27,18 +27,18 @@ void IsometricCamera::updateCamera() {
     _up = glm::normalize(glm::cross(_right, _front));
 }
 
-void IsometricCamera::processMouseScroll(const float yOffset) {
+void cbit::IsometricCamera::processMouseScroll(const float yOffset) {
     _size -= yOffset;
     if (_size < 1.0f) _size = 1.0f;
 }
 
-void IsometricCamera::scrollCallback(GLFWwindow *window, double, const double dy) {
+void cbit::IsometricCamera::scrollCallback(GLFWwindow *window, double, const double dy) {
     if (const auto camera = static_cast<IsometricCamera *>(glfwGetWindowUserPointer(window)))
         camera->
                 processMouseScroll(static_cast<float>(dy));
 }
 
-glm::mat4 IsometricCamera::getProjectionMatrix(const float aspectRatio) const {
+glm::mat4 cbit::IsometricCamera::getProjectionMatrix(const float aspectRatio) const {
     const float right = _size * aspectRatio;
     const float left = -right;
     const float top = _size;
@@ -47,13 +47,13 @@ glm::mat4 IsometricCamera::getProjectionMatrix(const float aspectRatio) const {
     return glm::ortho(left, right, bottom, top, -1000.0f, 1000.0f);
 }
 
-void IsometricCamera::setAngles(const float yaw, const float pitch) {
+void cbit::IsometricCamera::setAngles(const float yaw, const float pitch) {
     _yaw = yaw;
     _pitch = pitch;
     updateCameraVectors();
     updateCamera();
 }
 
-void IsometricCamera::rotateYaw(const float delta) {
+void cbit::IsometricCamera::rotateYaw(const float delta) {
     setAngles(_yaw + delta, _pitch);
 }

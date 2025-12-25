@@ -10,13 +10,13 @@
 
 #include "Camera.h"
 
-void Camera::setup(const glm::vec3 position,
-                   const glm::vec3 worldUp,
-                   const float yawDegrees,
-                   const float pitchDegrees,
-                   const float movementSpeed,
-                   const float mouseSensitivity,
-                   const float zoomDegrees
+void cbit::Camera::setup(const glm::vec3 position,
+                         const glm::vec3 worldUp,
+                         const float yawDegrees,
+                         const float pitchDegrees,
+                         const float movementSpeed,
+                         const float mouseSensitivity,
+                         const float zoomDegrees
 ) {
     _position = position;
     _worldUp = worldUp;
@@ -30,27 +30,27 @@ void Camera::setup(const glm::vec3 position,
     updateCameraVectors();
 }
 
-Camera::Camera(const glm::vec3 &position,
-               const glm::vec3 &worldUp,
-               const float yawDegrees,
-               const float pitchDegrees,
-               const float movementSpeed,
-               const float mouseSensitivity,
-               const float zoomDegrees
+cbit::Camera::Camera(const glm::vec3 &position,
+                     const glm::vec3 &worldUp,
+                     const float yawDegrees,
+                     const float pitchDegrees,
+                     const float movementSpeed,
+                     const float mouseSensitivity,
+                     const float zoomDegrees
 ) {
     setup(position, worldUp, yawDegrees, pitchDegrees, movementSpeed, mouseSensitivity, zoomDegrees);
 }
 
-glm::mat4 Camera::getViewMatrix() const {
+glm::mat4 cbit::Camera::getViewMatrix() const {
     return glm::lookAt(_position, _position + _front, _up);
 }
 
-glm::mat4 Camera::getProjectionMatrix(const float aspectRatio) const {
+glm::mat4 cbit::Camera::getProjectionMatrix(const float aspectRatio) const {
     return glm::perspective(glm::radians(_zoom), aspectRatio, 0.1f, 100.0f);
 }
 
-void Camera::processKeyboard(const float deltaTime, const bool forward, const bool backward, const bool left,
-                             const bool right) {
+void cbit::Camera::processKeyboard(const float deltaTime, const bool forward, const bool backward, const bool left,
+                                   const bool right) {
     const float velocity = _movementSpeed * deltaTime;
     if (forward) _position += _front * velocity;
     if (backward) _position -= _front * velocity;
@@ -58,7 +58,7 @@ void Camera::processKeyboard(const float deltaTime, const bool forward, const bo
     if (right) _position += _right * velocity;
 }
 
-void Camera::processMouseMovement(float xOffset, float yOffset) {
+void cbit::Camera::processMouseMovement(float xOffset, float yOffset) {
     xOffset *= _mouseSensitivity;
     yOffset *= _mouseSensitivity;
 
@@ -71,12 +71,12 @@ void Camera::processMouseMovement(float xOffset, float yOffset) {
     updateCameraVectors();
 }
 
-void Camera::processMouseScroll(const float yOffset) {
+void cbit::Camera::processMouseScroll(const float yOffset) {
     _zoom -= yOffset;
     _zoom = glm::clamp(_zoom, 1.0f, 45.0f);
 }
 
-void Camera::updateCameraVectors() {
+void cbit::Camera::updateCameraVectors() {
     // compute new front vector
     glm::vec3 f;
     f.x = static_cast<float>(cos(glm::radians(_yaw)) * cos(glm::radians(_pitch)));

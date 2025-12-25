@@ -19,7 +19,7 @@ void TestScene::initialize() {
     }
 
     glfwSetWindowUserPointer(getWindow(), &_isometricCamera);
-    glfwSetScrollCallback(getWindow(), IsometricCamera::scrollCallback);
+    glfwSetScrollCallback(getWindow(), cbit::IsometricCamera::scrollCallback);
 }
 
 void TestScene::update(float deltaTime) {
