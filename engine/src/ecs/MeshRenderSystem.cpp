@@ -9,28 +9,116 @@
 #include "MeshRenderSystem.h"
 
 #include "Components.h"
+#include "glm/ext/matrix_clip_space.hpp"
+#include "glm/ext/matrix_transform.hpp"
 
 cbit::MeshRenderSystem::MeshRenderSystem(entt::registry &registry) : _registry(registry) {
     // Constructor implementation can be added here if needed
     _shader.loadShaders("resources/shaders/default.vert", "resources/shaders/default.frag");
 }
 
-void cbit::MeshRenderSystem::render(Camera &camera, int windowWidth, int windowHeight) {
-    auto view = _registry.view<CubeComponent, TransformComponent>();
+void cbit::MeshRenderSystem::setWindow(GLFWwindow *window) {
+    _window = window;
+}
+
+void cbit::MeshRenderSystem::render() {
+    const auto cameraView = _registry.view<CameraComponent, TransformComponent, ActiveCameraComponent>();
+
+    if (cameraView.begin() == cameraView.end()) {
+        return;
+    }
+
+    const auto cameraEntity = *cameraView.begin();
+
+    const auto &cameraComponent = cameraView.get<CameraComponent>(cameraEntity);
+
+    const auto &cameraTransformComponent = cameraView.get<TransformComponent>(cameraEntity);
+
+    if (!_window) {
+        return;
+    }
+
+    int windowWidth, windowHeight;
+
+    glfwGetFramebufferSize(_window, &windowWidth, &windowHeight);
+
+    if (windowWidth <= 0 || windowHeight <= 0) {
+        return;
+    }
 
     _shader.use();
-    float aspectRatio = static_cast<float>(windowWidth) / windowHeight;
-    glm::mat4 projection = camera.getProjectionMatrix(aspectRatio);
-    glm::mat4 viewMatrix = camera.getViewMatrix();
+
+    const float aspectRatio = static_cast<float>(windowWidth) / windowHeight;
+
+    glm::mat4 projection;
+
+    switch (cameraComponent.type) {
+        case CameraType::Perspective:
+            projection = glm::perspective(
+                glm::radians(cameraComponent.fov),
+                aspectRatio,
+                cameraComponent.nearPlane,
+                cameraComponent.farPlane);
+            break;
+        case CameraType::Orthographic:
+            projection = glm::ortho(
+                cameraComponent.orthoLeft,
+                cameraComponent.orthoRight,
+                cameraComponent.orthoBottom,
+                cameraComponent.orthoTop,
+                cameraComponent.nearPlane,
+                cameraComponent.farPlane);
+            break;
+        case CameraType::Isometric: {
+            projection = glm::ortho(
+                cameraComponent.orthoLeft,
+                cameraComponent.orthoRight,
+                cameraComponent.orthoBottom,
+                cameraComponent.orthoTop,
+                cameraComponent.nearPlane,
+                cameraComponent.farPlane);
+            break;
+        }
+        default:
+            throw std::runtime_error("Unknown camera type");
+    }
+
+    const float yaw = glm::radians(cameraComponent.yaw);
+    const float pitch = glm::radians(cameraComponent.pitch);
+
+    // Standard FPS-style forward vector
+    glm::vec3 forward;
+    forward.x = cosf(pitch) * cosf(yaw);
+    forward.y = sinf(pitch);
+    forward.z = cosf(pitch) * sinf(yaw);
+
+
+    const glm::vec3 cameraPosition = cameraTransformComponent.position.toGLM();
+    const glm::vec3 cameraTarget = cameraPosition + glm::normalize(forward);
+    constexpr auto cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+    const glm::mat4 viewMatrix = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
 
     _shader.setUniform("uView", viewMatrix);
     _shader.setUniform("uProjection", projection);
 
-    _shader.setUniform("lightDir", glm::vec3(-10.f, -10.0f, -1.0f));
-    _shader.setUniform("baseColor", glm::vec3(0.8f, 0.8f, 0.1f));
+    glm::vec3 lightDirection{-10.0f, -10.0f, -1.0f};
 
-    for (auto entity: view) {
-        auto [cube, transform] = view.get<CubeComponent, TransformComponent>(entity);
+    auto lightView = _registry.view<DirectionalLightComponent, TransformComponent>();
+    if (lightView.begin() != lightView.end()) {
+        auto &lightComponent = lightView.get<DirectionalLightComponent>(*lightView.begin());
+        lightDirection = lightComponent.direction.toGLM();
+    }
+
+    _shader.setUniform("lightDir", lightDirection);
+    _shader.setUniform("baseColor", glm::vec3(0.8f, 0.8f, 0.1f));
+    _shader.setUniform("uUseTexture", 0); // false
+    _shader.setUniform("ambientStrength", 0.25f); // any value > 0
+
+    const auto cubeView = _registry.view<CubeComponent, TransformComponent>();
+
+    for (const auto entity: cubeView) {
+        auto [cube, transform] = cubeView.get<CubeComponent, TransformComponent>(entity);
 
         glm::mat4 model = glm::translate(glm::mat4(1.0f), transform.position.toGLM());
         _shader.setUniform("uModel", model);

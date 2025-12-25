@@ -86,7 +86,7 @@ namespace cbit {
         Quad2D _quad2D;
         std::unordered_map<std::string, Texture> _textures;
 
-        // sizes window to keep in sync
+        // sizes a window to keep in sync
         int _windowWidth = 1, _windowHeight = 1;
         int _framebufferWidth = 1, _framebufferHeight = 1;
 

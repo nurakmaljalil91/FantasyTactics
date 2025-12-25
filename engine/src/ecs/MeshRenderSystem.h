@@ -9,7 +9,6 @@
 #ifndef FANTASYTACTICS_MESHRENDERSYSTEM_H
 #define FANTASYTACTICS_MESHRENDERSYSTEM_H
 #include "entt/entt.hpp"
-#include "graphics/cameras/Camera.h"
 #include "graphics/renderers/ShaderProgram.h"
 
 namespace cbit {
@@ -25,13 +24,16 @@ namespace cbit {
          */
         explicit MeshRenderSystem(entt::registry &registry);
 
+        void setWindow(GLFWwindow *window);
+
         /**
          * @brief Renders all mesh components.
          * @details This method iterates through all entities with mesh components and renders them.
          */
-        void render(Camera &camera, int windowWidth, int windowHeight);
+        void render();
 
     private:
+        GLFWwindow *_window{nullptr};
         entt::registry &_registry;
         ShaderProgram _shader;
     };

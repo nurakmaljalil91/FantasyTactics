@@ -11,16 +11,15 @@
 #include "GameObject.h"
 #include "utilities/UUIDGenerator.h"
 
-cbit::EntityComponentSystem::EntityComponentSystem() :
-_uiSystem(nullptr, _registry),
-_meshRenderSystem(_registry)
-{
+cbit::EntityComponentSystem::EntityComponentSystem() : _uiSystem(nullptr, _registry),
+                                                       _meshRenderSystem(_registry) {
     // Constructor implementation can be added here if needed
 }
 
 void cbit::EntityComponentSystem::setWindow(GLFWwindow *window) {
     _window = window;
     _uiSystem.setWindow(window);
+    _meshRenderSystem.setWindow(window);
 }
 
 cbit::EntityComponentSystem::~EntityComponentSystem() = default;
@@ -30,11 +29,8 @@ void cbit::EntityComponentSystem::update(const float deltaTime) {
 }
 
 void cbit::EntityComponentSystem::render() {
+    _meshRenderSystem.render();
     _uiSystem.render();
-}
-
-void cbit::EntityComponentSystem::render(Camera &camera, int windowWidth, int windowHeight) {
-    _meshRenderSystem.render(camera, windowWidth, windowHeight);
 }
 
 void cbit::EntityComponentSystem::cleanup() {

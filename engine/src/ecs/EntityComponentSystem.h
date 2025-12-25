@@ -60,8 +60,6 @@ namespace cbit {
          */
         void render();
 
-        void render(Camera& camera, int windowWidth, int windowHeight);
-
         /**
          * Clean up the entity-component system.
          * @details This method is called to clean up resources used by the ECS, such as destroying entities and components.
@@ -193,8 +191,6 @@ namespace cbit {
          * @return A reference to the entt::registry used by the ECS.
          */
         [[nodiscard]] entt::registry &getRegistry() { return _registry; }
-
-
 
     private:
         entt::registry _registry;

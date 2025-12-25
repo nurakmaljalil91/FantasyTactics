@@ -11,26 +11,34 @@
 #include "glm/gtc/type_ptr.inl"
 
 void PlayScene::initialize() {
-    _shader.loadShaders("resources/shaders/default.vert", "resources/shaders/default.frag");
+    auto mainCamera = getWorld().createGameObject("MainCamera")
+            .addComponent<cbit::TransformComponent>()
+            .addComponent<cbit::CameraComponent>()
+            .addComponent<cbit::ActiveCameraComponent>();
+
+    auto &cameraTransformComponent = mainCamera.getComponent<cbit::TransformComponent>();
+
+    cameraTransformComponent.position = cbit::Vector3{0.0f, 0.0f, 5.0f};
+
+    getWorld().createGameObject("MainLighting")
+            .addComponent<cbit::TransformComponent>()
+            .addComponent<cbit::DirectionalLightComponent>();
+
     getWorld().createGameObject("Cube")
-            .addComponent<cbit::TransformComponent>(
-                cbit::Vector3(0.0f, 0.0f, 0.0f),
-                cbit::Vector3(0.0f, 0.0f, 0.0f),
-                cbit::Vector3(1.0f, 1.0f, 1.0f)
-            )
+            .addComponent<cbit::TransformComponent>()
             .addComponent<cbit::CubeComponent>();
+
+
 }
 
 
 void PlayScene::update(float deltaTime) {
-    auto player = getWorld().getGameObject("Cube");
+    auto player = getWorld().getGameObject("MainCamera");
     auto &transformComponent = player.getComponent<cbit::TransformComponent>();
-    transformComponent.position.x += 0.5f * deltaTime;
-
+    transformComponent.position.x += 0.05f * deltaTime;
 }
 
 void PlayScene::render() {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    getWorld().render(_isometricCamera, getWindowWidth(), getWindowHeight());
+    Scene::render();
 }

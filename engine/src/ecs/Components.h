@@ -16,6 +16,7 @@
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
 #include "graphics/meshes/Cube.h"
+#include "math/Color.h"
 #include "math/Vector2.h"
 #include "math/Vector3.h"
 
@@ -114,7 +115,7 @@ namespace cbit {
      */
     struct ButtonComponent {
         std::string label;
-        glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f); // The default color is white
+        Color color{1.0f, 1.0f, 1.0f, 1.0f}; // The default color is white
         bool isPressed = false; // State of the button
         bool isHovered = false; // State of the button when hovered
         bool isPressedInside = false; // True if the mouse is pressed inside the button
@@ -131,9 +132,9 @@ namespace cbit {
      * @brief  Color component for UI rectangles.
      */
     struct UIColorRectangleComponent {
-        glm::vec4 color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f); // The default color is white
-        glm::vec4 hoverColor = glm::vec4(0.8f, 0.8f, 0.8f, 1.0f); // Color when hovered
-        glm::vec4 activeColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+        Color color{1.0f, 1.0f, 1.0f, 1.0f}; // The default color is white
+        Color hoverColor{0.8f, 0.8f, 0.8f, 1.0f}; // Color when hovered
+        Color activeColor{1.0f, 1.0f, 1.0f, 1.0f};
     };
 
     /**
@@ -142,7 +143,7 @@ namespace cbit {
      */
     struct UIImageComponent {
         std::string path;
-        glm::vec4 tintColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f); // The default tint color is white
+        Color tintColor{1.0f, 1.0f, 1.0f, 1.0f}; // The default tint color is white
     };
 
     /**
@@ -152,7 +153,7 @@ namespace cbit {
     struct UITextComponent {
         std::string text;
         float fontSize = 1.f; // Default font size
-        glm::vec4 color = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f); // The default color is black
+        Color color{0.0f, 0.0f, 0.0f, 1.0f}; // The default color is black
     };
 
     /**
@@ -217,11 +218,6 @@ namespace cbit {
     struct CameraComponent {
         CameraType type = CameraType::Perspective;
 
-        // Camera transform
-        glm::vec3 position = glm::vec3(0.0f, 0.0f, 5.0f);
-        glm::vec3 target = glm::vec3(0.0f, 0.0f, 0.0f);
-        glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-
         // Projection settings
         float fov = 45.0f; // Field of view (for perspective)
         float nearPlane = 0.1f;
@@ -264,12 +260,12 @@ namespace cbit {
      *          regardless of distance, simulating infinitely distant light sources.
      */
     struct DirectionalLightComponent {
-        glm::vec3 direction = glm::vec3(-0.2f, -1.0f, -0.3f); // Direction the light is pointing
+        Vector3 direction = Vector3(-0.2f, -1.0f, -0.3f); // Direction the light is pointing
 
         // Light colors
-        glm::vec3 ambient = glm::vec3(0.05f, 0.05f, 0.05f); // Ambient light contribution
-        glm::vec3 diffuse = glm::vec3(0.4f, 0.4f, 0.4f); // Diffuse light contribution
-        glm::vec3 specular = glm::vec3(0.5f, 0.5f, 0.5f); // Specular light contribution
+        Vector3 ambient = Vector3(0.05f, 0.05f, 0.05f); // Ambient light contribution
+        Vector3 diffuse = Vector3(0.4f, 0.4f, 0.4f); // Diffuse light contribution
+        Vector3 specular = Vector3(0.5f, 0.5f, 0.5f); // Specular light contribution
 
         float intensity = 1.0f; // Light intensity multiplier
         bool enabled = true; // Whether the light is active
@@ -283,9 +279,9 @@ namespace cbit {
      */
     struct PointLightComponent {
         // Light colors
-        glm::vec3 ambient = glm::vec3(0.05f, 0.05f, 0.05f); // Ambient light contribution
-        glm::vec3 diffuse = glm::vec3(0.8f, 0.8f, 0.8f); // Diffuse light contribution
-        glm::vec3 specular = glm::vec3(1.0f, 1.0f, 1.0f); // Specular light contribution
+        Vector3 ambient = Vector3(0.05f, 0.05f, 0.05f); // Ambient light contribution
+        Vector3 diffuse = Vector3(0.8f, 0.8f, 0.8f); // Diffuse light contribution
+        Vector3 specular = Vector3(1.0f, 1.0f, 1.0f); // Specular light contribution
 
         // Attenuation factors (for distance falloff)
         float constant = 1.0f; // Constant attenuation
@@ -305,12 +301,12 @@ namespace cbit {
      *          They have both position and direction, with adjustable cone angles.
      */
     struct SpotLightComponent {
-        glm::vec3 direction = glm::vec3(0.0f, -1.0f, 0.0f); // Direction the spotlight is pointing
+        Vector3 direction = Vector3(0.0f, -1.0f, 0.0f); // Direction the spotlight is pointing
 
         // Light colors
-        glm::vec3 ambient = glm::vec3(0.0f, 0.0f, 0.0f); // Ambient light contribution
-        glm::vec3 diffuse = glm::vec3(1.0f, 1.0f, 1.0f); // Diffuse light contribution
-        glm::vec3 specular = glm::vec3(1.0f, 1.0f, 1.0f); // Specular light contribution
+        Vector3 ambient = Vector3(0.0f, 0.0f, 0.0f); // Ambient light contribution
+        Vector3 diffuse = Vector3(1.0f, 1.0f, 1.0f); // Diffuse light contribution
+        Vector3 specular = Vector3(1.0f, 1.0f, 1.0f); // Specular light contribution
 
         // Attenuation factors (for distance falloff)
         float constant = 1.0f; // Constant attenuation

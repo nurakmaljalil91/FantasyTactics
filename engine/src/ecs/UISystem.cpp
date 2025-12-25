@@ -308,7 +308,7 @@ void cbit::UISystem::_dispatchPointerEvents() {
         }
     }
 
-    // Update mouse button state for next frame
+    // Update mouse button state for the next frame
     _mouseDownLastFrame = mouseDown;
 }
 
@@ -436,7 +436,7 @@ void cbit::UISystem::_renderText() {
         const float x = rectangle.x + (rectangle.width - approxTextWidth) * 0.5f;
         const float y = rectangle.y + (rectangle.height * 0.5f) - (14.0f * scale);
 
-        const glm::vec3 rgb(textComponent.color.r, textComponent.color.g, textComponent.color.b);
+        const glm::vec3 rgb(textComponent.color.glmVec4.r, textComponent.color.glmVec4.g, textComponent.color.glmVec4.b);
         _textRenderer.renderText(
             textComponent.text,
             x,
