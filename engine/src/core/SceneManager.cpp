@@ -11,18 +11,18 @@
 #include "SceneManager.h"
 #include "utilities/Logger.h"
 
-SceneManager::SceneManager(): _currentScene(nullptr) {
+cbit::SceneManager::SceneManager(): _currentScene(nullptr) {
 }
 
-SceneManager::~SceneManager() {
+cbit::SceneManager::~SceneManager() {
     cleanup();
 }
 
-void SceneManager::initialize(GLFWwindow *window) {
+void cbit::SceneManager::initialize(GLFWwindow *window) {
     _window = window;
 }
 
-void SceneManager::addScene(const std::string &name, std::shared_ptr<Scene> scene) {
+void cbit::SceneManager::addScene(const std::string &name, std::shared_ptr<Scene> scene) {
     if (_scenes.find(name) != _scenes.end()) {
         Logger::log()->error("Scene '{}' already exists in SceneManager", name);
         return; // Scene with this name already exists
@@ -30,7 +30,7 @@ void SceneManager::addScene(const std::string &name, std::shared_ptr<Scene> scen
     _scenes[name] = std::move(scene);
 }
 
-std::string SceneManager::getActiveScene() {
+std::string cbit::SceneManager::getActiveScene() {
     for (const auto &[name, scene]: _scenes) {
         if (scene == _currentScene) {
             return name; // Return the name of the active scene
@@ -39,7 +39,7 @@ std::string SceneManager::getActiveScene() {
     return "";
 }
 
-void SceneManager::setActiveScene(const std::string &name) {
+void cbit::SceneManager::setActiveScene(const std::string &name) {
     const auto scenes = _scenes.find(name);
     if (scenes == _scenes.end()) {
         Logger::log()->error("Scene '{}' does not exist in SceneManager", name);
@@ -60,20 +60,20 @@ void SceneManager::setActiveScene(const std::string &name) {
     }
 }
 
-void SceneManager::update(const float deltaTime) const {
+void cbit::SceneManager::update(const float deltaTime) const {
     if (_currentScene) {
         _currentScene->update(deltaTime);
     }
 }
 
-void SceneManager::render(int windowWidth, int windowHeight) const {
+void cbit::SceneManager::render(int windowWidth, int windowHeight) const {
     if (_currentScene) {
         _currentScene->setWindowSize(windowWidth, windowHeight);
         _currentScene->render();
     }
 }
 
-void SceneManager::cleanup() const {
+void cbit::SceneManager::cleanup() const {
     if (_currentScene) {
         _currentScene->cleanup();
     }

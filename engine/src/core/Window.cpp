@@ -9,7 +9,7 @@
 #include "Window.h"
 #include "utilities/Logger.h"
 
-Window::Window(WindowConfig windowConfig) : _window(nullptr),
+cbit::Window::Window(WindowConfig windowConfig) : _window(nullptr),
                                             _isFullscreen(windowConfig.fullscreen) {
     Logger::initialize(); // Initialize the logger
 
@@ -76,7 +76,7 @@ Window::Window(WindowConfig windowConfig) : _window(nullptr),
     glEnable(GL_DEPTH_TEST); // Enable depth testing for 3D rendering
 }
 
-Window::~Window() {
+cbit::Window::~Window() {
     if (_window) {
         glfwDestroyWindow(_window);
     }
@@ -84,18 +84,18 @@ Window::~Window() {
     Logger::log()->info("Window destroyed and GLFW terminated");
 }
 
-bool Window::shouldClose() const {
+bool cbit::Window::shouldClose() const {
     return glfwWindowShouldClose(_window);
 }
 
-void Window::pollEvents() {
+void cbit::Window::pollEvents() {
     glfwPollEvents();
 }
 
-void Window::swapBuffers() const {
+void cbit::Window::swapBuffers() const {
     glfwSwapBuffers(_window);
 }
 
-GLFWwindow *Window::getHandle() const {
+GLFWwindow *cbit::Window::getHandle() const {
     return _window;
 }

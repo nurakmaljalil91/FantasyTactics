@@ -32,7 +32,7 @@ void MeshRenderSystem::render(Camera &camera, int windowWidth, int windowHeight)
     for (auto entity: view) {
         auto [cube, transform] = view.get<CubeComponent, TransformComponent>(entity);
 
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), transform.position);
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), transform.position.getGlmVector());
         _shader.setUniform("uModel", model);
 
         cube.cube.draw();

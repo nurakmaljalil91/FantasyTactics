@@ -12,78 +12,79 @@
 #include <string>
 #include "OpenGLInclude.h"
 
-/**
- * @struct WindowConfig
- * @brief Configuration structure for creating a window.
- */
-struct WindowConfig {
-    int width;
-    int height;
-    std::string title;
-    bool resizable = false;
-    bool fullscreen = false;
-    bool decorated = true;
-};
-
-/**
- * @class Window
- * @brief Represents a window in the application.
- * @details This class is currently a placeholder and does not implement any functionality.
- *          It can be extended in the future to include methods for creating, managing, and rendering
- *          a window in the application. The Window class can be used in conjunction with other graphics
- *          components such as rendering contexts, event handling, and user interface elements.
- *          It is designed to be used in a graphics rendering context where OpenGL or other graphics
- *          libraries are used for rendering 2D and 3D graphics.
- *          The class can be extended to include methods for handling window events, resizing,
- *          and managing the rendering loop. It can also be integrated with other components such as
- *          input handling, graphics rendering, and user interface management to create a complete
- *          application windowing system.
- *          The Window class can be used in various applications such as games, graphical user interfaces,
- *          and other applications that require a window for rendering graphics and handling user input.
- */
-class Window {
-public:
+namespace cbit {
     /**
-     * Default constructor.
-     * Initializes an empty window object. The window will be created when the constructor with parameters is called.
-     * @param windowConfig Configuration for the window to be created.
+     * @struct WindowConfig
+     * @brief Configuration structure for creating a window.
      */
-    Window(WindowConfig windowConfig);
+    struct WindowConfig {
+        int width;
+        int height;
+        std::string title;
+        bool resizable = false;
+        bool fullscreen = false;
+        bool decorated = true;
+    };
 
     /**
-     * Default destructor.
-     * Cleans up the window resources.
+     * @class Window
+     * @brief Represents a window in the application.
+     * @details This class is currently a placeholder and does not implement any functionality.
+     *          It can be extended in the future to include methods for creating, managing, and rendering
+     *          a window in the application. The Window class can be used in conjunction with other graphics
+     *          components such as rendering contexts, event handling, and user interface elements.
+     *          It is designed to be used in a graphics rendering context where OpenGL or other graphics
+     *          libraries are used for rendering 2D and 3D graphics.
+     *          The class can be extended to include methods for handling window events, resizing,
+     *          and managing the rendering loop. It can also be integrated with other components such as
+     *          input handling, graphics rendering, and user interface management to create a complete
+     *          application windowing system.
+     *          The Window class can be used in various applications such as games, graphical user interfaces,
+     *          and other applications that require a window for rendering graphics and handling user input.
      */
-    ~Window();
+    class Window {
+    public:
+        /**
+         * Default constructor.
+         * Initializes an empty window object. The window will be created when the constructor with parameters is called.
+         * @param windowConfig Configuration for the window to be created.
+         */
+        Window(WindowConfig windowConfig);
 
-    /**
-     * Checks if the window should close.
-     * @return true if the window should close, false otherwise.
-     */
-    [[nodiscard]] bool shouldClose() const;
+        /**
+         * Default destructor.
+         * Cleans up the window resources.
+         */
+        ~Window();
 
-    /**
-     * Polls events for the window.
-     * @details This method processes events such as keyboard input, mouse movement, and window resizing
-     */
-    void pollEvents();
+        /**
+         * Checks if the window should close.
+         * @return true if the window should close, false otherwise.
+         */
+        [[nodiscard]] bool shouldClose() const;
 
-    /**
-     * Swaps the front and back buffers of the window.
-     * @details This method is used to display the rendered content on the screen.
-     */
-    void swapBuffers() const;
+        /**
+         * Polls events for the window.
+         * @details This method processes events such as keyboard input, mouse movement, and window resizing
+         */
+        void pollEvents();
 
-    /**
-     * Gets the window.
-     * @return window.
-     */
-    [[nodiscard]] GLFWwindow *getHandle() const;
+        /**
+         * Swaps the front and back buffers of the window.
+         * @details This method is used to display the rendered content on the screen.
+         */
+        void swapBuffers() const;
 
-private:
-    GLFWwindow *_window;
-    bool _isFullscreen;
-};
+        /**
+         * Gets the window.
+         * @return window.
+         */
+        [[nodiscard]] GLFWwindow *getHandle() const;
 
+    private:
+        GLFWwindow *_window;
+        bool _isFullscreen;
+    };
+}
 
 #endif //WINDOW_H

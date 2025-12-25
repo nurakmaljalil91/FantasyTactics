@@ -16,6 +16,7 @@
 #include "glm/vec3.hpp"
 #include "glm/vec4.hpp"
 #include "graphics/meshes/Cube.h"
+#include "math/Math.h"
 
 #pragma region DefaultComponents
 /**
@@ -39,9 +40,9 @@ struct IdComponent {
  * @brief  Transform component for storing position, rotation, and scale of entities.
  */
 struct TransformComponent {
-    glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-    glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+    Vector position{0.0f, 0.0f, 0.0f};
+    Vector rotation{0.0f, 0.0f, 0.0f};
+    Vector scale{1.0f, 1.0f, 1.0f};
 };
 
 #pragma endregion DefaultComponents

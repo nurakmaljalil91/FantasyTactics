@@ -22,7 +22,7 @@
  *          It can be used to organize menu items, handle user input, and manage rendering and updates for the main menu.
  *          The class can also be extended to include features such as animations, sound effects, and transitions between different menu states.
  */
-class MenuScene final : public Scene {
+class MenuScene final : public cbit::Scene {
 public:
     void initialize() override;
 

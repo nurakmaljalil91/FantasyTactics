@@ -8,40 +8,40 @@
 
 #include "Scene.h"
 
-void Scene::setWindowSize(const int width, const int height) {
+void cbit::Scene::setWindowSize(const int width, const int height) {
     _windowHeight = height;
     _windowWidth = width;
 }
 
-void Scene::update(float deltaTime) {
+void cbit::Scene::update(float deltaTime) {
     _world.update(deltaTime);
 }
 
-void Scene::render() {
+void cbit::Scene::render() {
     _world.render();
 }
 
-void Scene::cleanup() {
+void cbit::Scene::cleanup() {
     _world.cleanup();
 }
 
-void Scene::setWindow(GLFWwindow *window) {
+void cbit::Scene::setWindow(GLFWwindow *window) {
     _window = window;
     _world.setWindow(window);
 }
 
-GLFWwindow *Scene::getWindow() const {
+GLFWwindow *cbit::Scene::getWindow() const {
     return _window;
 }
 
-int Scene::getWindowWidth() const {
+int cbit::Scene::getWindowWidth() const {
     return _windowWidth;
 }
 
-int Scene::getWindowHeight() const {
+int cbit::Scene::getWindowHeight() const {
     return _windowHeight;
 }
 
-EntityComponentSystem &Scene::getWorld() {
+EntityComponentSystem &cbit::Scene::getWorld() {
     return _world;
 }

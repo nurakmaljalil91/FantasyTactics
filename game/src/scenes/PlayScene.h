@@ -16,7 +16,7 @@
  * @class PlayScene
  * @brief Represents the gameplay scene of the game.
  */
-class PlayScene final : public Scene {
+class PlayScene final : public cbit::Scene {
 public:
     void initialize() override;
 

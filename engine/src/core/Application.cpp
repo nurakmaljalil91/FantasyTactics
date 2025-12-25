@@ -8,7 +8,7 @@
 
 #include "Application.h"
 
-Application::Application(const WindowConfig &windowConfig) : _window(windowConfig),
+cbit::Application::Application(const WindowConfig &windowConfig) : _window(windowConfig),
                                                              _wireframe(false),
                                                              _fullscreen(windowConfig.fullscreen),
                                                              _windowedWidth(windowConfig.width),
@@ -19,9 +19,9 @@ Application::Application(const WindowConfig &windowConfig) : _window(windowConfi
 
 #include "utilities/Logger.h"
 
-Application::~Application() = default;
+cbit::Application::~Application() = default;
 
-void Application::run() {
+void cbit::Application::run() {
     auto lastTime = std::chrono::high_resolution_clock::now();
 
     while (!_window.shouldClose()) {
@@ -48,16 +48,16 @@ void Application::run() {
     }
 }
 
-SceneManager *Application::getSceneManager() {
+cbit::SceneManager *cbit::Application::getSceneManager() {
     return &_scenesManager;
 }
 
-void Application::_initialize() {
+void cbit::Application::_initialize() {
     // initialize scene manager
     _scenesManager.initialize(_window.getHandle());
 }
 
-void Application::_processInput(float deltaTime) {
+void cbit::Application::_processInput(float deltaTime) {
     GLFWwindow *window = _window.getHandle();
 
     // Close the window if the Escape key is pressed

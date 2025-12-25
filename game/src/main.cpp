@@ -7,7 +7,7 @@
 
 int main() {
     try {
-        const WindowConfig windowConfig{
+        const cbit::WindowConfig windowConfig{
             1200,
             800,
             "Fantasy Tactics",
@@ -16,7 +16,7 @@ int main() {
             true
         };
 
-        Application app(windowConfig);
+        cbit::Application app(windowConfig);
 
         app.getSceneManager()->addScene("MenuScene", std::make_shared<MenuScene>());
         app.getSceneManager()->addScene("PlayScene", std::make_shared<PlayScene>());

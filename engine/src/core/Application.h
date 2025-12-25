@@ -12,55 +12,56 @@
 #include "Window.h"
 #include "SceneManager.h"
 
-/**
- * @class Application
- * @brief Represents the main application class.
- */
-class Application {
-public:
+namespace cbit {
     /**
-     * Constructor for the Application class.
-     * @param windowConfig Configuration for the application window.
+     * @class Application
+     * @brief Represents the main application class.
      */
-    explicit Application(const WindowConfig &windowConfig);
+    class Application {
+    public:
+        /**
+         * Constructor for the Application class.
+         * @param windowConfig Configuration for the application window.
+         */
+        explicit Application(const WindowConfig &windowConfig);
 
-    /**
-     * Default destructor for the Application class.
-     * Cleans up resources used by the application.
-     */
-    ~Application();
+        /**
+         * Default destructor for the Application class.
+         * Cleans up resources used by the application.
+         */
+        ~Application();
 
-    /**
-     * Runs the application.
-     */
-    void run();
+        /**
+         * Runs the application.
+         */
+        void run();
 
-    /**
-     * Get SceneManager instance.
-     * @return Reference to the SceneManager instance.
-     */
-    SceneManager *getSceneManager();
+        /**
+         * Get SceneManager instance.
+         * @return Reference to the SceneManager instance.
+         */
+        SceneManager *getSceneManager();
 
-private:
-    Window _window;
-    SceneManager _scenesManager;
+    private:
+        Window _window;
+        SceneManager _scenesManager;
 
-    bool _wireframe;
-    bool _fullscreen;
-    int _windowedWidth, _windowedHeight;
+        bool _wireframe;
+        bool _fullscreen;
+        int _windowedWidth, _windowedHeight;
 
 
-    /**
-     * Initializes the application.
-     * This method sets up the necessary parts for the application to run.
-     */
-    void _initialize();
+        /**
+         * Initializes the application.
+         * This method sets up the necessary parts for the application to run.
+         */
+        void _initialize();
 
-    /**
-     * Processes input from the user.
-     */
-    void _processInput(float deltaTime);
-};
-
+        /**
+         * Processes input from the user.
+         */
+        void _processInput(float deltaTime);
+    };
+}
 
 #endif //APPLICATION_H

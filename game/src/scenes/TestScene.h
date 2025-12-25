@@ -19,7 +19,7 @@
  * @class TestScene
  * @brief Placeholder class for testing purposes.
  */
-class TestScene final : public Scene {
+class TestScene final : public cbit::Scene {
 public:
     void initialize() override;
 

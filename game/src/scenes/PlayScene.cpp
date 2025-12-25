@@ -15,9 +15,9 @@ void PlayScene::initialize() {
     _shader.loadShaders("resources/shaders/default.vert", "resources/shaders/default.frag");
     getWorld().createGameObject("Cube")
             .addComponent<TransformComponent>(
-                glm::vec3(0.0f, 0.0f, 0.0f),
-                glm::vec3(0.0f, 0.0f, 0.0f),
-                glm::vec3(1.0f, 1.0f, 1.0f)
+                Vector(0.0f, 0.0f, 0.0f),
+                Vector(0.0f, 0.0f, 0.0f),
+                Vector(1.0f, 1.0f, 1.0f)
             )
             .addComponent<CubeComponent>();
 }

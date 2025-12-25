@@ -107,10 +107,10 @@ UISystem::UIRectangle UISystem::_computeRectangle(entt::entity entity) const {
     if ((size.x <= 0.0f || size.y <= 0.0f) && _registry.all_of<TransformComponent>(entity)) {
         const auto &transformComponent = _registry.get<TransformComponent>(entity);
         if (size.x <= 0.0f) {
-            size.x = transformComponent.scale.x;
+            size.x = transformComponent.scale.getGlmVector().x;
         }
         if (size.y <= 0.0f) {
-            size.y = transformComponent.scale.y;
+            size.y = transformComponent.scale.getGlmVector().y;
         }
     }
 
@@ -171,8 +171,8 @@ UISystem::UIRectangle UISystem::_computeRectangle(entt::entity entity) const {
         position += anchorComponent->offsetPixel;
     } else if (_registry.all_of<TransformComponent>(entity)) {
         const auto &transformComponent = _registry.get<TransformComponent>(entity);
-        position.x = transformComponent.position.x;
-        position.y = transformComponent.position.y;
+        position.x = transformComponent.position.getGlmVector().x;
+        position.y = transformComponent.position.getGlmVector().y;
     }
 
     rectangle.x = position.x;
@@ -449,14 +449,14 @@ void UISystem::_renderText() {
 
 bool UISystem::_hitTest(const TransformComponent &transformComponent, const RectangleComponent &rectangleComponent,
                         const double uiX, const double uiY) {
-    const double x0 = transformComponent.position.x;
-    const double y0 = transformComponent.position.y;
+    const double x0 = transformComponent.position.getGlmVector().x;
+    const double y0 = transformComponent.position.getGlmVector().y;
     const double x1 = x0 + (rectangleComponent.width > 0
                                 ? static_cast<float>(rectangleComponent.width)
-                                : transformComponent.scale.x);
+                                : transformComponent.scale.getGlmVector().x);
     const double y1 = y0 + (rectangleComponent.height > 0
                                 ? static_cast<float>(rectangleComponent.height)
-                                : transformComponent.scale.y);
+                                : transformComponent.scale.getGlmVector().y);
     return uiX >= x0 && uiX <= x1 && uiY >= y0 && uiY <= y1;
 }
 
@@ -478,13 +478,13 @@ void UISystem::_drawQuad(std::string &texturePath, const TransformComponent &tra
     _uiShader.setUniform("uTexture", 0);
 
     const glm::vec2 position{
-        transform.position.x,
-        transform.position.y
+        transform.position.getGlmVector().x,
+        transform.position.getGlmVector().y
     };
 
     const glm::vec2 size{
-        transform.scale.x,
-        transform.scale.y
+        transform.scale.getGlmVector().x,
+        transform.scale.getGlmVector().y
     };
 
     _uiShader.setUniform("uPosition", position);
