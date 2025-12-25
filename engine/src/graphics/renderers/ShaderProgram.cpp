@@ -39,21 +39,21 @@
 #include <sstream>
 #include <glm/gtc/type_ptr.hpp>
 
-ShaderProgram::ShaderProgram()
+cbit::ShaderProgram::ShaderProgram()
     : _handle(0) {
 }
 
-ShaderProgram::ShaderProgram(const char *vsFilename, const char *fsFilename) : _handle(0) {
+cbit::ShaderProgram::ShaderProgram(const char *vsFilename, const char *fsFilename) : _handle(0) {
     loadShaders(vsFilename, fsFilename);
 }
 
 
-ShaderProgram::~ShaderProgram() {
+cbit::ShaderProgram::~ShaderProgram() {
     glDeleteProgram(_handle);
 }
 
 // Loads vertex and fragment shaders
-bool ShaderProgram::loadShaders(const char *vsFilename, const char *fsFilename) {
+bool cbit::ShaderProgram::loadShaders(const char *vsFilename, const char *fsFilename) {
     const std::string vsString = _fileToString(vsFilename);
     const std::string fsString = _fileToString(fsFilename);
 
@@ -95,7 +95,7 @@ bool ShaderProgram::loadShaders(const char *vsFilename, const char *fsFilename) 
 
 // Opens and reads contents of an ASCII file to a string.  Returns the string.
 // Not good for very large files.
-std::string ShaderProgram::_fileToString(const std::string &filename) {
+std::string cbit::ShaderProgram::_fileToString(const std::string &filename) {
     std::stringstream ss;
 
     try {
@@ -118,14 +118,14 @@ std::string ShaderProgram::_fileToString(const std::string &filename) {
 }
 
 // Activate the shader program
-void ShaderProgram::use() const {
+void cbit::ShaderProgram::use() const {
     if (_handle > 0) {
         glUseProgram(_handle);
     }
 }
 
 // Checks for shader compiler errors
-void ShaderProgram::_checkCompileErrors(const GLuint shader, const ShaderType type) {
+void cbit::ShaderProgram::_checkCompileErrors(const GLuint shader, const ShaderType type) {
     GLint status = 0;
     if (type == PROGRAM) {
         glGetProgramiv(shader, GL_LINK_STATUS, &status);
@@ -149,30 +149,30 @@ void ShaderProgram::_checkCompileErrors(const GLuint shader, const ShaderType ty
 }
 
 // Returns the active shader program
-GLuint ShaderProgram::getProgram() const {
+GLuint cbit::ShaderProgram::getProgram() const {
     return _handle;
 }
 
 // Sets a glm::vec2 shader uniform
-void ShaderProgram::setUniform(const GLchar *name, const glm::vec2 &vector) {
+void cbit::ShaderProgram::setUniform(const GLchar *name, const glm::vec2 &vector) {
     const GLint loc = _getUniformLocation(name);
     glUniform2f(loc, vector.x, vector.y);
 }
 
 // Sets a glm::vec3 shader uniform
-void ShaderProgram::setUniform(const GLchar *name, const glm::vec3 &vector) {
+void cbit::ShaderProgram::setUniform(const GLchar *name, const glm::vec3 &vector) {
     const GLint loc = _getUniformLocation(name);
     glUniform3f(loc, vector.x, vector.y, vector.z);
 }
 
 // Sets a glm::vec4 shader uniform
-void ShaderProgram::setUniform(const GLchar *name, const glm::vec4 &vector) {
+void cbit::ShaderProgram::setUniform(const GLchar *name, const glm::vec4 &vector) {
     const GLint loc = _getUniformLocation(name);
     glUniform4f(loc, vector.x, vector.y, vector.z, vector.w);
 }
 
 // Sets a glm::mat4 shader uniform
-void ShaderProgram::setUniform(const GLchar *name, const glm::mat4 &material) {
+void cbit::ShaderProgram::setUniform(const GLchar *name, const glm::mat4 &material) {
     const GLint loc = _getUniformLocation(name);
 
     // loc = location of uniform in shader
@@ -183,35 +183,35 @@ void ShaderProgram::setUniform(const GLchar *name, const glm::mat4 &material) {
 }
 
 // Sets a GLfloat shader uniform
-void ShaderProgram::setUniform(const GLchar *name, const GLfloat glFloat) {
+void cbit::ShaderProgram::setUniform(const GLchar *name, const GLfloat glFloat) {
     const GLint loc = _getUniformLocation(name);
     glUniform1f(loc, glFloat);
 }
 
 
 // Sets a GLint shader uniform
-void ShaderProgram::setUniform(const GLchar *name, const GLint glLint) {
+void cbit::ShaderProgram::setUniform(const GLchar *name, const GLint glLint) {
     const GLint loc = _getUniformLocation(name);
     glUniform1i(loc, glLint);
 }
 
 
 // Sets a GLint shader uniform that is specific to a texture unit
-void ShaderProgram::setUniformSampler(const GLchar *name, const GLint &slot) {
+void cbit::ShaderProgram::setUniformSampler(const GLchar *name, const GLint &slot) {
     glActiveTexture(GL_TEXTURE0 + slot);
 
     const GLint loc = _getUniformLocation(name);
     glUniform1i(loc, slot);
 }
 
-bool ShaderProgram::hasUniform(const GLchar *name) const {
+bool cbit::ShaderProgram::hasUniform(const GLchar *name) const {
     const GLint loc = glGetUniformLocation(_handle, name);
     return loc != -1;
 }
 
 // Returns the uniform identifier given its string name.
 // NOTE: shader must be currently active first.
-GLint ShaderProgram::_getUniformLocation(const GLchar *name) {
+GLint cbit::ShaderProgram::_getUniformLocation(const GLchar *name) {
     // Only need to query the shader program IF it doesn't already exist.
     if (const auto it = _uniformLocations.find(name); it == _uniformLocations.end()) {
         // Find it and add it to the map

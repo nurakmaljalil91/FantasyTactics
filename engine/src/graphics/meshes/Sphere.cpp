@@ -10,7 +10,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp> // for pi constants
 
-Sphere::Sphere(const float radius, const int stacks, const int slices) {
+cbit::Sphere::Sphere(const float radius, const int stacks, const int slices) {
     // Helper lambda for generating one vertex (position, normal, texcoords)
     auto makeVertex = [&](const int stackIdx, const int sliceIdx) {
         const float theta = glm::pi<float>() * static_cast<float>(stackIdx) / static_cast<float>(stacks); // 0..pi
@@ -56,4 +56,4 @@ Sphere::Sphere(const float radius, const int stacks, const int slices) {
     loaded = true;
 }
 
-Sphere::~Sphere() = default;
+cbit::Sphere::~Sphere() = default;

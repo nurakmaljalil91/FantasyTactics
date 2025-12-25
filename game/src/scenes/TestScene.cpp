@@ -13,9 +13,9 @@ void TestScene::initialize() {
     _texture.loadTexture("resources/textures/crate.jpg");
     _robotTexture.loadTexture("resources/textures/robot_diffuse.jpg");
     if (!_robotMesh.loadObj("resources/models/robot.obj")) {
-        Logger::log()->error("Failed to load robot mesh");
+        cbit::Logger::log()->error("Failed to load robot mesh");
     } else {
-        Logger::log()->info("Robot mesh loaded successfully");
+        cbit::Logger::log()->info("Robot mesh loaded successfully");
     }
 
     glfwSetWindowUserPointer(getWindow(), &_isometricCamera);

@@ -13,18 +13,19 @@
 
 #include "Mesh.h"
 
-/**
- * @class Sphere
- * @brief Class representing a sphere mesh.
- */
-class Sphere final : public Mesh {
-public:
-    // Create a sphere of given radius, subdivided into
-    // "stacks" rows (latitude) and "slices" columns (longitude).
-    explicit Sphere(float radius = 1.0f, int stacks = 16, int slices = 32);
+namespace cbit {
+    /**
+     * @class Sphere
+     * @brief Class representing a sphere mesh.
+     */
+    class Sphere final : public Mesh {
+    public:
+        // Create a sphere of given radius, subdivided into
+        // "stacks" rows (latitude) and "slices" columns (longitude).
+        explicit Sphere(float radius = 1.0f, int stacks = 16, int slices = 32);
 
-    ~Sphere() override;
-};
-
+        ~Sphere() override;
+    };
+}
 
 #endif //FANTASYTACTICS_SPHERE_H

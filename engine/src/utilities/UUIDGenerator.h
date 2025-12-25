@@ -11,18 +11,19 @@
 
 #include <string>
 
-/**
- * @class UUIDGenerator
- * @brief Generates unique identifiers (UUIDs) for game objects.
- */
-class UUIDGenerator {
-public:
+namespace cbit {
     /**
-     * Generates a new UUID.
-     * @return newly generated UUID as a string.
+     * @class UUIDGenerator
+     * @brief Generates unique identifiers (UUIDs) for game objects.
      */
-    static std::string generate();
-};
-
+    class UUIDGenerator {
+    public:
+        /**
+         * Generates a new UUID.
+         * @return newly generated UUID as a string.
+         */
+        static std::string generate();
+    };
+}
 
 #endif //UUIDGENERATOR_H

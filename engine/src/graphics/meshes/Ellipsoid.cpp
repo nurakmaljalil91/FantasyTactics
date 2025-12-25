@@ -12,8 +12,8 @@
 #include <cmath>
 #include "glm/ext/scalar_constants.hpp"
 
-Ellipsoid::Ellipsoid(const float radiusX, const float radiusY, const float radiusZ, const int sectorCount,
-                     const int stackCount) {
+cbit::Ellipsoid::Ellipsoid(const float radiusX, const float radiusY, const float radiusZ, const int sectorCount,
+                           const int stackCount) {
     vertices.clear();
 
     for (int i = 0; i <= stackCount; ++i) {

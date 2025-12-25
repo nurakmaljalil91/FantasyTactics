@@ -10,7 +10,7 @@
 #include FT_FREETYPE_H
 #include "glm/ext/matrix_clip_space.hpp"
 
-TextRenderer::TextRenderer(const GLuint screenWidth, const GLuint screenHeight) : VAO(0), VBO(0), EBO(0) {
+cbit::TextRenderer::TextRenderer(const GLuint screenWidth, const GLuint screenHeight) : VAO(0), VBO(0), EBO(0) {
     textShader.loadShaders("resources/shaders/text.vert", "resources/shaders/text.frag");
     textShader.use();
 
@@ -32,7 +32,7 @@ TextRenderer::TextRenderer(const GLuint screenWidth, const GLuint screenHeight) 
     glEnableVertexAttribArray(0);
 }
 
-void TextRenderer::loadFont(const std::string &fontPath, GLuint fontSize) {
+void cbit::TextRenderer::loadFont(const std::string &fontPath, GLuint fontSize) {
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) {
         Logger::log()->error("Could not initialize FreeType Library");
@@ -79,7 +79,7 @@ void TextRenderer::loadFont(const std::string &fontPath, GLuint fontSize) {
     FT_Done_FreeType(ft);
 }
 
-void TextRenderer::renderText(const std::string &text, GLfloat x, const GLfloat y, const GLfloat scale,
+void cbit::TextRenderer::renderText(const std::string &text, GLfloat x, const GLfloat y, const GLfloat scale,
                               const glm::vec3 color) {
     textShader.use();
     textShader.setUniform("textColor", color);
@@ -120,7 +120,7 @@ void TextRenderer::renderText(const std::string &text, GLfloat x, const GLfloat 
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void TextRenderer::resize(GLuint width, GLuint height) {
+void cbit::TextRenderer::resize(GLuint width, GLuint height) {
     // update projection matrix
     const glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(width), 0.0f,
                                             static_cast<GLfloat>(height));

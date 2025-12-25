@@ -8,7 +8,7 @@
 
 #include "Quad.h"
 
-Quad::Quad() {
+cbit::Quad::Quad() {
     // 4 corners: pos, normal, uv
     vertices = {
         // top-left
@@ -34,4 +34,4 @@ Quad::Quad() {
     loaded = true;
 }
 
-Quad::~Quad() = default;
+cbit::Quad::~Quad() = default;

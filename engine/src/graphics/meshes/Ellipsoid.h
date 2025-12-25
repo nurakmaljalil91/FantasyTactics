@@ -34,26 +34,27 @@
 
 #include "Mesh.h"
 
-/**
- * @class Ellipsoid
- * @brief Class representing a 3D ellipsoid mesh.
- * @details This class currently serves as a placeholder for future development of ellipsoid rendering capabilities.
- *          It can be extended to include methods for generating vertices, normals, and texture coordinates for
- *          rendering the ellipsoid mesh in a 3D graphics context.
- */
-class Ellipsoid final : public Mesh {
-public:
+namespace cbit {
     /**
-     * Default constructor.
-     * Initializes an empty ellipsoid mesh.
-     * @param radiusX     Semi-axis length along the X axis.
-     * @param radiusY     Semi-axis length along the Y axis.
-     * @param radiusZ     Semi-axis length along the Z axis.
-     * @param sectorCount Number of sectors (longitude divisions). Default is 36.
-     * @param stackCount  Number of stacks (latitude divisions). Default is 18.
+     * @class Ellipsoid
+     * @brief Class representing a 3D ellipsoid mesh.
+     * @details This class currently serves as a placeholder for future development of ellipsoid rendering capabilities.
+     *          It can be extended to include methods for generating vertices, normals, and texture coordinates for
+     *          rendering the ellipsoid mesh in a 3D graphics context.
      */
-    Ellipsoid(float radiusX, float radiusY, float radiusZ, int sectorCount = 36, int stackCount = 18);
-};
-
+    class Ellipsoid final : public Mesh {
+    public:
+        /**
+         * Default constructor.
+         * Initializes an empty ellipsoid mesh.
+         * @param radiusX     Semi-axis length along the X axis.
+         * @param radiusY     Semi-axis length along the Y axis.
+         * @param radiusZ     Semi-axis length along the Z axis.
+         * @param sectorCount Number of sectors (longitude divisions). Default is 36.
+         * @param stackCount  Number of stacks (latitude divisions). Default is 18.
+         */
+        Ellipsoid(float radiusX, float radiusY, float radiusZ, int sectorCount = 36, int stackCount = 18);
+    };
+}
 
 #endif //ELLIPSOID_H

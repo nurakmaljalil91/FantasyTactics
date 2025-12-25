@@ -19,14 +19,14 @@ static bool g_stbiFlipped = [](){
 
 #include "utilities/Logger.h"
 
-Texture::Texture() : _textureID(0) {
+cbit::Texture::Texture() : _textureID(0) {
 }
 
-Texture::~Texture() {
+cbit::Texture::~Texture() {
     glDeleteTextures(1, &_textureID);
 }
 
-bool Texture::loadTexture(const std::string &path) {
+bool cbit::Texture::loadTexture(const std::string &path) {
     if (_textureID == 0) {
         glGenTextures(1, &_textureID);
     }
@@ -52,6 +52,6 @@ bool Texture::loadTexture(const std::string &path) {
     return true;
 }
 
-void Texture::bind() const {
+void cbit::Texture::bind() const {
     glBindTexture(GL_TEXTURE_2D, _textureID);
 }

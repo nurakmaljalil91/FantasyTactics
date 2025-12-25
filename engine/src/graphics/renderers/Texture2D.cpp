@@ -20,15 +20,15 @@
 #include "../../utilities/Logger.h"
 
 // constructor
-Texture2D::Texture2D(): _texture(0) {
+cbit::Texture2D::Texture2D() : _texture(0) {
 }
 
 // destructor
-Texture2D::~Texture2D() {
+cbit::Texture2D::~Texture2D() {
     glDeleteTextures(1, &_texture);
 }
 
-bool Texture2D::loadTexture(const std::string &filename, const bool generateMipMaps) {
+bool cbit::Texture2D::loadTexture(const std::string &filename, const bool generateMipMaps) {
     int width, height, components;
     unsigned char *imageData = stbi_load(filename.c_str(), &width, &height, &components, 4);
 
@@ -96,7 +96,7 @@ bool Texture2D::loadTexture(const std::string &filename, const bool generateMipM
 }
 
 // Binds texture to texture unit
-void Texture2D::bind(const GLuint texUnit) const {
+void cbit::Texture2D::bind(const GLuint texUnit) const {
     assert(texUnit >= 0 && texUnit <= 32);
 
     glActiveTexture(GL_TEXTURE0 + texUnit);
@@ -104,7 +104,7 @@ void Texture2D::bind(const GLuint texUnit) const {
 }
 
 // Unbinds texture
-void Texture2D::unbind(const GLuint texUnit) {
+void cbit::Texture2D::unbind(const GLuint texUnit) {
     // assert(texUnit >= 0 && texUnit <= 31);
 
     glActiveTexture(GL_TEXTURE0 + texUnit);

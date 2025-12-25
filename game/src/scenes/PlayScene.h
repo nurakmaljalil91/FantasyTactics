@@ -25,7 +25,7 @@ public:
     void render() override;
 
 private:
-    ShaderProgram _shader;
+    cbit::ShaderProgram _shader;
     cbit::IsometricCamera _isometricCamera{
             {0.0f, 0.0f, 0.0f}, 5.0f, 5.0f
         };

@@ -28,17 +28,17 @@ public:
     void render() override;
 
 private:
-    ShaderProgram _shader;
+    cbit::ShaderProgram _shader;
     cbit::IsometricCamera _isometricCamera{
         {0.0f, 0.0f, 0.0f}, 5.0f, 5.0f
     };
-    Cube _cube;
-    Sphere _sphere;
+    cbit::Cube _cube;
+    cbit::Sphere _sphere;
     glm::vec3 _cubePosition{0.0f, 0.0f, 0.0f};
     glm::vec3 _spherePosition{0.0f, 1.5f, 0.0f};
-    Texture _texture;
-    Texture _robotTexture;
-    Mesh _robotMesh;
+    cbit::Texture _texture;
+    cbit::Texture _robotTexture;
+    cbit::Mesh _robotMesh;
 };
 
 

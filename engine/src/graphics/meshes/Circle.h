@@ -15,22 +15,23 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-/**
- * @class   Circle
- * @brief   Class representing a circle mesh.
- * @details This class initializes a circle mesh with a specified radius and number of segments.
- *          The circle is centered at the origin and lies on the XY plane.
- *          It uses triangle fan rendering to create a filled circle.
- */
-class Circle final : public Mesh {
-public:
-    explicit Circle(float radius = 1.0f, int segments = 32);
+namespace cbit {
+    /**
+     * @class   Circle
+     * @brief   Class representing a circle mesh.
+     * @details This class initializes a circle mesh with a specified radius and number of segments.
+     *          The circle is centered at the origin and lies on the XY plane.
+     *          It uses triangle fan rendering to create a filled circle.
+     */
+    class Circle final : public Mesh {
+    public:
+        explicit Circle(float radius = 1.0f, int segments = 32);
 
-    ~Circle() override;
+        ~Circle() override;
 
-    // Override the draw function
-    void draw() override;
-};
-
+        // Override the draw function
+        void draw() override;
+    };
+}
 
 #endif //FANTASYTACTICS_CIRCLE_H

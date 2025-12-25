@@ -34,7 +34,7 @@ void MenuScene::initialize() {
 
     auto &button = startButton.getComponent<cbit::ButtonComponent>();
     button.onClick = [&](entt::entity) {
-        Logger::log()->info("Start button clicked! Transitioning to GameScene...");
+        cbit::Logger::log()->info("Start button clicked! Transitioning to GameScene...");
         _sceneManager->setActiveScene("PlayScene");
     };
 }

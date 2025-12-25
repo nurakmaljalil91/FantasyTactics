@@ -20,7 +20,7 @@ static constexpr float quadVertices[] = {
     1, 0, 1, 0,
 };
 
-Quad2D::Quad2D() {
+cbit::Quad2D::Quad2D() {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
@@ -35,12 +35,12 @@ Quad2D::Quad2D() {
     glBindVertexArray(0);
 }
 
-Quad2D::~Quad2D() {
+cbit::Quad2D::~Quad2D() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 }
 
-void Quad2D::draw() const {
+void cbit::Quad2D::draw() const {
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);

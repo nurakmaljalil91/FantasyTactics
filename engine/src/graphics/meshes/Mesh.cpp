@@ -31,20 +31,20 @@ std::vector<std::string> splitString(std::string stringData, const std::string &
     return results;
 }
 
-Mesh::Mesh()
+cbit::Mesh::Mesh()
     : loaded(false),
       VAO(0),
       VBO(0),
       EBO(0) {
 }
 
-Mesh::~Mesh() {
+cbit::Mesh::~Mesh() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
 }
 
-bool Mesh::loadObj(const std::string &filename) {
+bool cbit::Mesh::loadObj(const std::string &filename) {
     if (filename.find(".obj") != std::string::npos) {
         std::vector<glm::vec3> tempNormals;
         std::vector<glm::vec2> tempUVs;
@@ -159,7 +159,7 @@ bool Mesh::loadObj(const std::string &filename) {
     return false;
 }
 
-void Mesh::initializeBuffers() {
+void cbit::Mesh::initializeBuffers() {
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
@@ -187,7 +187,7 @@ void Mesh::initializeBuffers() {
     glBindVertexArray(0);
 }
 
-void Mesh::draw() {
+void cbit::Mesh::draw() {
     if (!loaded) return;
 
     glBindVertexArray(VAO);

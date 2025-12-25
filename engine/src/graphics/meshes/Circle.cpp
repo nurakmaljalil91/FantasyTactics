@@ -8,7 +8,7 @@
  */
 #include "Circle.h"
 
-Circle::Circle(float radius, int segments) {
+cbit::Circle::Circle(float radius, int segments) {
     // Reserve enough space: 1 center vertex + (segments + 1) ring vertices
     // (the extra +1 vertex repeats the first ring vertex so the fan closes)
     vertices.reserve(segments + 2);
@@ -43,11 +43,10 @@ Circle::Circle(float radius, int segments) {
     loaded = true;
 }
 
-Circle::~Circle() = default;
-
+cbit::Circle::~Circle() = default;
 
 // Override draw():
-void Circle::draw() {
+void cbit::Circle::draw() {
     if (!loaded) return;
 
     glBindVertexArray(VAO);

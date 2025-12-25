@@ -23,25 +23,26 @@
 
 #include "Mesh.h"
 
-/**
- * @class Quad
- * @brief Quad class for representing a 2D quad mesh.
- * @details The Quad class is used to represent a 2D quad mesh in OpenGL
- */
-class Quad final : public Mesh {
-public:
+namespace cbit {
     /**
-     * Default constructor.
-     * Initializes an empty quad mesh with no vertices and no OpenGL buffers.
+     * @class Quad
+     * @brief Quad class for representing a 2D quad mesh.
+     * @details The Quad class is used to represent a 2D quad mesh in OpenGL
      */
-    Quad();
+    class Quad final : public Mesh {
+    public:
+        /**
+         * Default constructor.
+         * Initializes an empty quad mesh with no vertices and no OpenGL buffers.
+         */
+        Quad();
 
-    /**
-     * Destructor.
-     * Cleans up OpenGL resources associated with the quad mesh.
-     */
-    ~Quad() override;
-};
-
+        /**
+         * Destructor.
+         * Cleans up OpenGL resources associated with the quad mesh.
+         */
+        ~Quad() override;
+    };
+}
 
 #endif //QUAD_H

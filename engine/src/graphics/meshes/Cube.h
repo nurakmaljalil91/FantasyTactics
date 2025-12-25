@@ -11,17 +11,18 @@
 
 #include "Mesh.h"
 
-/**
- * @class   Cube
- * @brief   Class representing a simple cube mesh.
- * @details This class initializes a cube mesh with predefined vertices, normals, and texture coordinates.
- *          The cube is centered at the origin and has a size of 1 unit.
- */
-class Cube final : public Mesh {
-public:
-    Cube();
+namespace cbit {
+    /**
+     * @class   Cube
+     * @brief   Class representing a simple cube mesh.
+     * @details This class initializes a cube mesh with predefined vertices, normals, and texture coordinates.
+     *          The cube is centered at the origin and has a size of 1 unit.
+     */
+    class Cube final : public Mesh {
+    public:
+        Cube();
 
-    ~Cube() override;
-};
-
+        ~Cube() override;
+    };
+}
 #endif //FANTASYTACTICS_CUBE_H

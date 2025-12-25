@@ -9,7 +9,7 @@
 #include "Cube.h"
 #include <glm/glm.hpp>
 
-Cube::Cube() {
+cbit::Cube::Cube() {
    // Define 36 unique vertices (6 faces × 2 triangles × 3 vertices)
     vertices = {
         // Front face (+Z)
@@ -71,4 +71,4 @@ Cube::Cube() {
     loaded = true;
 }
 
-Cube::~Cube() = default;
+cbit::Cube::~Cube() = default;

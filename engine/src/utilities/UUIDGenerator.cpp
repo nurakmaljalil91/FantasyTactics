@@ -11,7 +11,7 @@
 #include <iomanip>
 #include <random>
 
-std::string UUIDGenerator::generate() {
+std::string cbit::UUIDGenerator::generate() {
     // Random number generator setup.
     std::random_device rd;
     std::mt19937 gen(rd());
