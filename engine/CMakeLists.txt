@@ -41,6 +41,8 @@ add_library(engine
         src/OpenGLInclude.h
         src/graphics/renderers/Texture.cpp
         src/graphics/renderers/Texture.h
+        src/ecs/MeshRenderSystem.cpp
+        src/ecs/MeshRenderSystem.h
 )
 
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

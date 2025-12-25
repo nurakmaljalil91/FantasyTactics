@@ -11,7 +11,10 @@
 #include "GameObject.h"
 #include "utilities/UUIDGenerator.h"
 
-EntityComponentSystem::EntityComponentSystem() : _uiSystem(nullptr, _registry) {
+EntityComponentSystem::EntityComponentSystem() :
+_uiSystem(nullptr, _registry),
+_meshRenderSystem(_registry)
+{
     // Constructor implementation can be added here if needed
 }
 
@@ -28,6 +31,10 @@ void EntityComponentSystem::update(const float deltaTime) {
 
 void EntityComponentSystem::render() {
     _uiSystem.render();
+}
+
+void EntityComponentSystem::render(Camera &camera, int windowWidth, int windowHeight) {
+    _meshRenderSystem.render(camera, windowWidth, windowHeight);
 }
 
 void EntityComponentSystem::cleanup() {

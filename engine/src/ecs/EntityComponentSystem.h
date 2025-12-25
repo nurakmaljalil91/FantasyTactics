@@ -8,6 +8,7 @@
 
 #ifndef ENTITYCOMPONENTSYSTEM_H
 #define ENTITYCOMPONENTSYSTEM_H
+#include "MeshRenderSystem.h"
 #include "UISystem.h"
 #include "entt/entt.hpp"
 #include "utilities/Logger.h"
@@ -58,8 +59,10 @@ public:
      */
     void render();
 
+    void render(Camera& camera, int windowWidth, int windowHeight);
+
     /**
-     * Cleanup the entity-component system.
+     * Clean up the entity-component system.
      * @details This method is called to clean up resources used by the ECS, such as destroying entities and components.
      *          It should be called when the ECS is no longer needed, such as when the game is exiting or switching scenes.
      */
@@ -190,12 +193,15 @@ public:
      */
     [[nodiscard]] entt::registry &getRegistry() { return _registry; }
 
+
+
 private:
     entt::registry _registry;
     friend class GameObject;
     GLFWwindow *_window{nullptr};
 
     UISystem _uiSystem{_window, _registry};
+    MeshRenderSystem _meshRenderSystem{_registry};
 };
 
 
