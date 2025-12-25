@@ -10,12 +10,12 @@
 
 #include "Components.h"
 
-MeshRenderSystem::MeshRenderSystem(entt::registry &registry) : _registry(registry) {
+cbit::MeshRenderSystem::MeshRenderSystem(entt::registry &registry) : _registry(registry) {
     // Constructor implementation can be added here if needed
     _shader.loadShaders("resources/shaders/default.vert", "resources/shaders/default.frag");
 }
 
-void MeshRenderSystem::render(Camera &camera, int windowWidth, int windowHeight) {
+void cbit::MeshRenderSystem::render(Camera &camera, int windowWidth, int windowHeight) {
     auto view = _registry.view<CubeComponent, TransformComponent>();
 
     _shader.use();

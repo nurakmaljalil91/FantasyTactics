@@ -42,6 +42,6 @@ int cbit::Scene::getWindowHeight() const {
     return _windowHeight;
 }
 
-EntityComponentSystem &cbit::Scene::getWorld() {
+cbit::EntityComponentSystem &cbit::Scene::getWorld() {
     return _world;
 }

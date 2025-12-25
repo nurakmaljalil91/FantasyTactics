@@ -31,7 +31,7 @@ public:
     void render() override;
 
 private:
-    GameObject _button;
+    cbit::GameObject _button;
 };
 
 

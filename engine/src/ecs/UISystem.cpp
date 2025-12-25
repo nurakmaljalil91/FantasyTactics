@@ -18,8 +18,8 @@
 #include "glm/ext/matrix_clip_space.hpp"
 #include "utilities/Logger.h"
 
-UISystem::UISystem(GLFWwindow *window, entt::registry &registry) : _window(window), _registry(registry),
-                                                                   _textRenderer(1200, 800) {
+cbit::UISystem::UISystem(GLFWwindow *window, entt::registry &registry) : _window(window), _registry(registry),
+                                                                         _textRenderer(1200, 800) {
     // Constructor implementation can be added here if needed
     _uiShader.loadShaders("resources/shaders/ui.vert", "resources/shaders/ui.frag");
     _uiColorShader.loadShaders("resources/shaders/color_ui.vert", "resources/shaders/color_ui.frag");
@@ -28,12 +28,12 @@ UISystem::UISystem(GLFWwindow *window, entt::registry &registry) : _window(windo
     _syncSize();
 }
 
-void UISystem::setWindow(GLFWwindow *window) {
+void cbit::UISystem::setWindow(GLFWwindow *window) {
     _window = window;
     _syncSize();
 }
 
-void UISystem::update(float deltaTime) {
+void cbit::UISystem::update(float deltaTime) {
     (void) deltaTime; // Currently unused
     _syncSize();
 
@@ -41,7 +41,7 @@ void UISystem::update(float deltaTime) {
     _dispatchPointerEvents();
 }
 
-void UISystem::render() {
+void cbit::UISystem::render() {
     _syncSize();
 
     const glm::mat4 projectionMatrix = _orthoMatrix();
@@ -58,7 +58,7 @@ void UISystem::render() {
     glEnable(GL_DEPTH_TEST);
 }
 
-void UISystem::_syncSize() {
+void cbit::UISystem::_syncSize() {
     if (!_window) return;
     glfwGetWindowSize(_window, &_windowWidth, &_windowHeight);
     glfwGetFramebufferSize(_window, &_framebufferWidth, &_framebufferHeight);
@@ -71,7 +71,7 @@ void UISystem::_syncSize() {
     _textRenderer.resize(_framebufferWidth, _framebufferHeight);
 }
 
-glm::mat4 UISystem::_orthoMatrix() const {
+glm::mat4 cbit::UISystem::_orthoMatrix() const {
     return glm::ortho(
         0.0f, static_cast<float>(_framebufferWidth), // left → right
         0.0f, static_cast<float>(_framebufferHeight), // bottom → top
@@ -79,7 +79,7 @@ glm::mat4 UISystem::_orthoMatrix() const {
     );
 }
 
-UISystem::UIRectangle UISystem::_computeRectangle(entt::entity entity) const {
+cbit::UISystem::UIRectangle cbit::UISystem::_computeRectangle(entt::entity entity) const {
     UIRectangle rectangle{};
 
     // Size resolution priority: UIAnchor.sizePixel -> RectangleComponent -> TransformComponent.scale
@@ -182,12 +182,12 @@ UISystem::UIRectangle UISystem::_computeRectangle(entt::entity entity) const {
     return rectangle;
 }
 
-bool UISystem::_hit(const UIRectangle &rectangle, double uiX, double uiY) const {
+bool cbit::UISystem::_hit(const UIRectangle &rectangle, double uiX, double uiY) const {
     return uiX >= rectangle.x && uiX <= (rectangle.x + rectangle.width) &&
            uiY >= rectangle.y && uiY <= (rectangle.y + rectangle.height);
 }
 
-void UISystem::_dispatchPointerEvents() {
+void cbit::UISystem::_dispatchPointerEvents() {
     // Mouse conversion: window coordinates (top-left origin) -> framebuffer coordinates (bottom-left origin)
     const float scaleX = static_cast<float>(_framebufferWidth) / static_cast<float>(_windowWidth);
     const float scaleY = static_cast<float>(_framebufferHeight) / static_cast<float>(_windowHeight);
@@ -312,7 +312,7 @@ void UISystem::_dispatchPointerEvents() {
     _mouseDownLastFrame = mouseDown;
 }
 
-void UISystem::_renderColorRectangles(const glm::mat4 &projectionMatrix) {
+void cbit::UISystem::_renderColorRectangles(const glm::mat4 &projectionMatrix) {
     _uiColorShader.use();
     _uiColorShader.setUniform("uProjection", projectionMatrix);
 
@@ -367,7 +367,7 @@ void UISystem::_renderColorRectangles(const glm::mat4 &projectionMatrix) {
     }
 }
 
-void UISystem::_renderImages(const glm::mat4 &projectionMatrix) {
+void cbit::UISystem::_renderImages(const glm::mat4 &projectionMatrix) {
     _uiShader.use();
     _uiShader.setUniform("uProjection", projectionMatrix);
 
@@ -399,7 +399,7 @@ void UISystem::_renderImages(const glm::mat4 &projectionMatrix) {
     }
 }
 
-void UISystem::_renderText() {
+void cbit::UISystem::_renderText() {
     // TextRenderer likely draw in screen space; assume bottom-left origin
     // If it uses top-left origin, need to convert y coordinate
     struct Item {
@@ -447,8 +447,9 @@ void UISystem::_renderText() {
     }
 }
 
-bool UISystem::_hitTest(const TransformComponent &transformComponent, const RectangleComponent &rectangleComponent,
-                        const double uiX, const double uiY) {
+bool cbit::UISystem::_hitTest(const TransformComponent &transformComponent,
+                              const RectangleComponent &rectangleComponent,
+                              const double uiX, const double uiY) {
     const double x0 = transformComponent.position.getGlmVector().x;
     const double y0 = transformComponent.position.getGlmVector().y;
     const double x1 = x0 + (rectangleComponent.width > 0
@@ -460,7 +461,7 @@ bool UISystem::_hitTest(const TransformComponent &transformComponent, const Rect
     return uiX >= x0 && uiX <= x1 && uiY >= y0 && uiY <= y1;
 }
 
-void UISystem::_drawQuad(std::string &texturePath, const TransformComponent &transform) {
+void cbit::UISystem::_drawQuad(std::string &texturePath, const TransformComponent &transform) {
     auto [it, inserted] = _textures.try_emplace(texturePath); // default‐constructs Texture
     if (inserted) {
         if (!it->second.loadTexture(texturePath)) {
@@ -494,7 +495,7 @@ void UISystem::_drawQuad(std::string &texturePath, const TransformComponent &tra
     _quad2D.draw();
 }
 
-void UISystem::_drawColorQuad(float x, float y, float w, float h, const glm::vec4 &color) {
+void cbit::UISystem::_drawColorQuad(float x, float y, float w, float h, const glm::vec4 &color) {
     _uiColorShader.use();
     // _uiColorShader.setUniform("uProjection", glm::ortho(0.0f, 1200.0f, 0.0f, 800.0f, -1.0f, 1.0f));
 
@@ -508,8 +509,8 @@ void UISystem::_drawColorQuad(float x, float y, float w, float h, const glm::vec
     _quad2D.draw();
 }
 
-void UISystem::_drawImageQuad(const std::string &texturePath, float x, float y, float w, float h,
-                              const glm::vec4 &tint) {
+void cbit::UISystem::_drawImageQuad(const std::string &texturePath, float x, float y, float w, float h,
+                                    const glm::vec4 &tint) {
     auto [it, inserted] = _textures.try_emplace(texturePath); // default‐constructs Texture
     if (inserted) {
         if (!it->second.loadTexture(texturePath)) {

@@ -11,48 +11,48 @@
 #include "GameObject.h"
 #include "utilities/UUIDGenerator.h"
 
-EntityComponentSystem::EntityComponentSystem() :
+cbit::EntityComponentSystem::EntityComponentSystem() :
 _uiSystem(nullptr, _registry),
 _meshRenderSystem(_registry)
 {
     // Constructor implementation can be added here if needed
 }
 
-void EntityComponentSystem::setWindow(GLFWwindow *window) {
+void cbit::EntityComponentSystem::setWindow(GLFWwindow *window) {
     _window = window;
     _uiSystem.setWindow(window);
 }
 
-EntityComponentSystem::~EntityComponentSystem() = default;
+cbit::EntityComponentSystem::~EntityComponentSystem() = default;
 
-void EntityComponentSystem::update(const float deltaTime) {
+void cbit::EntityComponentSystem::update(const float deltaTime) {
     _uiSystem.update(deltaTime);
 }
 
-void EntityComponentSystem::render() {
+void cbit::EntityComponentSystem::render() {
     _uiSystem.render();
 }
 
-void EntityComponentSystem::render(Camera &camera, int windowWidth, int windowHeight) {
+void cbit::EntityComponentSystem::render(Camera &camera, int windowWidth, int windowHeight) {
     _meshRenderSystem.render(camera, windowWidth, windowHeight);
 }
 
-void EntityComponentSystem::cleanup() {
+void cbit::EntityComponentSystem::cleanup() {
     _registry.clear();
 }
 
-GameObject EntityComponentSystem::createGameObject(const std::string &tag) {
+cbit::GameObject cbit::EntityComponentSystem::createGameObject(const std::string &tag) {
     auto entity = GameObject(_registry.create(), this);
     entity.addComponent<TagComponent>(tag);
     entity.addComponent<IdComponent>(UUIDGenerator::generate());
     return entity;
 }
 
-void EntityComponentSystem::destroyGameObject(const GameObject gameObject) {
+void cbit::EntityComponentSystem::destroyGameObject(const GameObject gameObject) {
     _registry.destroy(gameObject.getEntity());
 }
 
-GameObject EntityComponentSystem::getGameObject(const std::string &tag) {
+cbit::GameObject cbit::EntityComponentSystem::getGameObject(const std::string &tag) {
     const auto view = _registry.view<TagComponent>();
     for (auto entity: view) {
         auto &tagComponent = view.get<TagComponent>(entity);

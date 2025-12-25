@@ -14,25 +14,25 @@
 
 void MenuScene::initialize() {
     getWorld().createGameObject("title")
-            .addComponent<UIAnchorComponent>(
-                UIAnchor::TopCenter,
+            .addComponent<cbit::UIAnchorComponent>(
+                cbit::UIAnchor::TopCenter,
                 glm::vec2(0.0f, -120.0f),
                 glm::vec2(512.0f, 128.0f),
                 0, true, false)
-            .addComponent<UIImageComponent>("assets/branding/fantasy_tactic_title.png");
+            .addComponent<cbit::UIImageComponent>("assets/branding/fantasy_tactic_title.png");
 
     auto startButton = getWorld().createGameObject("startButton")
-            .addComponent<UIAnchorComponent>(
-                UIAnchor::Center,
+            .addComponent<cbit::UIAnchorComponent>(
+                cbit::UIAnchor::Center,
                 glm::vec2(0.0f, -80.0f),
                 glm::vec2(240.0f, 50.0f),
                 10, true, true)
-            .addComponent<UIColorRectangleComponent>()
-            .addComponent<ButtonComponent>();
+            .addComponent<cbit::UIColorRectangleComponent>()
+            .addComponent<cbit::ButtonComponent>();
 
-    startButton.addComponent<UITextComponent>("START", 1.0f, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    startButton.addComponent<cbit::UITextComponent>("START", 1.0f, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 
-    auto &button = startButton.getComponent<ButtonComponent>();
+    auto &button = startButton.getComponent<cbit::ButtonComponent>();
     button.onClick = [&](entt::entity) {
         Logger::log()->info("Start button clicked! Transitioning to GameScene...");
         _sceneManager->setActiveScene("PlayScene");

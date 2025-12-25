@@ -14,12 +14,12 @@
 void PlayScene::initialize() {
     _shader.loadShaders("resources/shaders/default.vert", "resources/shaders/default.frag");
     getWorld().createGameObject("Cube")
-            .addComponent<TransformComponent>(
-                Vector(0.0f, 0.0f, 0.0f),
-                Vector(0.0f, 0.0f, 0.0f),
-                Vector(1.0f, 1.0f, 1.0f)
+            .addComponent<cbit::TransformComponent>(
+                cbit::Vector(0.0f, 0.0f, 0.0f),
+                cbit::Vector(0.0f, 0.0f, 0.0f),
+                cbit::Vector(1.0f, 1.0f, 1.0f)
             )
-            .addComponent<CubeComponent>();
+            .addComponent<cbit::CubeComponent>();
 }
 
 
