@@ -11,6 +11,7 @@
 #include "core/SceneManager.h"
 #include "ecs/Components.h"
 #include "ecs/GameObject.h"
+#include "math/Color.h"
 
 void MenuScene::initialize() {
     getWorld().createGameObject("title")
@@ -28,9 +29,8 @@ void MenuScene::initialize() {
                 glm::vec2(240.0f, 50.0f),
                 10, true, true)
             .addComponent<cbit::UIColorRectangleComponent>()
-            .addComponent<cbit::ButtonComponent>();
-
-    startButton.addComponent<cbit::UITextComponent>("START", 1.0f, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+            .addComponent<cbit::ButtonComponent>()
+            .addComponent<cbit::UITextComponent>("START", 1.0f, cbit::Color::Black);
 
     auto &button = startButton.getComponent<cbit::ButtonComponent>();
     button.onClick = [&](entt::entity) {

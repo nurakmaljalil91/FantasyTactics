@@ -107,10 +107,10 @@ cbit::UISystem::UIRectangle cbit::UISystem::_computeRectangle(entt::entity entit
     if ((size.x <= 0.0f || size.y <= 0.0f) && _registry.all_of<TransformComponent>(entity)) {
         const auto &transformComponent = _registry.get<TransformComponent>(entity);
         if (size.x <= 0.0f) {
-            size.x = transformComponent.scale.getGlmVector().x;
+            size.x = transformComponent.scale.data().x;
         }
         if (size.y <= 0.0f) {
-            size.y = transformComponent.scale.getGlmVector().y;
+            size.y = transformComponent.scale.data().y;
         }
     }
 
@@ -171,8 +171,8 @@ cbit::UISystem::UIRectangle cbit::UISystem::_computeRectangle(entt::entity entit
         position += anchorComponent->offsetPixel;
     } else if (_registry.all_of<TransformComponent>(entity)) {
         const auto &transformComponent = _registry.get<TransformComponent>(entity);
-        position.x = transformComponent.position.getGlmVector().x;
-        position.y = transformComponent.position.getGlmVector().y;
+        position.x = transformComponent.position.data().x;
+        position.y = transformComponent.position.data().y;
     }
 
     rectangle.x = position.x;
@@ -428,7 +428,7 @@ void cbit::UISystem::_renderText() {
 
         // Approximate centering without font metrics:
         // - Estimate text width using a fixed per-character advance
-        // - Place baseline slightly below vertical midpoint
+        // - Place baseline slightly below the vertical midpoint
         const float scale = textComponent.fontSize;
         const float approxAdvancePx = 30.0f * scale; // tune this constant for your font size 50
         const float approxTextWidth = approxAdvancePx * static_cast<float>(textComponent.text.size());
@@ -450,14 +450,14 @@ void cbit::UISystem::_renderText() {
 bool cbit::UISystem::_hitTest(const TransformComponent &transformComponent,
                               const RectangleComponent &rectangleComponent,
                               const double uiX, const double uiY) {
-    const double x0 = transformComponent.position.getGlmVector().x;
-    const double y0 = transformComponent.position.getGlmVector().y;
+    const double x0 = transformComponent.position.data().x;
+    const double y0 = transformComponent.position.data().y;
     const double x1 = x0 + (rectangleComponent.width > 0
                                 ? static_cast<float>(rectangleComponent.width)
-                                : transformComponent.scale.getGlmVector().x);
+                                : transformComponent.scale.data().x);
     const double y1 = y0 + (rectangleComponent.height > 0
                                 ? static_cast<float>(rectangleComponent.height)
-                                : transformComponent.scale.getGlmVector().y);
+                                : transformComponent.scale.data().y);
     return uiX >= x0 && uiX <= x1 && uiY >= y0 && uiY <= y1;
 }
 
@@ -479,13 +479,13 @@ void cbit::UISystem::_drawQuad(std::string &texturePath, const TransformComponen
     _uiShader.setUniform("uTexture", 0);
 
     const glm::vec2 position{
-        transform.position.getGlmVector().x,
-        transform.position.getGlmVector().y
+        transform.position.data().x,
+        transform.position.data().y
     };
 
     const glm::vec2 size{
-        transform.scale.getGlmVector().x,
-        transform.scale.getGlmVector().y
+        transform.scale.data().x,
+        transform.scale.data().y
     };
 
     _uiShader.setUniform("uPosition", position);

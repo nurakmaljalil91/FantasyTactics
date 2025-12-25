@@ -20,18 +20,21 @@ namespace cbit {
      *          It provides constructors for initializing the vector and methods to access the underlying glm::vec3.
      */
     struct Vector {
-        glm::vec3 glmVector3{0.0f, 0.0f, 0.0f};
+        glm::vec3 glmVec3{0.0f, 0.0f, 0.0f};
 
         Vector() = default;
 
-        explicit Vector(const glm::vec3 &vector) : glmVector3(vector) {
+        Vector(const glm::vec3 &vector) : glmVec3(vector) {
         }
 
-        Vector(const float x, const float y, const float z) : glmVector3(x, y, z) {
+        Vector(const float x, const float y, const float z) : glmVec3(x, y, z) {
         }
 
-        glm::vec3 &getGlmVector() { return glmVector3; }
-        const glm::vec3 &getGlmVector() const { return glmVector3; }
+        operator glm::vec3 &() { return glmVec3; }
+        operator const glm::vec3 &() const { return glmVec3; }
+
+        glm::vec3 &data() { return glmVec3; }
+        const glm::vec3 &data() const { return glmVec3; }
     };
 }
 #endif //FANTASYTACTICS_VECTOR_H
