@@ -48,8 +48,9 @@ add_library(engine
         src/OpenGLInclude.h
         src/graphics/renderers/Texture.cpp
         src/graphics/renderers/Texture.h
-
-
+        src/core/Input.cpp
+        src/core/Input.h
+        src/core/Keyboard.h
 )
 
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

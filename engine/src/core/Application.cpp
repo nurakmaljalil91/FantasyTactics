@@ -8,11 +8,13 @@
 
 #include "Application.h"
 
+#include "Input.h"
+
 cbit::Application::Application(const WindowConfig &windowConfig) : _window(windowConfig),
-                                                             _wireframe(false),
-                                                             _fullscreen(windowConfig.fullscreen),
-                                                             _windowedWidth(windowConfig.width),
-                                                             _windowedHeight(windowConfig.height) {
+                                                                   _wireframe(false),
+                                                                   _fullscreen(windowConfig.fullscreen),
+                                                                   _windowedWidth(windowConfig.width),
+                                                                   _windowedHeight(windowConfig.height) {
     Logger::log()->info("Welcome to Fantasy Tactics!");
     _initialize();
 }
@@ -30,8 +32,6 @@ void cbit::Application::run() {
         const float deltaTime = elapsed.count();
         lastTime = currentTime;
 
-        _processInput(deltaTime);
-
         int framebufferWidth, framebufferHeight;
         glfwGetFramebufferSize(_window.getHandle(), &framebufferWidth, &framebufferHeight);
         glViewport(0, 0, framebufferWidth, framebufferHeight);
@@ -45,6 +45,8 @@ void cbit::Application::run() {
 
         _window.swapBuffers();
         _window.pollEvents();
+        Input::update();
+        _processInput(deltaTime);
     }
 }
 
@@ -55,6 +57,7 @@ cbit::SceneManager *cbit::Application::getSceneManager() {
 void cbit::Application::_initialize() {
     // initialize scene manager
     _scenesManager.initialize(_window.getHandle());
+    Input::setWindow(_window.getHandle());
 }
 
 void cbit::Application::_processInput(float deltaTime) {
