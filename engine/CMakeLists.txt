@@ -51,6 +51,8 @@ add_library(engine
         src/core/Input.cpp
         src/core/Input.h
         src/core/Keyboard.h
+        src/core/Mouse.h
+        src/core/Gamepad.h
 )
 
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -72,4 +74,3 @@ target_link_libraries(engine
         Freetype::Freetype
         $<$<BOOL:${MINGW}>:ws2_32>
 )
-

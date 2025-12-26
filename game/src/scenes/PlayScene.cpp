@@ -45,7 +45,7 @@ void PlayScene::initialize() {
 
 
 void PlayScene::update(float deltaTime) {
-    auto player = getWorld().getGameObject("Cube");
+    auto player = getWorld().getGameObject("MainLighting");
     auto &transformComponent = player.getComponent<cbit::TransformComponent>();
 
     if (cbit::Input::isKeyDown(cbit::Keyboard::A)) {
@@ -56,6 +56,15 @@ void PlayScene::update(float deltaTime) {
         transformComponent.position.z -= 5.0f * deltaTime;
     } else if (cbit::Input::isKeyDown(cbit::Keyboard::S)) {
         transformComponent.position.z += 5.0f * deltaTime;
+    }
+
+    if (cbit::Input::isMouseDown(cbit::MouseButton::Left)) {
+        double mouseX, mouseY;
+        cbit::Input::getMousePosition(mouseX, mouseY);
+        (void) mouseX;
+        (void) mouseY;
+        // Implement mouse drag to rotate the camera if needed
+        cbit::Logger::log()->info("Mouse Position: ({}, {})", mouseX, mouseY);
     }
 }
 
