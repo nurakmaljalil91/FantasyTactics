@@ -6,8 +6,8 @@
  * @date    2025-08-03
  */
 
-#ifndef GAMEOBJECT_H
-#define GAMEOBJECT_H
+#ifndef CBIT_GAMEOBJECT_H
+#define CBIT_GAMEOBJECT_H
 
 #include <entt/entt.hpp>
 
@@ -68,25 +68,6 @@ namespace cbit {
             }
             return *this;
         }
-
-        /**
-         * Add multiple components to the GameObject.
-         * @tparam First The type of the first component to be added.
-         * @tparam Rest The types of the remaining components to be added.
-         * @param firstArgs Arguments for the first component's constructor.
-         * @param restArgs Arguments for the remaining components' constructors.
-         * @return A reference to the GameObject itself, allowing for method chaining.
-         * @details This method uses a fold-expression to add multiple components with their respective constructor arguments.
-         */
-        // template<typename First, typename... Rest>
-        // GameObject &addComponents(const typename First::Args &... firstArgs,
-        //                           const typename Rest::Args &... restArgs) {
-        //     // Add the very first component
-        //     addComponent<First>(firstArgs...);
-        //     // Fold‐expression to add all the rest with their own ctor args
-        //     (addComponent<Rest>(restArgs...), ...);
-        //     return *this;
-        // }
 
         /**
          * Get a component from the GameObject.
@@ -187,4 +168,4 @@ namespace cbit {
     };
 }
 
-#endif //GAMEOBJECT_H
+#endif //CBIT_GAMEOBJECT_H

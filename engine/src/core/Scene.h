@@ -6,8 +6,8 @@
  * @date    2025-07-29
  */
 
-#ifndef SCENE_H
-#define SCENE_H
+#ifndef CBIT_SCENE_H
+#define CBIT_SCENE_H
 
 #include "OpenGLInclude.h"
 #include "ecs/EntityComponentSystem.h"
@@ -119,4 +119,4 @@ namespace cbit {
         EntityComponentSystem _world;
     };
 }
-#endif //SCENE_H
+#endif //CBIT_SCENE_H

@@ -6,8 +6,8 @@
  * @date    2025-12-25
  */
 
-#ifndef FANTASYTACTICS_VECTOR2_H
-#define FANTASYTACTICS_VECTOR2_H
+#ifndef CBIT_VECTOR2_H
+#define CBIT_VECTOR2_H
 
 #include "glm/vec2.hpp"
 
@@ -20,8 +20,8 @@ namespace cbit {
         Vector2(const float x, const float y) : x(x), y(y) {
         }
 
-        glm::vec2 toGLM() const { return glm::vec2(x, y); }
+        [[nodiscard]] glm::vec2 toGLM() const { return {x, y}; }
     };
 }
 
-#endif //FANTASYTACTICS_VECTOR2_H
+#endif //CBIT_VECTOR2_H

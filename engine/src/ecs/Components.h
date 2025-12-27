@@ -7,14 +7,11 @@
  * @date    2025-08-03
  */
 
-#ifndef COMPONENTS_H
-#define COMPONENTS_H
+#ifndef CBIT_COMPONENTS_H
+#define CBIT_COMPONENTS_H
 
 #include <string>
 #include "entt/entt.hpp"
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
-#include "glm/vec4.hpp"
 #include "graphics/meshes/Cube.h"
 #include "math/Color.h"
 #include "math/Vector2.h"
@@ -325,4 +322,4 @@ namespace cbit {
 
 #pragma endregion LightingComponents
 }
-#endif //COMPONENTS_H
+#endif //CBIT_COMPONENTS_H

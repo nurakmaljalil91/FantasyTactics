@@ -6,13 +6,12 @@
  * @date    2024-01-11
  */
 
-#ifndef MESH_H
-#define MESH_H
+#ifndef CBIT_MESH_H
+#define CBIT_MESH_H
 
 #include <vector>
 #include <string>
 #include <glm/glm.hpp>
-#include "../../utilities/Logger.h"
 #include "OpenGLInclude.h"
 
 namespace cbit {
@@ -89,4 +88,4 @@ namespace cbit {
         GLuint EBO;
     };
 }
-#endif //MESH_H
+#endif //CBIT_MESH_H

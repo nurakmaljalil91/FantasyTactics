@@ -6,8 +6,9 @@
  * @date    2025-12-25
  */
 
-#ifndef FANTASYTACTICS_MESHRENDERSYSTEM_H
-#define FANTASYTACTICS_MESHRENDERSYSTEM_H
+#ifndef CBIT_MESHRENDERSYSTEM_H
+#define CBIT_MESHRENDERSYSTEM_H
+
 #include "entt/entt.hpp"
 #include "graphics/renderers/ShaderProgram.h"
 
@@ -38,4 +39,4 @@ namespace cbit {
         ShaderProgram _shader;
     };
 }
-#endif //FANTASYTACTICS_MESHRENDERSYSTEM_H
+#endif //CBIT_MESHRENDERSYSTEM_H

@@ -8,8 +8,8 @@
  * @date    2025-03-26
  */
 
-#ifndef FANTASYTACTICS_SPHERE_H
-#define FANTASYTACTICS_SPHERE_H
+#ifndef CBIT_SPHERE_H
+#define CBIT_SPHERE_H
 
 #include "Mesh.h"
 
@@ -20,7 +20,7 @@ namespace cbit {
      */
     class Sphere final : public Mesh {
     public:
-        // Create a sphere of given radius, subdivided into
+        // Create a sphere of a given radius, subdivided into
         // "stacks" rows (latitude) and "slices" columns (longitude).
         explicit Sphere(float radius = 1.0f, int stacks = 16, int slices = 32);
 
@@ -28,4 +28,4 @@ namespace cbit {
     };
 }
 
-#endif //FANTASYTACTICS_SPHERE_H
+#endif //CBIT_SPHERE_H

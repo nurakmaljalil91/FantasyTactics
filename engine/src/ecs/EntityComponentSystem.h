@@ -6,8 +6,9 @@
  * @date    2025-08-03
  */
 
-#ifndef ENTITYCOMPONENTSYSTEM_H
-#define ENTITYCOMPONENTSYSTEM_H
+#ifndef CBIT_ENTITYCOMPONENTSYSTEM_H
+#define CBIT_ENTITYCOMPONENTSYSTEM_H
+
 #include "MeshRenderSystem.h"
 #include "UISystem.h"
 #include "entt/entt.hpp"
@@ -202,4 +203,4 @@ namespace cbit {
     };
 }
 
-#endif //ENTITYCOMPONENTSYSTEM_H
+#endif //CBIT_ENTITYCOMPONENTSYSTEM_H

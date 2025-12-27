@@ -6,8 +6,8 @@
  * @date    2025-07-29
  */
 
-#ifndef SCENEMANAGER_H
-#define SCENEMANAGER_H
+#ifndef CBIT_SCENEMANAGER_H
+#define CBIT_SCENEMANAGER_H
 
 #include <string>
 #include <memory>
@@ -89,4 +89,4 @@ namespace cbit {
         GLFWwindow *_window{nullptr};
     };
 }
-#endif //SCENEMANAGER_H
+#endif //CBIT_SCENEMANAGER_H

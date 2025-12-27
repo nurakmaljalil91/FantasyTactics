@@ -18,8 +18,8 @@
  * @date    2025-07-28
  */
 
-#ifndef QUAD_H
-#define QUAD_H
+#ifndef CBIT_QUAD_H
+#define CBIT_QUAD_H
 
 #include "Mesh.h"
 
@@ -45,4 +45,4 @@ namespace cbit {
     };
 }
 
-#endif //QUAD_H
+#endif //CBIT_QUAD_H

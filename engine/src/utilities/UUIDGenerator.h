@@ -6,8 +6,8 @@
  * @date    2025-08-03
  */
 
-#ifndef UUIDGENERATOR_H
-#define UUIDGENERATOR_H
+#ifndef CBIT_UUIDGENERATOR_H
+#define CBIT_UUIDGENERATOR_H
 
 #include <string>
 
@@ -26,4 +26,4 @@ namespace cbit {
     };
 }
 
-#endif //UUIDGENERATOR_H
+#endif //CBIT_UUIDGENERATOR_H

@@ -6,8 +6,8 @@
  * @date    2025-12-26
  */
 
-#ifndef FANTASYTACTICS_KEYBOARD_H
-#define FANTASYTACTICS_KEYBOARD_H
+#ifndef CBIT_KEYBOARD_H
+#define CBIT_KEYBOARD_H
 
 #include "OpenGLInclude.h"
 
@@ -58,4 +58,4 @@ namespace cbit {
     };
 }
 
-#endif //FANTASYTACTICS_KEYBOARD_H
+#endif //CBIT_KEYBOARD_H

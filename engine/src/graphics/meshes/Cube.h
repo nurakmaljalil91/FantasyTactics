@@ -6,8 +6,8 @@
  * @date    2025-03-20
  */
 
-#ifndef FANTASYTACTICS_CUBE_H
-#define FANTASYTACTICS_CUBE_H
+#ifndef CBIT_CUBE_H
+#define CBIT_CUBE_H
 
 #include "Mesh.h"
 
@@ -25,4 +25,4 @@ namespace cbit {
         ~Cube() override;
     };
 }
-#endif //FANTASYTACTICS_CUBE_H
+#endif //CBIT_CUBE_H

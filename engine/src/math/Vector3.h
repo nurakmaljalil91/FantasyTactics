@@ -7,8 +7,8 @@
  * @date    2025-12-25
  */
 
-#ifndef FANTASYTACTICS_VECTOR3_H
-#define FANTASYTACTICS_VECTOR3_H
+#ifndef CBIT_VECTOR3_H
+#define CBIT_VECTOR3_H
 
 #include "glm/glm.hpp"
 
@@ -32,4 +32,4 @@ namespace cbit {
         }
     };
 }
-#endif //FANTASYTACTICS_VECTOR3_H
+#endif //CBIT_VECTOR3_H

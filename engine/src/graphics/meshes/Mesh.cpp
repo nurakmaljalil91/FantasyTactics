@@ -6,10 +6,12 @@
  * @author  Nur Akmal bin Jalil
  * @date    2024-01-11
  */
+
 #include "Mesh.h"
 #include <sstream>
 #include <fstream>
 #include <numeric>
+#include "utilities/Logger.h"
 
 /**
  * @brief  Splits string according to some substring and returns it as a vector.

@@ -8,8 +8,8 @@
  * @date    2024-01-07
  */
 
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef CBIT_CAMERA_H
+#define CBIT_CAMERA_H
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -122,4 +122,4 @@ namespace cbit {
         float _zoom = 45.0f; ///< Field‑of‑view (degrees)
     };
 }
-#endif //CAMERA_H
+#endif //CBIT_CAMERA_H

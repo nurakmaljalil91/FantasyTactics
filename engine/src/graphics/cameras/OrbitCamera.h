@@ -6,8 +6,8 @@
  * @date    2025-08-01
  */
 
-#ifndef ORBITCAMERA_H
-#define ORBITCAMERA_H
+#ifndef CBIT_ORBITCAMERA_H
+#define CBIT_ORBITCAMERA_H
 
 #include "Camera.h"
 #include <GLFW/glfw3.h>
@@ -67,4 +67,4 @@ namespace cbit {
         static float _lastX, _lastY;
     };
 }
-#endif //ORBITCAMERA_H
+#endif //CBIT_ORBITCAMERA_H

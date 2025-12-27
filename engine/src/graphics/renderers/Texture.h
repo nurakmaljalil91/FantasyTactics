@@ -8,8 +8,8 @@
  * @date    2025-08-03
  */
 
-#ifndef TEXTURE_H
-#define TEXTURE_H
+#ifndef CBIT_TEXTURE_H
+#define CBIT_TEXTURE_H
 
 #include "OpenGLInclude.h"
 #include <string>
@@ -86,4 +86,4 @@ namespace cbit {
         GLuint _textureID;
     };
 }
-#endif //TEXTURE_H
+#endif //CBIT_TEXTURE_H

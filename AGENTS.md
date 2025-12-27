@@ -1,11 +1,39 @@
 # Repository Guidelines
 
+## Project Overview
+This repository contains the source code for a C++ game engine and a game built on top. The engine is designed to be 
+modular, efficient, and extensible, with a focus on performance and ease of use. The game, Fantasy Tactics, is a 
+turn-based strategy game that showcases the engine's capabilities.
+
+The engine uses
+- OpenGL 3.3 for rendering
+- GLFW for window and input management
+- GLM for mathematics
+- EnTT for the entity-component-system architecture
+- spdlog for logging
+- CMake as the build system
+- Doxygen for documentation generation
+- Freetype for font rendering
+
+Primary namespace for game engine code is `cbit`.
+
+---
+
 ## Project Structure & Module Organization
-- `engine/` holds the core rendering, ECS, math, and utilities code. Source lives in `engine/src/`.
-- `game/` contains gameplay logic and scenes, with sources in `game/src/`.
+- `engine/` holds the core rendering, ECS, math, and utilities code. Source lives in `engine/src/`. namespace cbit.
+- `game/` contains gameplay logic and scenes, with sources in `game/src/`. no namespace prefix.
 - `assets/` stores art and branding assets copied into the build output.
 - `vendors/` is for third-party libraries (GLFW, GLM, spdlog, glad, freetype, stb, rapidjson, entt).
 - `docs/` contains generated documentation artifacts; the Doxygen config is at `Doxyfile`.
+
+## Important Files / Entry Points
+- `engine/src/core/Application.cpp` is the main application loop and entry point for the engine.
+- `engine/src/core/Window.cpp` manages window creation and input handling.
+- `engine/src/core/SceneManager.cpp` handles scene transitions and updates.
+- `engine/src/core/Scene.cpp` is the base class for all game scenes.
+- `engine/src/ecs/EntityComponentSystem.cpp` and related files implement the ECS architecture.
+- `game/src/main.cpp` is the entry point for the game executable.
+- `CMakeLists.txt` is the root CMake build configuration file.
 
 ## Build, Test, and Development Commands
 - `cmake -S . -B cmake-build-debug -G Ninja -DCMAKE_BUILD_TYPE=Debug` configures the build.
@@ -20,6 +48,7 @@
 - Files and classes use PascalCase (e.g., `SceneManager.cpp`, `PlayScene`).
 - Member variables commonly use a leading underscore (e.g., `_scenesManager`).
 - Keep namespaces under `cbit` where applicable to match existing code.
+- Prefer full words in names; avoid abbreviations unless widely recognized.
 
 ## Testing Guidelines
 - No automated test framework is configured yet.

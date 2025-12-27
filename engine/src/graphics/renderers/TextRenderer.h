@@ -19,8 +19,8 @@
  * @date    2024-07-28
  */
 
-#ifndef TEXTRENDERER_H
-#define TEXTRENDERER_H
+#ifndef CBIT_TEXTRENDERER_H
+#define CBIT_TEXTRENDERER_H
 
 #include <map>
 
@@ -98,4 +98,4 @@ namespace cbit {
     };
 }
 
-#endif //TEXTRENDERER_H
+#endif //CBIT_TEXTRENDERER_H

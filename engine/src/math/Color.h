@@ -5,8 +5,8 @@
  * @author  Nur Akmal bin Jalil
  * @date    2025-12-25
  */
-#ifndef FANTASYTACTICS_COLOR_H
-#define FANTASYTACTICS_COLOR_H
+#ifndef CBIT_COLOR_H
+#define CBIT_COLOR_H
 
 #include "glm/vec4.hpp"
 
@@ -56,4 +56,4 @@ namespace cbit {
     inline const Color Color::LightGreen{0.56f, 0.93f, 0.56f};
 }
 
-#endif //FANTASYTACTICS_COLOR_H
+#endif //CBIT_COLOR_H

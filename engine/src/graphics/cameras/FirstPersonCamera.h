@@ -6,8 +6,8 @@
  * @date    2025-07-21
  */
 
-#ifndef FIRSTPERSONCAMERA_H
-#define FIRSTPERSONCAMERA_H
+#ifndef CBIT_FIRSTPERSONCAMERA_H
+#define CBIT_FIRSTPERSONCAMERA_H
 
 #include "Camera.h"
 #include <GLFW/glfw3.h>
@@ -68,4 +68,4 @@ namespace cbit {
         static float _lastY;
     };
 }
-#endif //FIRSTPERSONCAMERA_H
+#endif //CBIT_FIRSTPERSONCAMERA_H

@@ -8,8 +8,8 @@
  * @date    2025-12-26
  */
 
-#ifndef FANTASYTACTICS_INPUT_H
-#define FANTASYTACTICS_INPUT_H
+#ifndef CBIT_INPUT_H
+#define CBIT_INPUT_H
 
 #include <array>
 
@@ -64,4 +64,4 @@ namespace cbit {
     };
 }
 
-#endif //FANTASYTACTICS_INPUT_H
+#endif //CBIT_INPUT_H

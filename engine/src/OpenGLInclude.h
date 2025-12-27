@@ -1,11 +1,15 @@
-//
-// Created by User on 2/8/2025.
-//
+/**
+ * @file    OpenGLInclude.h
+ * @brief   Header file for OpenGL and GLFW includes it.
+ * @details This file includes the necessary headers for OpenGL and GLFW to be used in the project.
+ * @author  Nur Akmal bin Jalil
+ * @date    2025-02-08
+ */
 
-#ifndef OPENGLINCLUDE_H
-#define OPENGLINCLUDE_H
+#ifndef CBIT_OPENGLINCLUDE_H
+#define CBIT_OPENGLINCLUDE_H
 
 #include <glad/glad.h>
 #include "GLFW/glfw3.h"
 
-#endif //OPENGLINCLUDE_H
+#endif //CBIT_OPENGLINCLUDE_H

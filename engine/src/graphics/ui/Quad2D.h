@@ -27,8 +27,8 @@
  * @date    2025-07-28
  */
 
-#ifndef Quad2D_H
-#define Quad2D_H
+#ifndef CBIT_Quad2D_H
+#define CBIT_Quad2D_H
 
 #include "OpenGLInclude.h"
 
@@ -64,4 +64,4 @@ namespace cbit {
     };
 }
 
-#endif //Quad2D_H
+#endif //CBIT_Quad2D_H

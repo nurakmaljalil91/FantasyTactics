@@ -10,8 +10,8 @@
  * @date    2024-01-01
  */
 
-#ifndef FANTASYTACTICS_TEXTURE_2D_H
-#define FANTASYTACTICS_TEXTURE_2D_H
+#ifndef CBIT_TEXTURE_2D_H
+#define CBIT_TEXTURE_2D_H
 
 #include "OpenGLInclude.h"
 #include <string>
@@ -77,4 +77,4 @@ namespace cbit {
         GLuint _texture;
     };
 }
-#endif //FANTASYTACTICS_TEXTURE_2D_H
+#endif //CBIT_TEXTURE_2D_H

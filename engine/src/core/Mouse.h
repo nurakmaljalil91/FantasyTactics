@@ -6,8 +6,8 @@
  * @date    2025-12-26
  */
 
-#ifndef FANTASYTACTICS_MOUSE_H
-#define FANTASYTACTICS_MOUSE_H
+#ifndef CBIT_MOUSE_H
+#define CBIT_MOUSE_H
 
 #include "OpenGLInclude.h"
 
@@ -25,4 +25,4 @@ namespace cbit {
     };
 }
 
-#endif //FANTASYTACTICS_MOUSE_H
+#endif //CBIT_MOUSE_H

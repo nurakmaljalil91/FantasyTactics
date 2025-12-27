@@ -6,8 +6,8 @@
  * @date    2024-01-01
  */
 
-#ifndef FANTASYTACTICS_SHADER_H
-#define FANTASYTACTICS_SHADER_H
+#ifndef CBIT_SHADER_H
+#define CBIT_SHADER_H
 
 #include "OpenGLInclude.h"
 #include <string>
@@ -169,4 +169,4 @@ namespace cbit {
         std::map<std::string, GLint> _uniformLocations;
     };
 }
-#endif //FANTASYTACTICS_SHADER_H
+#endif //CBIT_SHADER_H

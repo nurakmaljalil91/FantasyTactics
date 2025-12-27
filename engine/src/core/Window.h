@@ -7,8 +7,8 @@
  */
 
 
-#ifndef WINDOW_H
-#define WINDOW_H
+#ifndef CBIT_WINDOW_H
+#define CBIT_WINDOW_H
 #include <string>
 #include "OpenGLInclude.h"
 
@@ -87,4 +87,4 @@ namespace cbit {
     };
 }
 
-#endif //WINDOW_H
+#endif //CBIT_WINDOW_H

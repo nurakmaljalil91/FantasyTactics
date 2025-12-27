@@ -29,8 +29,8 @@
  * @date    2024-07-27
  */
 
-#ifndef ELLIPSOID_H
-#define ELLIPSOID_H
+#ifndef CBIT_ELLIPSOID_H
+#define CBIT_ELLIPSOID_H
 
 #include "Mesh.h"
 
@@ -57,4 +57,4 @@ namespace cbit {
     };
 }
 
-#endif //ELLIPSOID_H
+#endif //CBIT_ELLIPSOID_H

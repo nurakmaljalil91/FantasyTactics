@@ -8,8 +8,8 @@
  * @date    2025-07-21
  */
 
-#ifndef FANTASYTACTICS_ISOMETRICCAMERA_H
-#define FANTASYTACTICS_ISOMETRICCAMERA_H
+#ifndef CBIT_ISOMETRICCAMERA_H
+#define CBIT_ISOMETRICCAMERA_H
 
 #include "OpenGLInclude.h"
 #include <glm/glm.hpp>
@@ -98,4 +98,4 @@ namespace cbit {
         float _distance; ///< Distance from a center along iso direction
     };
 }
-#endif //FANTASYTACTICS_ISOMETRICCAMERA_H
+#endif //CBIT_ISOMETRICCAMERA_H

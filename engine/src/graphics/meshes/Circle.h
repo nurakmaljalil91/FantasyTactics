@@ -6,8 +6,8 @@
  * @author  Nur Akmal bin Jalil
  * @date    2025-03-25
  */
-#ifndef FANTASYTACTICS_CIRCLE_H
-#define FANTASYTACTICS_CIRCLE_H
+#ifndef CBIT_CIRCLE_H
+#define CBIT_CIRCLE_H
 
 #include "Mesh.h"
 
@@ -34,4 +34,4 @@ namespace cbit {
     };
 }
 
-#endif //FANTASYTACTICS_CIRCLE_H
+#endif //CBIT_CIRCLE_H

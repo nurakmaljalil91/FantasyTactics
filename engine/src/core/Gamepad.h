@@ -6,8 +6,8 @@
  * @date    2025-12-26
  */
 
-#ifndef FANTASYTACTICS_GAMEPAD_H
-#define FANTASYTACTICS_GAMEPAD_H
+#ifndef CBIT_GAMEPAD_H
+#define CBIT_GAMEPAD_H
 
 #include "OpenGLInclude.h"
 
@@ -48,4 +48,4 @@ namespace cbit {
     };
 }
 
-#endif //FANTASYTACTICS_GAMEPAD_H
+#endif //CBIT_GAMEPAD_H

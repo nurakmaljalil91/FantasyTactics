@@ -13,8 +13,8 @@
  * @date    2025-08-03
  */
 
-#ifndef UISYSTEM_H
-#define UISYSTEM_H
+#ifndef CBIT_UISYSTEM_H
+#define CBIT_UISYSTEM_H
 
 #include "Components.h"
 #include "entt/entt.hpp"
@@ -196,4 +196,4 @@ namespace cbit {
     };
 }
 
-#endif //UISYSTEM_H
+#endif //CBIT_UISYSTEM_H

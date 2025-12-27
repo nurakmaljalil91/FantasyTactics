@@ -6,8 +6,8 @@
  * @date    2025-07-29
  */
 
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#ifndef CBIT_APPLICATION_H
+#define CBIT_APPLICATION_H
 
 #include "Window.h"
 #include "SceneManager.h"
@@ -64,4 +64,4 @@ namespace cbit {
     };
 }
 
-#endif //APPLICATION_H
+#endif //CBIT_APPLICATION_H
