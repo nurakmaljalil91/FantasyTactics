@@ -9,6 +9,7 @@
 #include "MeshRenderSystem.h"
 
 #include "Components.h"
+#include "utilities/Logger.h"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
 
@@ -19,6 +20,28 @@ cbit::MeshRenderSystem::MeshRenderSystem(entt::registry &registry) : _registry(r
 
 void cbit::MeshRenderSystem::setWindow(GLFWwindow *window) {
     _window = window;
+}
+
+cbit::ShaderProgram *cbit::MeshRenderSystem::_getShader(const std::string &vertexPath, const std::string &fragmentPath) {
+    if (vertexPath.empty() || fragmentPath.empty()) {
+        return &_shader;
+    }
+
+    const std::string key = vertexPath + "|" + fragmentPath;
+    const auto found = _shaderCache.find(key);
+    if (found != _shaderCache.end()) {
+        return found->second.get();
+    }
+
+    auto shader = std::make_unique<ShaderProgram>();
+    if (!shader->loadShaders(vertexPath.c_str(), fragmentPath.c_str())) {
+        Logger::log()->error("Failed to load shader override: {} / {}", vertexPath, fragmentPath);
+        return &_shader;
+    }
+
+    auto *shaderPtr = shader.get();
+    _shaderCache.emplace(key, std::move(shader));
+    return shaderPtr;
 }
 
 void cbit::MeshRenderSystem::render() {
@@ -45,8 +68,6 @@ void cbit::MeshRenderSystem::render() {
     if (windowWidth <= 0 || windowHeight <= 0) {
         return;
     }
-
-    _shader.use();
 
     const float aspectRatio = static_cast<float>(windowWidth) / windowHeight;
 
@@ -99,9 +120,6 @@ void cbit::MeshRenderSystem::render() {
 
     const glm::mat4 viewMatrix = glm::lookAt(cameraPosition, cameraTarget, cameraUp);
 
-    _shader.setUniform("uView", viewMatrix);
-    _shader.setUniform("uProjection", projection);
-
     glm::vec3 lightDirection{-10.0f, -10.0f, -1.0f};
     glm::vec3 lightColor{1.0f, 1.0f, 1.0f};
     float ambientStrength = 0.25f;
@@ -118,21 +136,54 @@ void cbit::MeshRenderSystem::render() {
         }
     }
 
-    _shader.setUniform("lightDir", lightDirection);
-    _shader.setUniform("lightColor", lightColor);
-    _shader.setUniform("baseColor", glm::vec3(0.83f, 0.83f, 0.83f));
-    _shader.setUniform("uUseTexture", 0); // false
-    _shader.setUniform("ambientStrength", ambientStrength);
-    _shader.setUniform("lightIntensity", lightIntensity);
-    _shader.setUniform("lightWrap", 0.35f);
-
     const auto cubeView = _registry.view<CubeComponent, TransformComponent>();
+    ShaderProgram *currentShader = nullptr;
 
     for (const auto entity: cubeView) {
         auto [cube, transform] = cubeView.get<CubeComponent, TransformComponent>(entity);
+        const auto *shaderOverride = _registry.try_get<ShaderOverrideComponent>(entity);
+        const std::string vertexPath = shaderOverride ? shaderOverride->vertexShaderPath : "";
+        const std::string fragmentPath = shaderOverride ? shaderOverride->fragmentShaderPath : "";
+        ShaderProgram *shader = _getShader(vertexPath, fragmentPath);
+
+        if (shader != currentShader) {
+            shader->use();
+
+            if (shader->hasUniform("uView")) {
+                shader->setUniform("uView", viewMatrix);
+            }
+            if (shader->hasUniform("uProjection")) {
+                shader->setUniform("uProjection", projection);
+            }
+            if (shader->hasUniform("lightDir")) {
+                shader->setUniform("lightDir", lightDirection);
+            }
+            if (shader->hasUniform("lightColor")) {
+                shader->setUniform("lightColor", lightColor);
+            }
+            if (shader->hasUniform("baseColor")) {
+                shader->setUniform("baseColor", glm::vec3(0.83f, 0.83f, 0.83f));
+            }
+            if (shader->hasUniform("uUseTexture")) {
+                shader->setUniform("uUseTexture", 0);
+            }
+            if (shader->hasUniform("ambientStrength")) {
+                shader->setUniform("ambientStrength", ambientStrength);
+            }
+            if (shader->hasUniform("lightIntensity")) {
+                shader->setUniform("lightIntensity", lightIntensity);
+            }
+            if (shader->hasUniform("lightWrap")) {
+                shader->setUniform("lightWrap", 0.35f);
+            }
+
+            currentShader = shader;
+        }
 
         glm::mat4 model = glm::translate(glm::mat4(1.0f), transform.position.toGLM());
-        _shader.setUniform("uModel", model);
+        if (currentShader && currentShader->hasUniform("uModel")) {
+            currentShader->setUniform("uModel", model);
+        }
 
         cube.cube.draw();
     }

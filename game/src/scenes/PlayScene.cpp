@@ -10,8 +10,48 @@
 #include "core/Input.h"
 #include "ecs/GameObject.h"
 #include "glm/gtc/type_ptr.inl"
-
+#include "entt/entt.hpp"
 #include <string>
+
+namespace {
+    constexpr int kGridWidth = 8;
+    constexpr int kGridHeight = 8;
+    constexpr float kTileSize = 1.0f;
+    constexpr float kTileHeight = 1.0f;
+
+    const int kHeightMap[kGridHeight][kGridWidth] = {
+        {0, 1, 1, 1, 1, 0, 0, 0},
+        {0, 1, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 1, 1, 1, 1},
+        {0, 0, 0, 0, 2, 2, 2, 2},
+        {0, 0, 0, 0, 2, 2, 2, 3}
+    };
+
+    void applyShaderOverrideToTiles(cbit::EntityComponentSystem &world, const bool useCelShader) {
+        for (int z = 0; z < kGridHeight; ++z) {
+            for (int x = 0; x < kGridWidth; ++x) {
+                const int height = kHeightMap[z][x];
+                for (int y = 0; y <= height; ++y) {
+                    auto tile = world.getGameObject(
+                        "Tile_" + std::to_string(x) + "_" + std::to_string(z) + "_" + std::to_string(y));
+                    if (tile.getEntity() == entt::null) {
+                        continue;
+                    }
+                    if (useCelShader) {
+                        tile.setShaderOverride(
+                            "resources/shaders/cel_shading.vert",
+                            "resources/shaders/cel_shading.frag");
+                    } else {
+                        tile.clearShaderOverride();
+                    }
+                }
+            }
+        }
+    }
+}
 
 void PlayScene::initialize() {
     auto mainCamera = getWorld().createGameObject("MainCamera")
@@ -46,38 +86,23 @@ void PlayScene::initialize() {
     lightComponent.diffuse = cbit::Vector3{1.0f, 1.0f, 1.0f};
     lightComponent.intensity = 1.2f;
 
-    constexpr int gridWidth = 8;
-    constexpr int gridHeight = 8;
-    constexpr float tileSize = 1.0f;
+    constexpr float originX = -((kGridWidth - 1) * kTileSize) * 0.5f;
+    constexpr float originZ = -((kGridHeight - 1) * kTileSize) * 0.5f;
 
-    constexpr float originX = -((gridWidth - 1) * tileSize) * 0.5f;
-    constexpr float originZ = -((gridHeight - 1) * tileSize) * 0.5f;
-
-    for (int z = 0; z < gridHeight; ++z) {
-        for (int x = 0; x < gridWidth; ++x) {
-            const int heightMap[gridHeight][gridWidth] = {
-                {0, 1, 1, 1, 1, 0, 0, 0},
-                {0, 1, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 1, 1, 1, 1},
-                {0, 0, 0, 0, 2, 2, 2, 2},
-                {0, 0, 0, 0, 2, 2, 2, 3}
-            };
-            const int height = heightMap[z][x];
+    for (int z = 0; z < kGridHeight; ++z) {
+        for (int x = 0; x < kGridWidth; ++x) {
+            const int height = kHeightMap[z][x];
             for (int y = 0; y <= height; ++y) {
-                constexpr float tileHeight = 1.0f;
                 auto tile = getWorld().createGameObject(
-                    "Tile_" + std::to_string(x) + "_" + std::to_string(z) + "_" + std::to_string(y))
-                    .addComponent<cbit::TransformComponent>()
-                    .addComponent<cbit::CubeComponent>();
+                            "Tile_" + std::to_string(x) + "_" + std::to_string(z) + "_" + std::to_string(y))
+                        .addComponent<cbit::TransformComponent>()
+                        .addComponent<cbit::CubeComponent>();
 
                 auto &tileTransform = tile.getComponent<cbit::TransformComponent>();
                 tileTransform.position = cbit::Vector3{
-                    originX + static_cast<float>(x) * tileSize,
-                    static_cast<float>(y) * tileHeight,
-                    originZ + static_cast<float>(z) * tileSize
+                    originX + static_cast<float>(x) * kTileSize,
+                    static_cast<float>(y) * kTileHeight,
+                    originZ + static_cast<float>(z) * kTileSize
                 };
             }
         }
@@ -86,10 +111,16 @@ void PlayScene::initialize() {
 
 
 void PlayScene::update(float deltaTime) {
+    static bool useCelShader = false;
+    if (cbit::Input::isKeyPressed(cbit::Keyboard::C)) {
+        useCelShader = !useCelShader;
+        applyShaderOverrideToTiles(getWorld(), useCelShader);
+    }
+
     auto player = getWorld().getGameObject("MainLighting");
     auto &lightComponent = player.getComponent<cbit::DirectionalLightComponent>();
 
-    const float directionSpeed = 2.0f;
+    constexpr float directionSpeed = 2.0f;
     if (cbit::Input::isKeyDown(cbit::Keyboard::A)) {
         lightComponent.direction.x -= directionSpeed * deltaTime;
     } else if (cbit::Input::isKeyDown(cbit::Keyboard::D)) {
@@ -106,9 +137,9 @@ void PlayScene::update(float deltaTime) {
         lightComponent.direction.y += directionSpeed * deltaTime;
     }
 
-    const float colorSpeed = 0.6f;
+    constexpr float colorSpeed = 0.6f;
     const bool decrease = cbit::Input::isKeyDown(cbit::Keyboard::LeftShift)
-        || cbit::Input::isKeyDown(cbit::Keyboard::RightShift);
+                          || cbit::Input::isKeyDown(cbit::Keyboard::RightShift);
     const float colorDelta = (decrease ? -1.0f : 1.0f) * colorSpeed * deltaTime;
 
     auto clamp01 = [](float value) {

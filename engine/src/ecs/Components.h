@@ -56,6 +56,15 @@ namespace cbit {
         std::string path;
     };
 
+    /**
+     * @struct ShaderOverrideComponent
+     * @brief  Shader override component for per-entity shader selection.
+     */
+    struct ShaderOverrideComponent {
+        std::string vertexShaderPath;
+        std::string fragmentShaderPath;
+    };
+
 #pragma endregion GraphicsComponents
 
 #pragma region ShapeComponents

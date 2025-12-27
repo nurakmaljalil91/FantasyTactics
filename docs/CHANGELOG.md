@@ -6,7 +6,7 @@
 
 ### Added - 2024-01-11
 
-- Add Mesh class to load obj file
+- Add Mesh class to load an obj file
 - Add Lighting
 
 ### Added - 2024-01-08
@@ -19,8 +19,8 @@
 
 ### Fixed - 2024-01-07
 
-- Fix logger file to make it singleton
+- Fix the logger file to make it singleton
 
 ### Added - 2024-01-04
-- Refactor show FPS function
+- Refactor shows an FPS function
 

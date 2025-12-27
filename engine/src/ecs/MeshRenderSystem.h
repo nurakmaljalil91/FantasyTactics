@@ -9,6 +9,9 @@
 #ifndef CBIT_MESHRENDERSYSTEM_H
 #define CBIT_MESHRENDERSYSTEM_H
 
+#include <memory>
+#include <string>
+#include <unordered_map>
 #include "entt/entt.hpp"
 #include "graphics/renderers/ShaderProgram.h"
 
@@ -34,9 +37,12 @@ namespace cbit {
         void render();
 
     private:
+        ShaderProgram *_getShader(const std::string &vertexPath, const std::string &fragmentPath);
+
         GLFWwindow *_window{nullptr};
         entt::registry &_registry;
         ShaderProgram _shader;
+        std::unordered_map<std::string, std::unique_ptr<ShaderProgram>> _shaderCache;
     };
 }
 #endif //CBIT_MESHRENDERSYSTEM_H

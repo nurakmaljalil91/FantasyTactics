@@ -10,7 +10,9 @@
 #define CBIT_GAMEOBJECT_H
 
 #include <entt/entt.hpp>
+#include <string>
 
+#include "Components.h"
 #include "EntityComponentSystem.h"
 #include "utilities/Logger.h"
 
@@ -65,6 +67,34 @@ namespace cbit {
                 Logger::log()->warn("Component already added");
             } else {
                 _system->_registry.emplace<T>(_entity, std::forward<Args>(args)...);
+            }
+            return *this;
+        }
+
+        /**
+         * Set a shader override for this GameObject's mesh rendering.
+         * @param vertexShaderPath Path to the vertex shader.
+         * @param fragmentShaderPath Path to the fragment shader.
+         * @return A reference to the GameObject itself, allowing for method chaining.
+         */
+        GameObject &setShaderOverride(const std::string &vertexShaderPath, const std::string &fragmentShaderPath) {
+            if (hasComponent<ShaderOverrideComponent>()) {
+                auto &shaderOverride = getComponent<ShaderOverrideComponent>();
+                shaderOverride.vertexShaderPath = vertexShaderPath;
+                shaderOverride.fragmentShaderPath = fragmentShaderPath;
+            } else {
+                addComponent<ShaderOverrideComponent>(ShaderOverrideComponent{vertexShaderPath, fragmentShaderPath});
+            }
+            return *this;
+        }
+
+        /**
+         * Clear any shader override for this GameObject.
+         * @return A reference to the GameObject itself, allowing for method chaining.
+         */
+        GameObject &clearShaderOverride() {
+            if (hasComponent<ShaderOverrideComponent>()) {
+                removeComponent<ShaderOverrideComponent>();
             }
             return *this;
         }
