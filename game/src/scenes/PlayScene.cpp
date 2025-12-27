@@ -41,10 +41,10 @@ void PlayScene::initialize() {
             .addComponent<cbit::DirectionalLightComponent>();
 
     auto &lightComponent = mainLight.getComponent<cbit::DirectionalLightComponent>();
-    lightComponent.direction = cbit::Vector3{-0.6f, -1.0f, -0.5f};
-    lightComponent.ambient = cbit::Vector3{0.3f, 0.3f, 0.3f};
+    lightComponent.direction = cbit::Vector3{-0.4f, -1.0f, -0.4f};
+    lightComponent.ambient = cbit::Vector3{0.55f, 0.55f, 0.55f};
     lightComponent.diffuse = cbit::Vector3{1.0f, 1.0f, 1.0f};
-    lightComponent.intensity = 1.6f;
+    lightComponent.intensity = 1.2f;
 
     constexpr int gridWidth = 8;
     constexpr int gridHeight = 8;
@@ -56,14 +56,14 @@ void PlayScene::initialize() {
     for (int z = 0; z < gridHeight; ++z) {
         for (int x = 0; x < gridWidth; ++x) {
             const int heightMap[gridHeight][gridWidth] = {
-                {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 1, 1, 1, 0, 0, 0, 0},
                 {0, 1, 1, 1, 1, 0, 0, 0},
-                {0, 1, 1, 1, 1, 1, 0, 0},
-                {0, 0, 1, 1, 1, 1, 0, 0},
-                {0, 0, 0, 1, 1, 1, 0, 0},
+                {0, 1, 0, 0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 0, 0, 0, 0}
+                {0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 1, 1, 1, 1},
+                {0, 0, 0, 0, 2, 2, 2, 2},
+                {0, 0, 0, 0, 2, 2, 2, 3}
             };
             const int height = heightMap[z][x];
             for (int y = 0; y <= height; ++y) {
@@ -87,16 +87,55 @@ void PlayScene::initialize() {
 
 void PlayScene::update(float deltaTime) {
     auto player = getWorld().getGameObject("MainLighting");
-    auto &transformComponent = player.getComponent<cbit::DirectionalLightComponent>();
+    auto &lightComponent = player.getComponent<cbit::DirectionalLightComponent>();
 
+    const float directionSpeed = 2.0f;
     if (cbit::Input::isKeyDown(cbit::Keyboard::A)) {
-        transformComponent.direction.x -= 5.0f * deltaTime;
+        lightComponent.direction.x -= directionSpeed * deltaTime;
     } else if (cbit::Input::isKeyDown(cbit::Keyboard::D)) {
-        transformComponent.direction.x += 5.0f * deltaTime;
+        lightComponent.direction.x += directionSpeed * deltaTime;
     } else if (cbit::Input::isKeyDown(cbit::Keyboard::W)) {
-        transformComponent.direction.z -= 5.0f * deltaTime;
+        lightComponent.direction.z -= directionSpeed * deltaTime;
     } else if (cbit::Input::isKeyDown(cbit::Keyboard::S)) {
-        transformComponent.direction.z += 5.0f * deltaTime;
+        lightComponent.direction.z += directionSpeed * deltaTime;
+    }
+
+    if (cbit::Input::isKeyDown(cbit::Keyboard::Q)) {
+        lightComponent.direction.y -= directionSpeed * deltaTime;
+    } else if (cbit::Input::isKeyDown(cbit::Keyboard::E)) {
+        lightComponent.direction.y += directionSpeed * deltaTime;
+    }
+
+    const float colorSpeed = 0.6f;
+    const bool decrease = cbit::Input::isKeyDown(cbit::Keyboard::LeftShift)
+        || cbit::Input::isKeyDown(cbit::Keyboard::RightShift);
+    const float colorDelta = (decrease ? -1.0f : 1.0f) * colorSpeed * deltaTime;
+
+    auto clamp01 = [](float value) {
+        if (value < 0.0f) {
+            return 0.0f;
+        }
+        if (value > 1.0f) {
+            return 1.0f;
+        }
+        return value;
+    };
+
+    if (cbit::Input::isKeyDown(cbit::Keyboard::R)) {
+        lightComponent.diffuse.x = clamp01(lightComponent.diffuse.x + colorDelta);
+    } else if (cbit::Input::isKeyDown(cbit::Keyboard::G)) {
+        lightComponent.diffuse.y = clamp01(lightComponent.diffuse.y + colorDelta);
+    } else if (cbit::Input::isKeyDown(cbit::Keyboard::B)) {
+        lightComponent.diffuse.z = clamp01(lightComponent.diffuse.z + colorDelta);
+    }
+
+    if (cbit::Input::isKeyDown(cbit::Keyboard::I)) {
+        lightComponent.intensity += 0.5f * deltaTime;
+    } else if (cbit::Input::isKeyDown(cbit::Keyboard::K)) {
+        lightComponent.intensity -= 0.5f * deltaTime;
+        if (lightComponent.intensity < 0.0f) {
+            lightComponent.intensity = 0.0f;
+        }
     }
 
     if (cbit::Input::isMouseDown(cbit::MouseButton::Left)) {

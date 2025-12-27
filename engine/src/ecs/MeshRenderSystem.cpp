@@ -103,6 +103,7 @@ void cbit::MeshRenderSystem::render() {
     _shader.setUniform("uProjection", projection);
 
     glm::vec3 lightDirection{-10.0f, -10.0f, -1.0f};
+    glm::vec3 lightColor{1.0f, 1.0f, 1.0f};
     float ambientStrength = 0.25f;
     float lightIntensity = 1.0f;
 
@@ -111,16 +112,19 @@ void cbit::MeshRenderSystem::render() {
         auto &lightComponent = lightView.get<DirectionalLightComponent>(*lightView.begin());
         if (lightComponent.enabled) {
             lightDirection = lightComponent.direction.toGLM();
+            lightColor = lightComponent.diffuse.toGLM();
             ambientStrength = (lightComponent.ambient.x + lightComponent.ambient.y + lightComponent.ambient.z) / 3.0f;
             lightIntensity = lightComponent.intensity;
         }
     }
 
     _shader.setUniform("lightDir", lightDirection);
-    _shader.setUniform("baseColor", glm::vec3(0.8f, 0.8f, 0.1f));
+    _shader.setUniform("lightColor", lightColor);
+    _shader.setUniform("baseColor", glm::vec3(0.83f, 0.83f, 0.83f));
     _shader.setUniform("uUseTexture", 0); // false
     _shader.setUniform("ambientStrength", ambientStrength);
     _shader.setUniform("lightIntensity", lightIntensity);
+    _shader.setUniform("lightWrap", 0.35f);
 
     const auto cubeView = _registry.view<CubeComponent, TransformComponent>();
 

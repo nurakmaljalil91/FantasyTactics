@@ -42,6 +42,7 @@ namespace cbit {
         static const Color LightBlue;
         static const Color LightPink;
         static const Color LightGreen;
+        static const Color LightGray;
     };
 
     inline const Color Color::Black{0.0f, 0.0f, 0.0f, 1.0f};
@@ -54,6 +55,7 @@ namespace cbit {
     inline const Color Color::LightBlue{0.68f, 0.85f, 0.9f};
     inline const Color Color::LightPink{1.0f, 0.71f, 0.76f};
     inline const Color Color::LightGreen{0.56f, 0.93f, 0.56f};
+    inline const Color Color::LightGray{0.83f, 0.83f, 0.83f};
 }
 
 #endif //CBIT_COLOR_H
