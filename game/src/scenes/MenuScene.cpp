@@ -25,7 +25,7 @@ void MenuScene::initialize() {
     auto startButton = getWorld().createGameObject("startButton")
             .addComponent<cbit::UIAnchorComponent>(
                 cbit::UIAnchor::Center,
-                cbit::Vector2(0.0f, -80.0f),
+                cbit::Vector2(0.0f, 0.0f),
                 cbit::Vector2(240.0f, 50.0f),
                 10, true, true)
             .addComponent<cbit::UIColorRectangleComponent>()
@@ -36,6 +36,21 @@ void MenuScene::initialize() {
     button.onClick = [&](entt::entity) {
         cbit::Logger::log()->info("Start button clicked! Transitioning to GameScene...");
         _sceneManager->setActiveScene("PlayScene");
+    };
+
+    auto quitButton = getWorld().createGameObject("quitButton")
+            .addComponent<cbit::UIAnchorComponent>(
+                cbit::UIAnchor::Center,
+                cbit::Vector2(0.0f, -80.0f),
+                cbit::Vector2(240.0f, 50.0f),
+                10, true, true)
+            .addComponent<cbit::UIColorRectangleComponent>()
+            .addComponent<cbit::ButtonComponent>()
+            .addComponent<cbit::UITextComponent>("QUIT", 1.0f, cbit::Color::Black);
+    auto &quitBtnComp = quitButton.getComponent<cbit::ButtonComponent>();
+    quitBtnComp.onClick = [&](entt::entity) {
+        cbit::Logger::log()->info("Quit button clicked! Exiting game...");
+        // _sceneManager->getWindow()->close();
     };
 }
 

@@ -9,7 +9,8 @@ uniform sampler2D diffuseTexture;  // your 2D texture
 uniform bool        uUseTexture;   // toggle: true = sample texture, false = use baseColor
 uniform vec3        baseColor;     // fallback flat color
 uniform vec3        lightDir;      // direction _to_ the light
-uniform float       ambientStrength; // e.g. 0.2–0.3
+uniform float       ambientStrength; // e.g. 0.2-0.3
+uniform float       lightIntensity; // overall lighting boost
 
 void main()
 {
@@ -30,6 +31,6 @@ void main()
     vec3 diffuse = diff * color;
 
     // 5. combine
-    vec3 result = ambient + diffuse;
+    vec3 result = (ambient + diffuse) * lightIntensity;
     FragColor = vec4(result, 1.0);
 }

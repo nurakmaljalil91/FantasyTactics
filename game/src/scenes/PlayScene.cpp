@@ -11,6 +11,8 @@
 #include "ecs/GameObject.h"
 #include "glm/gtc/type_ptr.inl"
 
+#include <string>
+
 void PlayScene::initialize() {
     auto mainCamera = getWorld().createGameObject("MainCamera")
             .addComponent<cbit::TransformComponent>()
@@ -22,7 +24,7 @@ void PlayScene::initialize() {
 
     // Classic isometric view angles
     cameraComponent.yaw = 45.0f;
-    cameraComponent.pitch = 35.264f;
+    cameraComponent.pitch = -35.264f;
 
     // Orthographic size
     cameraComponent.orthoLeft = -10.0f;
@@ -32,30 +34,69 @@ void PlayScene::initialize() {
 
     auto &cameraTransformComponent = mainCamera.getComponent<cbit::TransformComponent>();
 
-    cameraTransformComponent.position = cbit::Vector3{-10.0f, -10.0f, -10.0f};
+    cameraTransformComponent.position = cbit::Vector3{-10.0f, 10.0f, -10.0f};
 
-    getWorld().createGameObject("MainLighting")
+    auto mainLight = getWorld().createGameObject("MainLighting")
             .addComponent<cbit::TransformComponent>()
             .addComponent<cbit::DirectionalLightComponent>();
 
-    getWorld().createGameObject("Cube")
-            .addComponent<cbit::TransformComponent>()
-            .addComponent<cbit::CubeComponent>();
+    auto &lightComponent = mainLight.getComponent<cbit::DirectionalLightComponent>();
+    lightComponent.direction = cbit::Vector3{-0.6f, -1.0f, -0.5f};
+    lightComponent.ambient = cbit::Vector3{0.3f, 0.3f, 0.3f};
+    lightComponent.diffuse = cbit::Vector3{1.0f, 1.0f, 1.0f};
+    lightComponent.intensity = 1.6f;
+
+    constexpr int gridWidth = 8;
+    constexpr int gridHeight = 8;
+    constexpr float tileSize = 1.0f;
+
+    constexpr float originX = -((gridWidth - 1) * tileSize) * 0.5f;
+    constexpr float originZ = -((gridHeight - 1) * tileSize) * 0.5f;
+
+    for (int z = 0; z < gridHeight; ++z) {
+        for (int x = 0; x < gridWidth; ++x) {
+            const int heightMap[gridHeight][gridWidth] = {
+                {0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 1, 1, 1, 0, 0, 0, 0},
+                {0, 1, 1, 1, 1, 0, 0, 0},
+                {0, 1, 1, 1, 1, 1, 0, 0},
+                {0, 0, 1, 1, 1, 1, 0, 0},
+                {0, 0, 0, 1, 1, 1, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 0, 0, 0, 0}
+            };
+            const int height = heightMap[z][x];
+            for (int y = 0; y <= height; ++y) {
+                constexpr float tileHeight = 1.0f;
+                auto tile = getWorld().createGameObject(
+                    "Tile_" + std::to_string(x) + "_" + std::to_string(z) + "_" + std::to_string(y))
+                    .addComponent<cbit::TransformComponent>()
+                    .addComponent<cbit::CubeComponent>();
+
+                auto &tileTransform = tile.getComponent<cbit::TransformComponent>();
+                tileTransform.position = cbit::Vector3{
+                    originX + static_cast<float>(x) * tileSize,
+                    static_cast<float>(y) * tileHeight,
+                    originZ + static_cast<float>(z) * tileSize
+                };
+            }
+        }
+    }
 }
 
 
 void PlayScene::update(float deltaTime) {
     auto player = getWorld().getGameObject("MainLighting");
-    auto &transformComponent = player.getComponent<cbit::TransformComponent>();
+    auto &transformComponent = player.getComponent<cbit::DirectionalLightComponent>();
 
     if (cbit::Input::isKeyDown(cbit::Keyboard::A)) {
-        transformComponent.position.x -= 5.0f * deltaTime;
+        transformComponent.direction.x -= 5.0f * deltaTime;
     } else if (cbit::Input::isKeyDown(cbit::Keyboard::D)) {
-        transformComponent.position.x += 5.0f * deltaTime;
+        transformComponent.direction.x += 5.0f * deltaTime;
     } else if (cbit::Input::isKeyDown(cbit::Keyboard::W)) {
-        transformComponent.position.z -= 5.0f * deltaTime;
+        transformComponent.direction.z -= 5.0f * deltaTime;
     } else if (cbit::Input::isKeyDown(cbit::Keyboard::S)) {
-        transformComponent.position.z += 5.0f * deltaTime;
+        transformComponent.direction.z += 5.0f * deltaTime;
     }
 
     if (cbit::Input::isMouseDown(cbit::MouseButton::Left)) {
@@ -69,5 +110,6 @@ void PlayScene::update(float deltaTime) {
 }
 
 void PlayScene::render() {
+    glClearColor(0.53f, 0.81f, 0.92f, 1.0f);
     Scene::render();
 }
