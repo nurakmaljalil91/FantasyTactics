@@ -136,18 +136,12 @@ void cbit::MeshRenderSystem::render() {
         }
     }
 
-    const auto cubeView = _registry.view<CubeComponent, TransformComponent>();
     ShaderProgram *currentShader = nullptr;
 
-    for (const auto entity: cubeView) {
-        auto [cube, transform] = cubeView.get<CubeComponent, TransformComponent>(entity);
-        
+    auto applyShaderForEntity = [&](entt::entity entity) -> ShaderProgram * {
         const auto *shaderOverride = _registry.try_get<ShaderOverrideComponent>(entity);
-
         const std::string vertexPath = shaderOverride ? shaderOverride->vertexShaderPath : "";
-
         const std::string fragmentPath = shaderOverride ? shaderOverride->fragmentShaderPath : "";
-
         ShaderProgram *shader = _getShader(vertexPath, fragmentPath);
 
         if (shader != currentShader) {
@@ -181,11 +175,10 @@ void cbit::MeshRenderSystem::render() {
             currentShader = shader;
         }
 
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), transform.position.toGLM());
-        if (currentShader && currentShader->hasUniform("uModel")) {
-            currentShader->setUniform("uModel", model);
-        }
+        return shader;
+    };
 
+    auto applyTextureForEntity = [&](ShaderProgram *shader, entt::entity entity) {
         const auto *textureComponent = _registry.try_get<TextureComponent>(entity);
         const bool hasTexture = textureComponent && !textureComponent->path.empty();
 
@@ -202,7 +195,43 @@ void cbit::MeshRenderSystem::render() {
             it->second.bind();
             shader->setUniform("diffuseTexture", 0);
         }
+    };
 
+    auto buildModelMatrix = [](const TransformComponent &transform) {
+        glm::mat4 model = glm::translate(glm::mat4(1.0f), transform.position.toGLM());
+        const glm::vec3 rotation = transform.rotation.toGLM();
+        model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+        model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+        model = glm::scale(model, transform.scale.toGLM());
+        return model;
+    };
+
+    const auto cubeView = _registry.view<CubeComponent, TransformComponent>();
+    for (const auto entity: cubeView) {
+        auto [cube, transform] = cubeView.get<CubeComponent, TransformComponent>(entity);
+        ShaderProgram *shader = applyShaderForEntity(entity);
+
+        glm::mat4 model = buildModelMatrix(transform);
+        if (shader->hasUniform("uModel")) {
+            shader->setUniform("uModel", model);
+        }
+
+        applyTextureForEntity(shader, entity);
         cube.cube.draw();
+    }
+
+    const auto meshView = _registry.view<MeshComponent, TransformComponent>();
+    for (const auto entity: meshView) {
+        auto [meshComponent, transform] = meshView.get<MeshComponent, TransformComponent>(entity);
+        ShaderProgram *shader = applyShaderForEntity(entity);
+
+        glm::mat4 model = buildModelMatrix(transform);
+        if (shader->hasUniform("uModel")) {
+            shader->setUniform("uModel", model);
+        }
+
+        applyTextureForEntity(shader, entity);
+        meshComponent.mesh.draw();
     }
 }

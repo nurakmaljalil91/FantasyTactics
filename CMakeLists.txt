@@ -4,12 +4,6 @@ project(FantasyTactics)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# set sdl2 path
-#set(SDL2_PATH vendors/SDL2-2.28.5/x86_64-w64-mingw32)
-#include_directories(${SDL2_PATH}/include)
-#link_directories(${SDL2_PATH}/lib)
-#file(COPY ${SDL2_PATH}/bin/SDL2.dll DESTINATION ${CMAKE_BINARY_DIR})
-
 # set glfw path
 set(GLFW_PATH vendors/glfw)
 include_directories(${GLFW_PATH}/include)
@@ -55,11 +49,23 @@ include_directories(vendors/entt)
 set(STB_IMAGE_PATH vendors/stb)
 include_directories(${STB_IMAGE_PATH})
 
+# set assimp path (prebuilt)
+set(ASSIMP_PATH vendors/assimp)
+include_directories(${ASSIMP_PATH}/include)
+link_directories(${ASSIMP_PATH}/lib)
+
 # add resources folder
 file(COPY engine/resources DESTINATION ${CMAKE_BINARY_DIR})
 
 # add assets folder
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
+
+# copy assimp runtime dll (prebuilt)
+if (EXISTS ${ASSIMP_PATH}/bin/libassimp-6d.dll)
+    file(COPY ${ASSIMP_PATH}/bin/libassimp-6d.dll DESTINATION ${CMAKE_BINARY_DIR})
+elseif (EXISTS ${ASSIMP_PATH}/bin/libassimp-6.dll)
+    file(COPY ${ASSIMP_PATH}/bin/libassimp-6.dll DESTINATION ${CMAKE_BINARY_DIR})
+endif ()
 
 add_subdirectory(engine)
 

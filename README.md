@@ -2,21 +2,24 @@
 
 ## Description
 
-This is a tactical RPG game inspired by Final Fantasy Tactics. It is a turn-based game where the player controls a party of characters and fights against enemies. The player can move their characters around the map and attack enemies. The player can also use items and abilities to heal their characters or damage enemies. The player wins the game by defeating all enemies.
+This is a tactical RPG game inspired by Final Fantasy Tactics. It is a turn-based game where the player controls 
+a party of characters and fights against enemies. The player can move their characters around the map and attack enemies. 
+The player can also use items and abilities to heal their characters or damage enemies. The player wins the game by 
+defeating all enemies.
 
 ## Prerequisites
 
-- JetBrains CLion as main IDE
-- CMake 3.17.3 as build system
-- MinGW 8.1.0 as compiler
-- Ninja 1.10.0 as build tool
-- Python 3.8.3 as scripting language
-- Git 2.27.0 as version control system
-- GLFW 3.3 as windowing library
+- JetBrains CLion as the main IDE
+- CMake 3.17.3 as a build system
+- MinGW 8.1.0 as a compiler
+- Ninja 1.10.0 as a build tool
+- Python 3.8.3 as a scripting language
+- Git 2.27.0 as a version control system
+- GLFW 3.3 as a windowing library
 - GLAD as OpenGL loader
 - GLM as OpenGL mathematics library
 - SPDLOG as logging library
-- STB_IMAGE as image loading library
+- STB_IMAGE as an image loading library
 
 ## Installation
 
@@ -52,7 +55,7 @@ cmake --build _builds --target install
 
 - Download GLM from https://github.com/g-truc/glm/releases/tag/0.9.9.8
 - Extract the files and copy the glm folder into the project include directory
-- Git clone STB_IMAGE from
+- Git clones STB_IMAGE from
 
 ```bash
 git clone https://github.com/nothings/stb.git
@@ -64,6 +67,7 @@ git clone https://github.com/nothings/stb.git
 ## Documentation
 
 - The documentation is generated using Doxygen. To generate the documentation, run the following command in the project root directory:
+
 ```bash
 doxygen Doxyfile
 ```

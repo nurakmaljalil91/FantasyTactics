@@ -70,6 +70,9 @@ target_link_libraries(engine
         glad
         glfw3
         opengl32
+        $<$<AND:$<BOOL:${MINGW}>,$<CONFIG:Debug>>:${CMAKE_SOURCE_DIR}/vendors/assimp/lib/libassimpd.dll.a>
+        $<$<AND:$<BOOL:${MINGW}>,$<NOT:$<CONFIG:Debug>>>:${CMAKE_SOURCE_DIR}/vendors/assimp/lib/libassimp.dll.a>
+        $<$<NOT:$<BOOL:${MINGW}>>:assimp>
         spdlog::spdlog
         Freetype::Freetype
         $<$<BOOL:${MINGW}>:ws2_32>

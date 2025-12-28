@@ -66,6 +66,13 @@ namespace cbit {
         bool loadObj(const std::string &filename);
 
         /**
+         * @brief   Loads a model file supported by Assimp (e.g. FBX).
+         * @param   filename
+         * @return  if the model was loaded successfully.
+         */
+        bool loadFromFile(const std::string &filename);
+
+        /**
          * @brief   Renders the mesh using OpenGL.
          * @details Binds the vertex array object and draws the mesh using the currently active shader
          *          program. Assumes the mesh has been loaded and buffers initialized.

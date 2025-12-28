@@ -8,9 +8,14 @@
  */
 
 #include "Mesh.h"
+#include <algorithm>
+#include <cctype>
 #include <sstream>
 #include <fstream>
 #include <numeric>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+#include <assimp/scene.h>
 #include "utilities/Logger.h"
 
 /**
@@ -31,6 +36,13 @@ std::vector<std::string> splitString(std::string stringData, const std::string &
         stringData = stringData.substr(pos + 1, stringData.size() - pos - 1);
     }
     return results;
+}
+
+std::string toLowerCase(std::string value) {
+    std::transform(value.begin(), value.end(), value.begin(), [](unsigned char ch) {
+        return static_cast<char>(std::tolower(ch));
+    });
+    return value;
 }
 
 cbit::Mesh::Mesh()
@@ -159,6 +171,67 @@ bool cbit::Mesh::loadObj(const std::string &filename) {
     }
 
     return false;
+}
+
+bool cbit::Mesh::loadFromFile(const std::string &filename) {
+    const std::string lowerFilename = toLowerCase(filename);
+    if (lowerFilename.find(".obj") != std::string::npos) {
+        return loadObj(filename);
+    }
+
+    Assimp::Importer importer;
+    const unsigned int flags = aiProcess_Triangulate
+                               | aiProcess_JoinIdenticalVertices
+                               | aiProcess_GenNormals;
+
+    const aiScene *scene = importer.ReadFile(filename, flags);
+    if (!scene || !scene->HasMeshes()) {
+        Logger::log()->error("Assimp failed to load model {}: {}", filename, importer.GetErrorString());
+        return false;
+    }
+
+    if (scene->mNumMeshes > 1) {
+        Logger::log()->warn("Assimp model {} has {} meshes; loading first mesh only.", filename, scene->mNumMeshes);
+    }
+
+    vertices.clear();
+    indices.clear();
+
+    const aiMesh *mesh = scene->mMeshes[0];
+    vertices.reserve(mesh->mNumVertices);
+
+    for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
+        Vertex meshVertex{};
+        const auto &position = mesh->mVertices[i];
+        meshVertex.position = glm::vec3(position.x, position.y, position.z);
+
+        if (mesh->HasNormals()) {
+            const auto &normal = mesh->mNormals[i];
+            meshVertex.normal = glm::vec3(normal.x, normal.y, normal.z);
+        }
+
+        if (mesh->HasTextureCoords(0)) {
+            const auto &uv = mesh->mTextureCoords[0][i];
+            meshVertex.textureCoordinates = glm::vec2(uv.x, uv.y);
+        }
+
+        vertices.push_back(meshVertex);
+    }
+
+    indices.reserve(mesh->mNumFaces * 3);
+    for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {
+        const aiFace &face = mesh->mFaces[i];
+        if (face.mNumIndices != 3) {
+            continue;
+        }
+        indices.push_back(face.mIndices[0]);
+        indices.push_back(face.mIndices[1]);
+        indices.push_back(face.mIndices[2]);
+    }
+
+    initializeBuffers();
+    loaded = true;
+    return true;
 }
 
 void cbit::Mesh::initializeBuffers() {

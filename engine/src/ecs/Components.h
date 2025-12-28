@@ -13,6 +13,7 @@
 #include <string>
 #include "entt/entt.hpp"
 #include "graphics/meshes/Cube.h"
+#include "graphics/meshes/Mesh.h"
 #include "math/Color.h"
 #include "math/Vector2.h"
 #include "math/Vector3.h"
@@ -199,6 +200,22 @@ namespace cbit {
      */
     struct CubeComponent {
         Cube cube;
+    };
+
+    /**
+     * @struct MeshComponent
+     * @brief  Mesh component for storing a Mesh loaded from file.
+     */
+    struct MeshComponent {
+        Mesh mesh;
+        std::string path;
+
+        MeshComponent() = default;
+
+        explicit MeshComponent(const std::string &meshPath)
+            : path(meshPath) {
+            mesh.loadFromFile(meshPath);
+        }
     };
 
 #pragma endregion MeshComponents
