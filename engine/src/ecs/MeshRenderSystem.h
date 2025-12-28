@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include "entt/entt.hpp"
 #include "graphics/renderers/ShaderProgram.h"
+#include "graphics/renderers/Texture.h"
 
 namespace cbit {
     /**
@@ -42,7 +43,8 @@ namespace cbit {
         GLFWwindow *_window{nullptr};
         entt::registry &_registry;
         ShaderProgram _shader;
-        std::unordered_map<std::string, std::unique_ptr<ShaderProgram>> _shaderCache;
+        std::unordered_map<std::string, std::unique_ptr<ShaderProgram> > _shaderCache;
+        std::unordered_map<std::string, Texture> _textures;
     };
 }
 #endif //CBIT_MESHRENDERSYSTEM_H

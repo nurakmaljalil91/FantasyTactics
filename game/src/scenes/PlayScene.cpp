@@ -96,7 +96,8 @@ void PlayScene::initialize() {
                 auto tile = getWorld().createGameObject(
                             "Tile_" + std::to_string(x) + "_" + std::to_string(z) + "_" + std::to_string(y))
                         .addComponent<cbit::TransformComponent>()
-                        .addComponent<cbit::CubeComponent>();
+                        .addComponent<cbit::CubeComponent>()
+                        .addComponent<cbit::TextureComponent>("assets/textures/default_cube_texture.png");
 
                 auto &tileTransform = tile.getComponent<cbit::TransformComponent>();
                 tileTransform.position = cbit::Vector3{

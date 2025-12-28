@@ -141,9 +141,13 @@ void cbit::MeshRenderSystem::render() {
 
     for (const auto entity: cubeView) {
         auto [cube, transform] = cubeView.get<CubeComponent, TransformComponent>(entity);
+        
         const auto *shaderOverride = _registry.try_get<ShaderOverrideComponent>(entity);
+
         const std::string vertexPath = shaderOverride ? shaderOverride->vertexShaderPath : "";
+
         const std::string fragmentPath = shaderOverride ? shaderOverride->fragmentShaderPath : "";
+
         ShaderProgram *shader = _getShader(vertexPath, fragmentPath);
 
         if (shader != currentShader) {
@@ -164,9 +168,6 @@ void cbit::MeshRenderSystem::render() {
             if (shader->hasUniform("baseColor")) {
                 shader->setUniform("baseColor", glm::vec3(0.83f, 0.83f, 0.83f));
             }
-            if (shader->hasUniform("uUseTexture")) {
-                shader->setUniform("uUseTexture", 0);
-            }
             if (shader->hasUniform("ambientStrength")) {
                 shader->setUniform("ambientStrength", ambientStrength);
             }
@@ -183,6 +184,23 @@ void cbit::MeshRenderSystem::render() {
         glm::mat4 model = glm::translate(glm::mat4(1.0f), transform.position.toGLM());
         if (currentShader && currentShader->hasUniform("uModel")) {
             currentShader->setUniform("uModel", model);
+        }
+
+        const auto *textureComponent = _registry.try_get<TextureComponent>(entity);
+        const bool hasTexture = textureComponent && !textureComponent->path.empty();
+
+        if (shader->hasUniform("uUseTexture")) {
+            shader->setUniform("uUseTexture", hasTexture ? 1 : 0);
+        }
+
+        if (hasTexture && shader->hasUniform("diffuseTexture")) {
+            auto [it, inserted] = _textures.try_emplace(textureComponent->path);
+            if (inserted) {
+                it->second.loadTexture(textureComponent->path);
+            }
+            glActiveTexture(GL_TEXTURE0);
+            it->second.bind();
+            shader->setUniform("diffuseTexture", 0);
         }
 
         cube.cube.draw();
