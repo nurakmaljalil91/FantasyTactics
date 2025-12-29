@@ -190,7 +190,8 @@ void PlayScene::initialize() {
 
     auto player = getWorld().createGameObject("player")
             .addComponent<cbit::TransformComponent>()
-            .addComponent<cbit::MeshComponent>("assets/models/characterMedium.fbx");
+            .addComponent<cbit::MeshComponent>("assets/models/characterMedium.fbx")
+            .addComponent<cbit::TextureComponent>("assets/textures/skaterMaleA.png");
 
     auto &[playerPosition, playerRotation, playerScale] = player.getComponent<cbit::TransformComponent>();
     playerPosition = cbit::Vector3{2.0f, 5.0f, 2.0f};
