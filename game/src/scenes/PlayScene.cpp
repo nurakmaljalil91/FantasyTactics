@@ -33,6 +33,22 @@ namespace {
         {0, 0, 0, 0, 2, 2, 2, 3}
     };
 
+    cbit::Vector3 gridToWorldTop(const int x, const int z) {
+        constexpr float originX = -((kGridWidth - 1) * kTileSize) * 0.5f;
+        constexpr float originZ = -((kGridHeight - 1) * kTileSize) * 0.5f;
+
+        const int height = kHeightMap[z][x];
+        return {
+            originX + static_cast<float>(x) * kTileSize,
+            static_cast<float>(height + 1) * kTileHeight,
+            originZ + static_cast<float>(z) * kTileSize
+        };
+    }
+
+    bool isGridInBounds(const int x, const int z) {
+        return x >= 0 && x < kGridWidth && z >= 0 && z < kGridHeight;
+    }
+
     void applyShaderOverrideToTiles(cbit::EntityComponentSystem &world, const bool useCelShader) {
         for (int z = 0; z < kGridHeight; ++z) {
             for (int x = 0; x < kGridWidth; ++x) {
@@ -190,22 +206,30 @@ void PlayScene::initialize() {
 
     auto player = getWorld().createGameObject("player")
             .addComponent<cbit::TransformComponent>()
+            .addComponent<cbit::GridPositionComponent>()
             .addComponent<cbit::MeshComponent>("assets/models/characterMedium.fbx")
             .addComponent<cbit::TextureComponent>("assets/textures/skaterMaleA.png");
 
     auto &[playerPosition, playerRotation, playerScale] = player.getComponent<cbit::TransformComponent>();
-    playerPosition = cbit::Vector3{2.0f, 5.0f, 2.0f};
+    auto &playerGrid = player.getComponent<cbit::GridPositionComponent>();
+    playerGrid.x = 2;
+    playerGrid.z = 2;
+    playerPosition = gridToWorldTop(playerGrid.x, playerGrid.z);
     playerRotation = cbit::Vector3{-250.0f, -190.0f, 0.0f};
     playerScale = cbit::Vector3{0.6f, 0.6f, 0.6f};
 
 
     auto enemy = getWorld().createGameObject("enemy")
             .addComponent<cbit::TransformComponent>()
+            .addComponent<cbit::GridPositionComponent>()
             .addComponent<cbit::MeshComponent>("assets/models/characterMedium.fbx")
             .addComponent<cbit::TextureComponent>("assets/textures/criminalMaleA.png");
 
     auto &[enemyPosition, enemyRotation, enemyScale] = enemy.getComponent<cbit::TransformComponent>();
-    enemyPosition = cbit::Vector3{-6.0f, 5.0f, -7.0f};
+    auto &enemyGrid = enemy.getComponent<cbit::GridPositionComponent>();
+    enemyGrid.x = 5;
+    enemyGrid.z = 2;
+    enemyPosition = gridToWorldTop(enemyGrid.x, enemyGrid.z);
     enemyRotation = cbit::Vector3{-265.0f, -187.0f, -185.0f};
     enemyScale = cbit::Vector3{0.6f, 0.6f, 0.6f};
 }
@@ -218,67 +242,32 @@ void PlayScene::update(const float deltaTime) {
         applyShaderOverrideToTiles(getWorld(), useCelShader);
     }
 
-    auto player = getWorld().getGameObject("enemy");
+    auto player = getWorld().getGameObject("player");
 
-    auto &[position, rotation, scale] = player.getComponent<cbit::TransformComponent>();
+    auto &position = player.getComponent<cbit::TransformComponent>().position;
+    auto &grid = player.getComponent<cbit::GridPositionComponent>();
 
-    constexpr float rotateSpeed = 90.0f;
-    if (cbit::Input::isKeyDown(cbit::Keyboard::W)) {
-        rotation.y -= rotateSpeed * deltaTime;
-        cbit::Logger::log()->info("Player rotation: ({}, {}, {})", rotation.x, rotation.y, rotation.z);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::S)) {
-        rotation.y += rotateSpeed * deltaTime;
-        cbit::Logger::log()->info("Player rotation: ({}, {}, {})", rotation.x, rotation.y, rotation.z);
+    int dx = 0;
+    int dz = 0;
+    if (cbit::Input::isKeyPressed(cbit::Keyboard::W)) {
+        dz -= 1;
+    } else if (cbit::Input::isKeyPressed(cbit::Keyboard::S)) {
+        dz += 1;
+    } else if (cbit::Input::isKeyPressed(cbit::Keyboard::A)) {
+        dx -= 1;
+    } else if (cbit::Input::isKeyPressed(cbit::Keyboard::D)) {
+        dx += 1;
     }
 
-    if (cbit::Input::isKeyDown(cbit::Keyboard::A)) {
-        rotation.x -= rotateSpeed * deltaTime;
-        cbit::Logger::log()->info("Player rotation: ({}, {}, {})", rotation.x, rotation.y, rotation.z);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::D)) {
-        rotation.x += rotateSpeed * deltaTime;
-        cbit::Logger::log()->info("Player rotation: ({}, {}, {})", rotation.x, rotation.y, rotation.z);
-    }
-
-    if (cbit::Input::isKeyDown(cbit::Keyboard::Q)) {
-        rotation.z -= rotateSpeed * deltaTime;
-        cbit::Logger::log()->info("Player rotation: ({}, {}, {})", rotation.x, rotation.y, rotation.z);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::E)) {
-        rotation.z += rotateSpeed * deltaTime;
-        cbit::Logger::log()->info("Player rotation: ({}, {}, {})", rotation.x, rotation.y, rotation.z);
-    }
-
-    constexpr float scaleStep = 0.05f;
-    if (cbit::Input::isKeyDown(cbit::Keyboard::P)) {
-        scale.x += scaleStep;
-        scale.y += scaleStep;
-        scale.z += scaleStep;
-        cbit::Logger::log()->info("Player scale: ({}, {}, {})", scale.x, scale.y, scale.z);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::L)) {
-        scale.x = std::max(0.01f, scale.x - scaleStep);
-        scale.y = std::max(0.01f, scale.y - scaleStep);
-        scale.z = std::max(0.01f, scale.z - scaleStep);
-        cbit::Logger::log()->info("Player scale: ({}, {}, {})", scale.x, scale.y, scale.z);
-    }
-
-    constexpr float moveSpeed = 5.0f;
-    if (cbit::Input::isKeyDown(cbit::Keyboard::Up)) {
-        position.z -= moveSpeed * deltaTime;
-        cbit::Logger::log()->info("Player position: ({}, {}, {})", position.x, position.y, position.z);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::Down)) {
-        position.z += moveSpeed * deltaTime;
-        cbit::Logger::log()->info("Player position: ({}, {}, {})", position.x, position.y, position.z);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::Left)) {
-        position.x -= moveSpeed * deltaTime;
-        cbit::Logger::log()->info("Player position: ({}, {}, {})", position.x, position.y, position.z);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::Right)) {
-        position.x += moveSpeed * deltaTime;
-        cbit::Logger::log()->info("Player position: ({}, {}, {})", position.x, position.y, position.z);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::Y)) {
-        position.y += moveSpeed * deltaTime;
-        cbit::Logger::log()->info("Player position: ({}, {}, {})", position.x, position.y, position.z);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::H)) {
-        position.y -= moveSpeed * deltaTime;
-        cbit::Logger::log()->info("Player position: ({}, {}, {})", position.x, position.y, position.z);
+    if (dx != 0 || dz != 0) {
+        const int nextX = grid.x + dx;
+        const int nextZ = grid.z + dz;
+        if (isGridInBounds(nextX, nextZ)) {
+            grid.x = nextX;
+            grid.z = nextZ;
+            position = gridToWorldTop(grid.x, grid.z);
+            cbit::Logger::log()->info("Player grid: ({}, {})", grid.x, grid.z);
+        }
     }
 }
 
