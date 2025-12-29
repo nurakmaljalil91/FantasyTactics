@@ -55,7 +55,7 @@ namespace {
         }
     }
 
-    glm::mat4 buildCameraProjection(const cbit::CameraComponent &camera, float aspectRatio) {
+    glm::mat4 buildCameraProjection(const cbit::CameraComponent &camera, const float aspectRatio) {
         switch (camera.type) {
             case cbit::CameraType::Perspective:
                 return glm::perspective(
@@ -73,7 +73,7 @@ namespace {
                     camera.nearPlane,
                     camera.farPlane);
             default:
-                return glm::mat4(1.0f);
+                return {1.0f};
         }
     }
 
@@ -93,20 +93,20 @@ namespace {
     }
 
     bool screenToWorldOnPlane(
-        double screenX,
-        double screenY,
-        int screenWidth,
-        int screenHeight,
+        const double screenX,
+        const double screenY,
+        const int screenWidth,
+        const int screenHeight,
         const glm::mat4 &projection,
         const glm::mat4 &view,
-        float planeY,
+        const float planeY,
         glm::vec3 &outWorld) {
         if (screenWidth <= 0 || screenHeight <= 0) {
             return false;
         }
 
-        const float ndcX = static_cast<float>((2.0 * screenX) / screenWidth - 1.0);
-        const float ndcY = static_cast<float>(1.0 - (2.0 * screenY) / screenHeight);
+        const auto ndcX = static_cast<float>(2.0 * screenX / screenWidth - 1.0);
+        const auto ndcY = static_cast<float>(1.0 - 2.0 * screenY / screenHeight);
 
         const glm::mat4 invViewProjection = glm::inverse(projection * view);
         glm::vec4 nearPoint = invViewProjection * glm::vec4(ndcX, ndcY, -1.0f, 1.0f);
@@ -119,7 +119,7 @@ namespace {
         nearPoint /= nearPoint.w;
         farPoint /= farPoint.w;
 
-        const glm::vec3 rayOrigin = glm::vec3(nearPoint);
+        const auto rayOrigin = glm::vec3(nearPoint);
         const glm::vec3 rayDirection = glm::normalize(glm::vec3(farPoint - nearPoint));
 
         if (std::abs(rayDirection.y) < 0.0001f) {
@@ -192,132 +192,82 @@ void PlayScene::initialize() {
             .addComponent<cbit::TransformComponent>()
             .addComponent<cbit::MeshComponent>("assets/models/characterMedium.fbx");
 
-    auto &playerTransformComponent = player.getComponent<cbit::TransformComponent>();
-    playerTransformComponent.position = cbit::Vector3{0.0f, 0.0f, 0.0f};
-    playerTransformComponent.scale = cbit::Vector3{0.1f, 0.1f, 0.1f};
+    auto &[playerPosition, playerRotation, playerScale] = player.getComponent<cbit::TransformComponent>();
+    playerPosition = cbit::Vector3{2.0f, 5.0f, 2.0f};
+    playerRotation = cbit::Vector3{-250.0f, -190.0f, 0.0f};
+    playerScale = cbit::Vector3{0.6f, 0.6f, 0.6f};
 }
 
 
-void PlayScene::update(float deltaTime) {
+void PlayScene::update(const float deltaTime) {
     static bool useCelShader = false;
     if (cbit::Input::isKeyPressed(cbit::Keyboard::C)) {
         useCelShader = !useCelShader;
         applyShaderOverrideToTiles(getWorld(), useCelShader);
     }
 
-    auto mainLighting = getWorld().getGameObject("MainLighting");
-    auto &lightComponent = mainLighting.getComponent<cbit::DirectionalLightComponent>();
-
-    constexpr float directionSpeed = 2.0f;
-    if (cbit::Input::isKeyDown(cbit::Keyboard::A)) {
-        lightComponent.direction.x -= directionSpeed * deltaTime;
-        cbit::Logger::log()->info("light direction ({}, {}, {})", lightComponent.direction.x, lightComponent.direction.y, lightComponent.direction.z);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::D)) {
-        lightComponent.direction.x += directionSpeed * deltaTime;
-        cbit::Logger::log()->info("light direction ({}, {}, {})", lightComponent.direction.x, lightComponent.direction.y, lightComponent.direction.z);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::W)) {
-        lightComponent.direction.z -= directionSpeed * deltaTime;
-        cbit::Logger::log()->info("light direction ({}, {}, {})", lightComponent.direction.x, lightComponent.direction.y, lightComponent.direction.z);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::S)) {
-        lightComponent.direction.z += directionSpeed * deltaTime;
-        cbit::Logger::log()->info("light direction ({}, {}, {})", lightComponent.direction.x, lightComponent.direction.y, lightComponent.direction.z);
-    }
-
-    if (cbit::Input::isKeyDown(cbit::Keyboard::Q)) {
-        lightComponent.direction.y -= directionSpeed * deltaTime;
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::E)) {
-        lightComponent.direction.y += directionSpeed * deltaTime;
-    }
-
-    constexpr float colorSpeed = 0.6f;
-    const bool decrease = cbit::Input::isKeyDown(cbit::Keyboard::LeftShift)
-                          || cbit::Input::isKeyDown(cbit::Keyboard::RightShift);
-    const float colorDelta = (decrease ? -1.0f : 1.0f) * colorSpeed * deltaTime;
-
-    auto clamp01 = [](float value) {
-        if (value < 0.0f) {
-            return 0.0f;
-        }
-        if (value > 1.0f) {
-            return 1.0f;
-        }
-        return value;
-    };
-
-    if (cbit::Input::isKeyDown(cbit::Keyboard::R)) {
-        lightComponent.diffuse.x = clamp01(lightComponent.diffuse.x + colorDelta);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::G)) {
-        lightComponent.diffuse.y = clamp01(lightComponent.diffuse.y + colorDelta);
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::B)) {
-        lightComponent.diffuse.z = clamp01(lightComponent.diffuse.z + colorDelta);
-    }
-
-    if (cbit::Input::isKeyDown(cbit::Keyboard::I)) {
-        lightComponent.intensity += 0.5f * deltaTime;
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::K)) {
-        lightComponent.intensity -= 0.5f * deltaTime;
-        if (lightComponent.intensity < 0.0f) {
-            lightComponent.intensity = 0.0f;
-        }
-    }
 
     auto player = getWorld().getGameObject("player");
 
-    auto &playerTransformComponent = player.getComponent<cbit::TransformComponent>();
-
-    if (cbit::Input::isMouseDown(cbit::MouseButton::Left)) {
-        double mouseX, mouseY;
-        cbit::Input::getMousePosition(mouseX, mouseY);
-        cbit::Logger::log()->info("Mouse Position: ({}, {})", mouseX, mouseY);
-
-        const auto cameraView = getWorld().getRegistry().view<cbit::CameraComponent, cbit::TransformComponent, cbit::ActiveCameraComponent>();
-        if (cameraView.begin() == cameraView.end()) {
-            const auto cameraEntity = *cameraView.begin();
-            const auto &cameraComponent = cameraView.get<cbit::CameraComponent>(cameraEntity);
-            const auto &cameraTransform = cameraView.get<cbit::TransformComponent>(cameraEntity);
-
-            const int width = getWindowWidth();
-            const int height = getWindowHeight();
-            const float aspectRatio = height > 0 ? static_cast<float>(width) / height : 1.0f;
-
-            const glm::mat4 projection = buildCameraProjection(cameraComponent, aspectRatio);
-            const glm::mat4 view = buildCameraView(cameraComponent, cameraTransform);
-
-            glm::vec3 hitPoint{};
-            if (screenToWorldOnPlane(mouseX, mouseY, width, height, projection, view, 0.0f, hitPoint)) {
-                playerTransformComponent.position = cbit::Vector3{hitPoint.x, hitPoint.y, hitPoint.z};
-            }
-        }
-    }
+    auto &[position, rotation, scale] = player.getComponent<cbit::TransformComponent>();
 
     constexpr float rotateSpeed = 90.0f;
-    if (cbit::Input::isKeyDown(cbit::Keyboard::Z)) {
-        playerTransformComponent.rotation.y -= rotateSpeed * deltaTime;
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::X)) {
-        playerTransformComponent.rotation.y += rotateSpeed * deltaTime;
+    if (cbit::Input::isKeyDown(cbit::Keyboard::W)) {
+        rotation.y -= rotateSpeed * deltaTime;
+        cbit::Logger::log()->info("Player rotation: ({}, {}, {})", rotation.x, rotation.y, rotation.z);
+    } else if (cbit::Input::isKeyDown(cbit::Keyboard::S)) {
+        rotation.y += rotateSpeed * deltaTime;
+        cbit::Logger::log()->info("Player rotation: ({}, {}, {})", rotation.x, rotation.y, rotation.z);
     }
 
-    if (cbit::Input::isKeyDown(cbit::Keyboard::N)) {
-        playerTransformComponent.rotation.x -= rotateSpeed * deltaTime;
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::M)) {
-        playerTransformComponent.rotation.x += rotateSpeed * deltaTime;
+    if (cbit::Input::isKeyDown(cbit::Keyboard::A)) {
+        rotation.x -= rotateSpeed * deltaTime;
+        cbit::Logger::log()->info("Player rotation: ({}, {}, {})", rotation.x, rotation.y, rotation.z);
+    } else if (cbit::Input::isKeyDown(cbit::Keyboard::D)) {
+        rotation.x += rotateSpeed * deltaTime;
+        cbit::Logger::log()->info("Player rotation: ({}, {}, {})", rotation.x, rotation.y, rotation.z);
     }
 
-    if (cbit::Input::isKeyDown(cbit::Keyboard::U)) {
-        playerTransformComponent.rotation.z -= rotateSpeed * deltaTime;
-    } else if (cbit::Input::isKeyDown(cbit::Keyboard::J)) {
-        playerTransformComponent.rotation.z += rotateSpeed * deltaTime;
+    if (cbit::Input::isKeyDown(cbit::Keyboard::Q)) {
+        rotation.z -= rotateSpeed * deltaTime;
+        cbit::Logger::log()->info("Player rotation: ({}, {}, {})", rotation.x, rotation.y, rotation.z);
+    } else if (cbit::Input::isKeyDown(cbit::Keyboard::E)) {
+        rotation.z += rotateSpeed * deltaTime;
+        cbit::Logger::log()->info("Player rotation: ({}, {}, {})", rotation.x, rotation.y, rotation.z);
     }
 
     constexpr float scaleStep = 0.05f;
     if (cbit::Input::isKeyDown(cbit::Keyboard::P)) {
-        playerTransformComponent.scale.x += scaleStep;
-        playerTransformComponent.scale.y += scaleStep;
-        playerTransformComponent.scale.z += scaleStep;
+        scale.x += scaleStep;
+        scale.y += scaleStep;
+        scale.z += scaleStep;
+        cbit::Logger::log()->info("Player scale: ({}, {}, {})", scale.x, scale.y, scale.z);
     } else if (cbit::Input::isKeyDown(cbit::Keyboard::L)) {
-        playerTransformComponent.scale.x = std::max(0.01f, playerTransformComponent.scale.x - scaleStep);
-        playerTransformComponent.scale.y = std::max(0.01f, playerTransformComponent.scale.y - scaleStep);
-        playerTransformComponent.scale.z = std::max(0.01f, playerTransformComponent.scale.z - scaleStep);
+        scale.x = std::max(0.01f, scale.x - scaleStep);
+        scale.y = std::max(0.01f, scale.y - scaleStep);
+        scale.z = std::max(0.01f, scale.z - scaleStep);
+        cbit::Logger::log()->info("Player scale: ({}, {}, {})", scale.x, scale.y, scale.z);
+    }
+
+    constexpr float moveSpeed = 5.0f;
+    if (cbit::Input::isKeyDown(cbit::Keyboard::Up)) {
+        position.z -= moveSpeed * deltaTime;
+        cbit::Logger::log()->info("Player position: ({}, {}, {})", position.x, position.y, position.z);
+    } else if (cbit::Input::isKeyDown(cbit::Keyboard::Down)) {
+        position.z += moveSpeed * deltaTime;
+        cbit::Logger::log()->info("Player position: ({}, {}, {})", position.x, position.y, position.z);
+    } else if (cbit::Input::isKeyDown(cbit::Keyboard::Left)) {
+        position.x -= moveSpeed * deltaTime;
+        cbit::Logger::log()->info("Player position: ({}, {}, {})", position.x, position.y, position.z);
+    } else if (cbit::Input::isKeyDown(cbit::Keyboard::Right)) {
+        position.x += moveSpeed * deltaTime;
+        cbit::Logger::log()->info("Player position: ({}, {}, {})", position.x, position.y, position.z);
+    } else if (cbit::Input::isKeyDown(cbit::Keyboard::Y)) {
+        position.y += moveSpeed * deltaTime;
+        cbit::Logger::log()->info("Player position: ({}, {}, {})", position.x, position.y, position.z);
+    } else if (cbit::Input::isKeyDown(cbit::Keyboard::H)) {
+        position.y -= moveSpeed * deltaTime;
+        cbit::Logger::log()->info("Player position: ({}, {}, {})", position.x, position.y, position.z);
     }
 }
 
