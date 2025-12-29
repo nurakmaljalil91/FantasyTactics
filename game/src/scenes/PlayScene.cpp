@@ -197,6 +197,17 @@ void PlayScene::initialize() {
     playerPosition = cbit::Vector3{2.0f, 5.0f, 2.0f};
     playerRotation = cbit::Vector3{-250.0f, -190.0f, 0.0f};
     playerScale = cbit::Vector3{0.6f, 0.6f, 0.6f};
+
+
+    auto enemy = getWorld().createGameObject("enemy")
+            .addComponent<cbit::TransformComponent>()
+            .addComponent<cbit::MeshComponent>("assets/models/characterMedium.fbx")
+            .addComponent<cbit::TextureComponent>("assets/textures/criminalMaleA.png");
+
+    auto &[enemyPosition, enemyRotation, enemyScale] = enemy.getComponent<cbit::TransformComponent>();
+    enemyPosition = cbit::Vector3{-6.0f, 5.0f, -7.0f};
+    enemyRotation = cbit::Vector3{-265.0f, -187.0f, -185.0f};
+    enemyScale = cbit::Vector3{0.6f, 0.6f, 0.6f};
 }
 
 
@@ -207,8 +218,7 @@ void PlayScene::update(const float deltaTime) {
         applyShaderOverrideToTiles(getWorld(), useCelShader);
     }
 
-
-    auto player = getWorld().getGameObject("player");
+    auto player = getWorld().getGameObject("enemy");
 
     auto &[position, rotation, scale] = player.getComponent<cbit::TransformComponent>();
 
