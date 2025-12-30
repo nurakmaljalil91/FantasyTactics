@@ -12,7 +12,6 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.inl"
 #include "entt/entt.hpp"
-#include <algorithm>
 #include <cmath>
 #include <string>
 
@@ -23,14 +22,14 @@ namespace {
     constexpr float kTileHeight = 1.0f;
 
     const int kHeightMap[kGridHeight][kGridWidth] = {
-        {0, 1, 1, 1, 1, 0, 0, 0},
-        {0, 1, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 1, 1, 1, 1},
-        {0, 0, 0, 0, 2, 2, 2, 2},
-        {0, 0, 0, 0, 2, 2, 2, 3}
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0}
     };
 
     cbit::Vector3 gridToWorldTop(const int x, const int z) {
@@ -40,7 +39,7 @@ namespace {
         const int height = kHeightMap[z][x];
         return {
             originX + static_cast<float>(x) * kTileSize,
-            static_cast<float>(height + 1) * kTileHeight,
+            (static_cast<float>(height) + 0.5f) * kTileHeight,
             originZ + static_cast<float>(z) * kTileSize
         };
     }
