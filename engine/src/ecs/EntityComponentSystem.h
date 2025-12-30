@@ -9,6 +9,7 @@
 #ifndef CBIT_ENTITYCOMPONENTSYSTEM_H
 #define CBIT_ENTITYCOMPONENTSYSTEM_H
 
+#include "ISystem.h"
 #include "MeshRenderSystem.h"
 #include "UISystem.h"
 #include "entt/entt.hpp"
@@ -193,11 +194,24 @@ namespace cbit {
          */
         [[nodiscard]] entt::registry &getRegistry() { return _registry; }
 
+        /**
+         * Add a custom system to the entity-component system.
+         * @tparam T The type of the system to be added.
+         * @param args Arguments to construct the system.
+         * @details This method adds a custom system of type T to the ECS.
+         *          The system will be stored in the ECS and can be updated and rendered as needed.
+         */
+        template<typename T, typename... Args>
+        void addSystem(Args &&... args) {
+            _customSystems.emplace_back(std::make_unique<T>(std::forward<Args>(args)...));
+        }
+
     private:
         entt::registry _registry;
         friend class GameObject;
         GLFWwindow *_window{nullptr};
 
+        std::vector<std::unique_ptr<ISystem> > _customSystems;
         UISystem _uiSystem{_window, _registry};
         MeshRenderSystem _meshRenderSystem{_registry};
     };

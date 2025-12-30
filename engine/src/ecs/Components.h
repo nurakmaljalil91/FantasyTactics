@@ -46,15 +46,6 @@ namespace cbit {
         Vector3 scale{1.0f, 1.0f, 1.0f};
     };
 
-    /**
-     * @struct GridPositionComponent
-     * @brief  Grid position component for tile-based movement.
-     */
-    struct GridPositionComponent {
-        int x = 0;
-        int z = 0;
-    };
-
 #pragma endregion DefaultComponents
 
 #pragma region GraphicsComponents

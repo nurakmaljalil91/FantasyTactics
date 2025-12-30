@@ -8,6 +8,8 @@ add_executable(FantasyTactics
         src/scenes/PlayScene.h
         src/scenes/TestScene.cpp
         src/scenes/TestScene.h
+        src/systems/GridMovementSystem.cpp
+        src/systems/GridMovementSystem.h
 )
 # force its .exe into the top-level build dir
 set_target_properties(FantasyTactics PROPERTIES

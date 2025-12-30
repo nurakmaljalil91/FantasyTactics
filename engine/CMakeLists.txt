@@ -53,6 +53,7 @@ add_library(engine
         src/core/Keyboard.h
         src/core/Mouse.h
         src/core/Gamepad.h
+        src/ecs/ISystem.h
 )
 
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

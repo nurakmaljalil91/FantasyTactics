@@ -25,11 +25,17 @@ cbit::EntityComponentSystem::~EntityComponentSystem() = default;
 
 void cbit::EntityComponentSystem::update(const float deltaTime) {
     _uiSystem.update(deltaTime);
+    for (const auto &system: _customSystems) {
+        system->update(_registry, deltaTime);
+    }
 }
 
 void cbit::EntityComponentSystem::render() {
     _meshRenderSystem.render();
     _uiSystem.render();
+    for (const auto &system: _customSystems) {
+        system->render(_registry);
+    }
 }
 
 void cbit::EntityComponentSystem::cleanup() {

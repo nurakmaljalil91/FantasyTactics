@@ -15,6 +15,8 @@
 #include <cmath>
 #include <string>
 
+#include "../systems/GridMovementSystem.h"
+
 namespace {
     constexpr int kGridWidth = 8;
     constexpr int kGridHeight = 8;
@@ -148,6 +150,9 @@ namespace {
 }
 
 void PlayScene::initialize() {
+    getWorld().addSystem<GridMovementSystem>(
+        [](int x, int z) { return gridToWorldTop(x, z); }, kGridWidth, kGridHeight);
+
     auto mainCamera = getWorld().createGameObject("MainCamera")
             .addComponent<cbit::TransformComponent>()
             .addComponent<cbit::CameraComponent>()
@@ -205,30 +210,28 @@ void PlayScene::initialize() {
 
     auto player = getWorld().createGameObject("player")
             .addComponent<cbit::TransformComponent>()
-            .addComponent<cbit::GridPositionComponent>()
+            .addComponent<GridMovementComponent>()
             .addComponent<cbit::MeshComponent>("assets/models/characterMedium.fbx")
             .addComponent<cbit::TextureComponent>("assets/textures/skaterMaleA.png");
 
     auto &[playerPosition, playerRotation, playerScale] = player.getComponent<cbit::TransformComponent>();
-    auto &playerGrid = player.getComponent<cbit::GridPositionComponent>();
+    auto &playerGrid = player.getComponent<GridMovementComponent>();
     playerGrid.x = 2;
     playerGrid.z = 2;
     playerPosition = gridToWorldTop(playerGrid.x, playerGrid.z);
     playerRotation = cbit::Vector3{-250.0f, -190.0f, 0.0f};
     playerScale = cbit::Vector3{0.6f, 0.6f, 0.6f};
 
-
     auto enemy = getWorld().createGameObject("enemy")
             .addComponent<cbit::TransformComponent>()
-            .addComponent<cbit::GridPositionComponent>()
             .addComponent<cbit::MeshComponent>("assets/models/characterMedium.fbx")
             .addComponent<cbit::TextureComponent>("assets/textures/criminalMaleA.png");
 
     auto &[enemyPosition, enemyRotation, enemyScale] = enemy.getComponent<cbit::TransformComponent>();
-    auto &enemyGrid = enemy.getComponent<cbit::GridPositionComponent>();
-    enemyGrid.x = 5;
-    enemyGrid.z = 2;
-    enemyPosition = gridToWorldTop(enemyGrid.x, enemyGrid.z);
+    auto &enemyGrid = enemy.getComponent<cbit::TransformComponent>();
+    constexpr auto enemyGridX = 5;
+    constexpr auto enemyGridZ = 2;
+    enemyPosition = gridToWorldTop(enemyGridX, enemyGridZ);
     enemyRotation = cbit::Vector3{-265.0f, -187.0f, -185.0f};
     enemyScale = cbit::Vector3{0.6f, 0.6f, 0.6f};
 }
@@ -241,33 +244,7 @@ void PlayScene::update(const float deltaTime) {
         applyShaderOverrideToTiles(getWorld(), useCelShader);
     }
 
-    auto player = getWorld().getGameObject("player");
-
-    auto &position = player.getComponent<cbit::TransformComponent>().position;
-    auto &grid = player.getComponent<cbit::GridPositionComponent>();
-
-    int dx = 0;
-    int dz = 0;
-    if (cbit::Input::isKeyPressed(cbit::Keyboard::W)) {
-        dz -= 1;
-    } else if (cbit::Input::isKeyPressed(cbit::Keyboard::S)) {
-        dz += 1;
-    } else if (cbit::Input::isKeyPressed(cbit::Keyboard::A)) {
-        dx -= 1;
-    } else if (cbit::Input::isKeyPressed(cbit::Keyboard::D)) {
-        dx += 1;
-    }
-
-    if (dx != 0 || dz != 0) {
-        const int nextX = grid.x + dx;
-        const int nextZ = grid.z + dz;
-        if (isGridInBounds(nextX, nextZ)) {
-            grid.x = nextX;
-            grid.z = nextZ;
-            position = gridToWorldTop(grid.x, grid.z);
-            cbit::Logger::log()->info("Player grid: ({}, {})", grid.x, grid.z);
-        }
-    }
+    Scene::update(deltaTime);
 }
 
 void PlayScene::render() {
