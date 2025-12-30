@@ -11,7 +11,6 @@
 
 #include <entt/entt.hpp>
 #include <string>
-
 #include "Components.h"
 #include "EntityComponentSystem.h"
 #include "utilities/Logger.h"

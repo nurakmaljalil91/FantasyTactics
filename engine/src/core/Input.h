@@ -12,7 +12,6 @@
 #define CBIT_INPUT_H
 
 #include <array>
-
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Gamepad.h"

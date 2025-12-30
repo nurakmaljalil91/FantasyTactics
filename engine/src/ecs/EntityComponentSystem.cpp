@@ -11,8 +11,7 @@
 #include "GameObject.h"
 #include "utilities/UUIDGenerator.h"
 
-cbit::EntityComponentSystem::EntityComponentSystem() : _uiSystem(nullptr, _registry),
-                                                       _meshRenderSystem(_registry) {
+cbit::EntityComponentSystem::EntityComponentSystem() : _uiSystem(nullptr, _registry) {
     // Constructor implementation can be added here if needed
 }
 
@@ -51,8 +50,7 @@ void cbit::EntityComponentSystem::destroyGameObject(const GameObject gameObject)
 cbit::GameObject cbit::EntityComponentSystem::getGameObject(const std::string &tag) {
     const auto view = _registry.view<TagComponent>();
     for (auto entity: view) {
-        auto &tagComponent = view.get<TagComponent>(entity);
-        if (tagComponent.tag == tag) {
+        if (auto &[tagComponent] = view.get<TagComponent>(entity); tagComponent == tag) {
             return {entity, this};
         }
     }
