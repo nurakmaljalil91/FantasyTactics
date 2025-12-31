@@ -207,6 +207,28 @@ void cbit::MeshRenderSystem::render() {
         return model;
     };
 
+    const auto skyView = _registry.view<SkyboxComponent, QuadComponent, TransformComponent, TextureComponent>();
+    if (skyView.begin() != skyView.end()) {
+        const glm::mat4 invViewRot = glm::mat4(glm::transpose(glm::mat3(viewMatrix)));
+        glDepthMask(GL_FALSE);
+        glDisable(GL_DEPTH_TEST);
+
+        for (const auto entity: skyView) {
+            auto [skybox, quad, transform] = skyView.get<SkyboxComponent, QuadComponent, TransformComponent>(entity);
+            ShaderProgram *shader = applyShaderForEntity(entity);
+
+            if (shader->hasUniform("uInvViewRot")) {
+                shader->setUniform("uInvViewRot", invViewRot);
+            }
+
+            applyTextureForEntity(shader, entity);
+            quad.quad.draw();
+        }
+
+        glDepthMask(GL_TRUE);
+        glEnable(GL_DEPTH_TEST);
+    }
+
     const auto cubeView = _registry.view<CubeComponent, TransformComponent>();
     for (const auto entity: cubeView) {
         auto [cube, transform] = cubeView.get<CubeComponent, TransformComponent>(entity);

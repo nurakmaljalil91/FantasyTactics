@@ -46,6 +46,7 @@ namespace {
 
 void MeshScene::initialize() {
     setBackgroundColor(cbit::Color{0.53f, 0.81f, 0.92f, 1.0f});
+    setSkyboxTexture("assets/textures/sky.jpg", 10000.0f);
     setupIsometricCamera(getWorld());
     setupLight(getWorld());
 

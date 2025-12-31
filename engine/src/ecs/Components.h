@@ -71,6 +71,14 @@ namespace cbit {
     };
 
     /**
+     * @struct SkyboxComponent
+     * @brief  Marks an entity as a skybox with a spherical mesh.
+     */
+    struct SkyboxComponent {
+        float radius = 50.0f;
+    };
+
+    /**
      * @struct BaseColorComponent
      * @brief  Per-entity base color used by shaders that support baseColor.
      */

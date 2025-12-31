@@ -7,6 +7,8 @@
  */
 
 #include "Scene.h"
+#include "ecs/Components.h"
+#include "ecs/GameObject.h"
 
 void cbit::Scene::setWindowSize(const int width, const int height) {
     _windowHeight = height;
@@ -38,6 +40,29 @@ void cbit::Scene::setWindow(GLFWwindow *window) {
 
 void cbit::Scene::setBackgroundColor(const Color &color) {
     _backgroundColor = color;
+}
+
+void cbit::Scene::setSkyboxTexture(const std::string &texturePath, float radius) {
+    if (_skyboxEntity != entt::null && _world.validGameObject(_skyboxEntity)) {
+        auto &texture = _world.getComponent<TextureComponent>(_skyboxEntity);
+        texture.path = texturePath;
+
+        auto &skybox = _world.getComponent<SkyboxComponent>(_skyboxEntity);
+        skybox.radius = radius;
+        return;
+    }
+
+    auto skybox = _world.createGameObject("Skybox")
+            .addComponent<TransformComponent>()
+            .addComponent<QuadComponent>()
+            .addComponent<TextureComponent>(texturePath)
+            .addComponent<ShaderOverrideComponent>(
+                "resources/shaders/sky.vert",
+                "resources/shaders/sky.frag")
+            .addComponent<SkyboxComponent>();
+
+    skybox.getComponent<SkyboxComponent>().radius = radius;
+    _skyboxEntity = skybox.getEntity();
 }
 
 GLFWwindow *cbit::Scene::getWindow() const {

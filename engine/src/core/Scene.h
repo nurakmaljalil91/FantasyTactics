@@ -11,7 +11,9 @@
 
 #include "OpenGLInclude.h"
 #include "ecs/EntityComponentSystem.h"
+#include "entt/entt.hpp"
 #include "math/Color.h"
+#include <string>
 
 namespace cbit {
     class SceneManager; // Forward declaration
@@ -60,6 +62,13 @@ namespace cbit {
          * @details This sets the solid clear color; skybox support can override this later.
          */
         void setBackgroundColor(const Color &color);
+
+        /**
+         * Sets a skybox texture (equirectangular) for this scene.
+         * @param texturePath Path to a 2D equirectangular texture.
+         * @param radius      Radius of the sky sphere.
+         */
+        void setSkyboxTexture(const std::string &texturePath, float radius = 50.0f);
 
         /**
          * Cleans up the scene.
@@ -126,6 +135,7 @@ namespace cbit {
         GLFWwindow *_window = nullptr; // Pointer to the GLFW window associated with the scene
         EntityComponentSystem _world;
         Color _backgroundColor = Color::Black;
+        entt::entity _skyboxEntity = entt::null;
     };
 }
 #endif //CBIT_SCENE_H
