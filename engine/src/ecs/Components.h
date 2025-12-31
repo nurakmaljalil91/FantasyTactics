@@ -12,8 +12,12 @@
 
 #include <string>
 #include "entt/entt.hpp"
+#include "graphics/meshes/Circle.h"
 #include "graphics/meshes/Cube.h"
+#include "graphics/meshes/Ellipsoid.h"
 #include "graphics/meshes/Mesh.h"
+#include "graphics/meshes/Quad.h"
+#include "graphics/meshes/Sphere.h"
 #include "math/Color.h"
 #include "math/Vector2.h"
 #include "math/Vector3.h"
@@ -208,6 +212,55 @@ namespace cbit {
      */
     struct CubeComponent {
         Cube cube;
+    };
+
+    /**
+     * @struct CircleComponent
+     * @brief  Circle component for storing a Circle mesh.
+     */
+    struct CircleComponent {
+        Circle circle;
+
+        CircleComponent() = default;
+
+        explicit CircleComponent(float radius, int segments = 32)
+            : circle(radius, segments) {
+        }
+    };
+
+    /**
+     * @struct QuadComponent
+     * @brief  Quad component for storing a Quad mesh.
+     */
+    struct QuadComponent {
+        Quad quad;
+    };
+
+    /**
+     * @struct SphereComponent
+     * @brief  Sphere component for storing a Sphere mesh.
+     */
+    struct SphereComponent {
+        Sphere sphere;
+
+        SphereComponent() = default;
+
+        explicit SphereComponent(float radius, int stacks = 16, int slices = 32)
+            : sphere(radius, stacks, slices) {
+        }
+    };
+
+    /**
+     * @struct EllipsoidComponent
+     * @brief  Ellipsoid component for storing an Ellipsoid mesh.
+     */
+    struct EllipsoidComponent {
+        Ellipsoid ellipsoid;
+
+        EllipsoidComponent(float radiusX = 1.0f, float radiusY = 1.0f, float radiusZ = 1.0f,
+                           int sectorCount = 36, int stackCount = 18)
+            : ellipsoid(radiusX, radiusY, radiusZ, sectorCount, stackCount) {
+        }
     };
 
     /**

@@ -2,6 +2,7 @@
 #include <ostream>
 #include "core/Application.h"
 #include "scenes/MenuScene.h"
+#include "scenes/MeshScene.h"
 #include "scenes/PlayScene.h"
 #include "scenes/TestScene.h"
 
@@ -21,7 +22,8 @@ int main() {
         app.getSceneManager()->addScene("MenuScene", std::make_shared<MenuScene>());
         app.getSceneManager()->addScene("PlayScene", std::make_shared<PlayScene>());
         app.getSceneManager()->addScene("TestScene", std::make_shared<TestScene>());
-        app.getSceneManager()->setActiveScene("MenuScene");
+        app.getSceneManager()->addScene("MeshScene", std::make_shared<MeshScene>());
+        app.getSceneManager()->setActiveScene("MeshScene");
 
         app.run();
     } catch (const std::exception &e) {

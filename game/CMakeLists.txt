@@ -4,6 +4,7 @@ add_executable(FantasyTactics
         src/scenes/MenuScene.cpp
 
         src/main.cpp
+        src/scenes/MeshScene.cpp
         src/scenes/PlayScene.cpp
         src/scenes/PlayScene.h
         src/scenes/TestScene.cpp
@@ -12,6 +13,8 @@ add_executable(FantasyTactics
         src/systems/DebugTransformSystem.h
         src/systems/GridMovementSystem.cpp
         src/systems/GridMovementSystem.h
+        src/scenes/MeshScene.cpp
+        src/scenes/MeshScene.h
 )
 # force its .exe into the top-level build dir
 set_target_properties(FantasyTactics PROPERTIES

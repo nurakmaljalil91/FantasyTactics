@@ -230,6 +230,98 @@ void cbit::MeshRenderSystem::render() {
         cube.cube.draw();
     }
 
+    const auto circleView = _registry.view<CircleComponent, TransformComponent>();
+    for (const auto entity: circleView) {
+        auto [circle, transform] = circleView.get<CircleComponent, TransformComponent>(entity);
+        ShaderProgram *shader = applyShaderForEntity(entity);
+
+        glm::mat4 model = buildModelMatrix(transform);
+        if (shader->hasUniform("uModel")) {
+            shader->setUniform("uModel", model);
+        }
+
+        if (shader->hasUniform("baseColor")) {
+            const auto *baseColor = _registry.try_get<BaseColorComponent>(entity);
+            if (baseColor) {
+                shader->setUniform("baseColor", baseColor->color.toGLM());
+            } else {
+                shader->setUniform("baseColor", glm::vec3(0.83f, 0.83f, 0.83f));
+            }
+        }
+
+        applyTextureForEntity(shader, entity);
+        circle.circle.draw();
+    }
+
+    const auto quadView = _registry.view<QuadComponent, TransformComponent>();
+    for (const auto entity: quadView) {
+        auto [quad, transform] = quadView.get<QuadComponent, TransformComponent>(entity);
+        ShaderProgram *shader = applyShaderForEntity(entity);
+
+        glm::mat4 model = buildModelMatrix(transform);
+        if (shader->hasUniform("uModel")) {
+            shader->setUniform("uModel", model);
+        }
+
+        if (shader->hasUniform("baseColor")) {
+            const auto *baseColor = _registry.try_get<BaseColorComponent>(entity);
+            if (baseColor) {
+                shader->setUniform("baseColor", baseColor->color.toGLM());
+            } else {
+                shader->setUniform("baseColor", glm::vec3(0.83f, 0.83f, 0.83f));
+            }
+        }
+
+        applyTextureForEntity(shader, entity);
+        quad.quad.draw();
+    }
+
+    const auto sphereView = _registry.view<SphereComponent, TransformComponent>();
+    for (const auto entity: sphereView) {
+        auto [sphere, transform] = sphereView.get<SphereComponent, TransformComponent>(entity);
+        ShaderProgram *shader = applyShaderForEntity(entity);
+
+        glm::mat4 model = buildModelMatrix(transform);
+        if (shader->hasUniform("uModel")) {
+            shader->setUniform("uModel", model);
+        }
+
+        if (shader->hasUniform("baseColor")) {
+            const auto *baseColor = _registry.try_get<BaseColorComponent>(entity);
+            if (baseColor) {
+                shader->setUniform("baseColor", baseColor->color.toGLM());
+            } else {
+                shader->setUniform("baseColor", glm::vec3(0.83f, 0.83f, 0.83f));
+            }
+        }
+
+        applyTextureForEntity(shader, entity);
+        sphere.sphere.draw();
+    }
+
+    const auto ellipsoidView = _registry.view<EllipsoidComponent, TransformComponent>();
+    for (const auto entity: ellipsoidView) {
+        auto [ellipsoid, transform] = ellipsoidView.get<EllipsoidComponent, TransformComponent>(entity);
+        ShaderProgram *shader = applyShaderForEntity(entity);
+
+        glm::mat4 model = buildModelMatrix(transform);
+        if (shader->hasUniform("uModel")) {
+            shader->setUniform("uModel", model);
+        }
+
+        if (shader->hasUniform("baseColor")) {
+            const auto *baseColor = _registry.try_get<BaseColorComponent>(entity);
+            if (baseColor) {
+                shader->setUniform("baseColor", baseColor->color.toGLM());
+            } else {
+                shader->setUniform("baseColor", glm::vec3(0.83f, 0.83f, 0.83f));
+            }
+        }
+
+        applyTextureForEntity(shader, entity);
+        ellipsoid.ellipsoid.draw();
+    }
+
     const auto meshView = _registry.view<MeshComponent, TransformComponent>();
     for (const auto entity: meshView) {
         auto [meshComponent, transform] = meshView.get<MeshComponent, TransformComponent>(entity);

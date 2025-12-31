@@ -6,8 +6,8 @@
  * @date    2025-08-02
  */
 
-#ifndef PLAYSCENE_H
-#define PLAYSCENE_H
+#ifndef FANTASYTACTICS_PLAYSCENE_H
+#define FANTASYTACTICS_PLAYSCENE_H
 
 #include "core/Scene.h"
 
@@ -25,4 +25,4 @@ public:
 };
 
 
-#endif //PLAYSCENE_H
+#endif //FANTASYTACTICS_PLAYSCENE_H

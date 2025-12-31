@@ -5,8 +5,8 @@
  * @author  Nur Akmal bin Jalil
  * @date    2025-07-29
  */
-#ifndef MENUSCENE_H
-#define MENUSCENE_H
+#ifndef FANTASYTACTICS_MENUSCENE_H
+#define FANTASYTACTICS_MENUSCENE_H
 
 #include "core/Scene.h"
 #include "ecs/GameObject.h"
@@ -35,4 +35,4 @@ private:
 };
 
 
-#endif //MENUSCENE_H
+#endif //FANTASYTACTICS_MENUSCENE_H
