@@ -21,6 +21,10 @@ struct GridMovementComponent {
     int x = 0;
     int z = 0;
     float moveCooldown = 0.0f;
+    cbit::Vector3 baseRotation{0.0f, 0.0f, 0.0f};
+    float targetRotationZ = 0.0f;
+    float turnSpeed = 540.0f;
+    bool hasBaseRotation = false;
 };
 
 class GridMovementSystem final : public cbit::ISystem {

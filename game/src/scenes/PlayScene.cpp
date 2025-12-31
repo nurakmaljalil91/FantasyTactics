@@ -33,7 +33,7 @@ namespace {
         {0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0}
+        {0, 0, 0, 0, 1, 1, 1, 1}
     };
 
     cbit::Vector3 gridToWorldTop(const int x, const int z) {
