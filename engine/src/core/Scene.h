@@ -11,6 +11,7 @@
 
 #include "OpenGLInclude.h"
 #include "ecs/EntityComponentSystem.h"
+#include "math/Color.h"
 
 namespace cbit {
     class SceneManager; // Forward declaration
@@ -52,6 +53,13 @@ namespace cbit {
          * @details This method is called to render the scene, drawing all game objects and UI elements.
          */
         virtual void render();
+
+        /**
+         * Sets the background clear color for this scene.
+         * @param color RGBA color to clear the screen with.
+         * @details This sets the solid clear color; skybox support can override this later.
+         */
+        void setBackgroundColor(const Color &color);
 
         /**
          * Cleans up the scene.
@@ -117,6 +125,7 @@ namespace cbit {
         int _windowWidth = 0, _windowHeight = 0;
         GLFWwindow *_window = nullptr; // Pointer to the GLFW window associated with the scene
         EntityComponentSystem _world;
+        Color _backgroundColor = Color::Black;
     };
 }
 #endif //CBIT_SCENE_H

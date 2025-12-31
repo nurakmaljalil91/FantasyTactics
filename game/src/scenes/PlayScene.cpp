@@ -152,6 +152,7 @@ namespace {
 }
 
 void PlayScene::initialize() {
+    setBackgroundColor(cbit::Color{0.53f, 0.81f, 0.92f, 1.0f});
     getWorld().addSystem<GridMovementSystem>(
         [](int x, int z) { return gridToWorldTop(x, z); }, kGridWidth, kGridHeight);
     getWorld().addSystem<DebugTransformSystem>();
@@ -318,6 +319,5 @@ void PlayScene::update(const float deltaTime) {
 }
 
 void PlayScene::render() {
-    glClearColor(0.53f, 0.81f, 0.92f, 1.0f);
     Scene::render();
 }

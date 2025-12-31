@@ -9,6 +9,7 @@
 
 #include "ecs/Components.h"
 #include "ecs/GameObject.h"
+#include "math/Color.h"
 
 namespace {
     void setupIsometricCamera(cbit::EntityComponentSystem &world) {
@@ -44,6 +45,7 @@ namespace {
 }
 
 void MeshScene::initialize() {
+    setBackgroundColor(cbit::Color{0.53f, 0.81f, 0.92f, 1.0f});
     setupIsometricCamera(getWorld());
     setupLight(getWorld());
 
@@ -93,6 +95,5 @@ void MeshScene::update(float deltaTime) {
 }
 
 void MeshScene::render() {
-    glClearColor(0.53f, 0.81f, 0.92f, 1.0f);
     Scene::render();
 }

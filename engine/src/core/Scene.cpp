@@ -18,6 +18,11 @@ void cbit::Scene::update(float deltaTime) {
 }
 
 void cbit::Scene::render() {
+    glClearColor(
+        _backgroundColor.glmVec4.r,
+        _backgroundColor.glmVec4.g,
+        _backgroundColor.glmVec4.b,
+        _backgroundColor.glmVec4.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     _world.render();
 }
@@ -29,6 +34,10 @@ void cbit::Scene::cleanup() {
 void cbit::Scene::setWindow(GLFWwindow *window) {
     _window = window;
     _world.setWindow(window);
+}
+
+void cbit::Scene::setBackgroundColor(const Color &color) {
+    _backgroundColor = color;
 }
 
 GLFWwindow *cbit::Scene::getWindow() const {
