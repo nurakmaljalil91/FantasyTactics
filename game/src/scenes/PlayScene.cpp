@@ -15,6 +15,7 @@
 #include <cmath>
 #include <string>
 
+#include "../systems/DebugTransformSystem.h"
 #include "../systems/GridMovementSystem.h"
 
 namespace {
@@ -152,6 +153,7 @@ namespace {
 void PlayScene::initialize() {
     getWorld().addSystem<GridMovementSystem>(
         [](int x, int z) { return gridToWorldTop(x, z); }, kGridWidth, kGridHeight);
+    getWorld().addSystem<DebugTransformSystem>();
 
     auto mainCamera = getWorld().createGameObject("MainCamera")
             .addComponent<cbit::TransformComponent>()
@@ -222,6 +224,47 @@ void PlayScene::initialize() {
     playerRotation = cbit::Vector3{-250.0f, -190.0f, 0.0f};
     playerScale = cbit::Vector3{0.6f, 0.6f, 0.6f};
 
+    constexpr float axisLength = 0.6f;
+    constexpr float axisThickness = 0.04f;
+
+    auto addAxisGizmo = [&](const std::string &name,
+                            const cbit::Vector3 &offset,
+                            const cbit::Vector3 &scale,
+                            const cbit::Vector3 &color) {
+        auto axis = getWorld().createGameObject(name)
+                .addComponent<cbit::TransformComponent>()
+                .addComponent<DebugFollowComponent>()
+                .addComponent<cbit::CubeComponent>()
+                .addComponent<cbit::BaseColorComponent>();
+
+        auto &follow = axis.getComponent<DebugFollowComponent>();
+        follow.target = player.getEntity();
+        follow.positionOffset = offset;
+        follow.scale = scale;
+        follow.followRotation = true;
+        follow.followScale = false;
+        follow.offsetInLocalSpace = true;
+
+        auto &baseColor = axis.getComponent<cbit::BaseColorComponent>();
+        baseColor.color = color;
+    };
+
+    addAxisGizmo(
+        "player_axis_x",
+        cbit::Vector3{axisLength * 0.5f, 0.0f, 0.0f},
+        cbit::Vector3{axisLength, axisThickness, axisThickness},
+        cbit::Vector3{1.0f, 0.0f, 0.0f});
+    addAxisGizmo(
+        "player_axis_y",
+        cbit::Vector3{0.0f, axisLength * 0.5f, 0.0f},
+        cbit::Vector3{axisThickness, axisLength, axisThickness},
+        cbit::Vector3{0.0f, 1.0f, 0.0f});
+    addAxisGizmo(
+        "player_axis_z",
+        cbit::Vector3{0.0f, 0.0f, axisLength * 0.5f},
+        cbit::Vector3{axisThickness, axisThickness, axisLength},
+        cbit::Vector3{0.0f, 0.0f, 1.0f});
+
     auto enemy = getWorld().createGameObject("enemy")
             .addComponent<cbit::TransformComponent>()
             .addComponent<cbit::MeshComponent>("assets/models/characterMedium.fbx")
@@ -245,6 +288,17 @@ void PlayScene::update(const float deltaTime) {
     }
 
     Scene::update(deltaTime);
+
+    auto player = getWorld().getGameObject("player");
+
+    if (player.getEntity() != entt::null) {
+        auto &transform = player.getComponent<cbit::TransformComponent>();
+
+        if (cbit::Input::isKeyPressed(cbit::Keyboard::Up)) {
+            transform.rotation.x -= 15.0f * deltaTime;
+        }
+    }
+
 }
 
 void PlayScene::render() {

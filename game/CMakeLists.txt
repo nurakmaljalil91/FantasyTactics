@@ -8,6 +8,8 @@ add_executable(FantasyTactics
         src/scenes/PlayScene.h
         src/scenes/TestScene.cpp
         src/scenes/TestScene.h
+        src/systems/DebugTransformSystem.cpp
+        src/systems/DebugTransformSystem.h
         src/systems/GridMovementSystem.cpp
         src/systems/GridMovementSystem.h
 )

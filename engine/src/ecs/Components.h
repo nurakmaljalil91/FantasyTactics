@@ -66,6 +66,14 @@ namespace cbit {
         std::string fragmentShaderPath;
     };
 
+    /**
+     * @struct BaseColorComponent
+     * @brief  Per-entity base color used by shaders that support baseColor.
+     */
+    struct BaseColorComponent {
+        Vector3 color{0.83f, 0.83f, 0.83f};
+    };
+
 #pragma endregion GraphicsComponents
 
 #pragma region ShapeComponents

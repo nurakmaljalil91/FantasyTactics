@@ -217,6 +217,15 @@ void cbit::MeshRenderSystem::render() {
             shader->setUniform("uModel", model);
         }
 
+        if (shader->hasUniform("baseColor")) {
+            const auto *baseColor = _registry.try_get<BaseColorComponent>(entity);
+            if (baseColor) {
+                shader->setUniform("baseColor", baseColor->color.toGLM());
+            } else {
+                shader->setUniform("baseColor", glm::vec3(0.83f, 0.83f, 0.83f));
+            }
+        }
+
         applyTextureForEntity(shader, entity);
         cube.cube.draw();
     }
@@ -229,6 +238,15 @@ void cbit::MeshRenderSystem::render() {
         glm::mat4 model = buildModelMatrix(transform);
         if (shader->hasUniform("uModel")) {
             shader->setUniform("uModel", model);
+        }
+
+        if (shader->hasUniform("baseColor")) {
+            const auto *baseColor = _registry.try_get<BaseColorComponent>(entity);
+            if (baseColor) {
+                shader->setUniform("baseColor", baseColor->color.toGLM());
+            } else {
+                shader->setUniform("baseColor", glm::vec3(0.83f, 0.83f, 0.83f));
+            }
         }
 
         applyTextureForEntity(shader, entity);
