@@ -9,6 +9,7 @@
 #include "PlayScene.h"
 #include "core/Input.h"
 #include "ecs/GameObject.h"
+#include "math/Color.h"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.inl"
 #include "entt/entt.hpp"
@@ -221,7 +222,7 @@ void PlayScene::initialize() {
     playerGrid.x = 2;
     playerGrid.z = 2;
     playerPosition = gridToWorldTop(playerGrid.x, playerGrid.z);
-    playerRotation = cbit::Vector3{-250.0f, -190.0f, 0.0f};
+    playerRotation = cbit::Vector3{-260.0f, -190.0f, 0.0f};
     playerScale = cbit::Vector3{0.6f, 0.6f, 0.6f};
 
     constexpr float axisLength = 0.6f;
@@ -265,6 +266,15 @@ void PlayScene::initialize() {
         cbit::Vector3{axisThickness, axisThickness, axisLength},
         cbit::Vector3{0.0f, 0.0f, 1.0f});
 
+    getWorld().createGameObject("player_transform_text")
+            .addComponent<cbit::UIAnchorComponent>(
+                cbit::UIAnchor::TopCenter,
+                cbit::Vector2(12.0f, -12.0f),
+                cbit::Vector2(320.0f, 90.0f),
+                50, true, false)
+            .addComponent<cbit::UITextComponent>("Transform:", 0.3f, cbit::Color::Black)
+            .addComponent<DebugTransformTextComponent>(DebugTransformTextComponent{player.getEntity()});
+
     auto enemy = getWorld().createGameObject("enemy")
             .addComponent<cbit::TransformComponent>()
             .addComponent<cbit::MeshComponent>("assets/models/characterMedium.fbx")
@@ -275,7 +285,7 @@ void PlayScene::initialize() {
     constexpr auto enemyGridX = 5;
     constexpr auto enemyGridZ = 2;
     enemyPosition = gridToWorldTop(enemyGridX, enemyGridZ);
-    enemyRotation = cbit::Vector3{-265.0f, -187.0f, -185.0f};
+    enemyRotation = cbit::Vector3{-260.0f, -190.0f, 0.0f};
     enemyScale = cbit::Vector3{0.6f, 0.6f, 0.6f};
 }
 
@@ -294,8 +304,14 @@ void PlayScene::update(const float deltaTime) {
     if (player.getEntity() != entt::null) {
         auto &transform = player.getComponent<cbit::TransformComponent>();
 
-        if (cbit::Input::isKeyPressed(cbit::Keyboard::Up)) {
-            transform.rotation.x -= 15.0f * deltaTime;
+        if (cbit::Input::isKeyDown(cbit::Keyboard::Up)) {
+            transform.rotation.x -= 10.0f * deltaTime;
+        } else if (cbit::Input::isKeyDown(cbit::Keyboard::Down)) {
+            transform.rotation.x += 10.0f * deltaTime;
+        } else if (cbit::Input::isKeyDown(cbit::Keyboard::Left)) {
+            transform.rotation.z += 10.0f * deltaTime;
+        } else if (cbit::Input::isKeyDown(cbit::Keyboard::Right)) {
+            transform.rotation.z -= 10.0f * deltaTime;
         }
     }
 

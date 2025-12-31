@@ -27,6 +27,14 @@ struct DebugFollowComponent {
     bool offsetInLocalSpace = false;
 };
 
+/**
+ * @struct DebugTransformTextComponent
+ * @brief  Updates a UITextComponent with transform values from a target entity.
+ */
+struct DebugTransformTextComponent {
+    entt::entity target{entt::null};
+};
+
 class DebugTransformSystem final : public cbit::ISystem {
 public:
     void update(entt::registry &registry, float deltaTime) override;

@@ -11,6 +11,8 @@
 #include "ecs/Components.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/quaternion.hpp"
+#include <iomanip>
+#include <sstream>
 
 void DebugTransformSystem::update(entt::registry &registry, float deltaTime) {
     (void)deltaTime;
@@ -56,5 +58,37 @@ void DebugTransformSystem::update(entt::registry &registry, float deltaTime) {
         } else {
             transform.scale = follow.scale;
         }
+    }
+
+    const auto textView = registry.view<DebugTransformTextComponent, cbit::UITextComponent>();
+    for (const auto entity: textView) {
+        auto &debugText = textView.get<DebugTransformTextComponent>(entity);
+        auto &text = textView.get<cbit::UITextComponent>(entity);
+
+        if (debugText.target == entt::null || !registry.valid(debugText.target) ||
+            !registry.all_of<cbit::TransformComponent>(debugText.target)) {
+            text.text = "Transform: <missing>";
+            continue;
+        }
+
+        const auto &targetTransform = registry.get<cbit::TransformComponent>(debugText.target);
+        const auto *tag = registry.try_get<cbit::TagComponent>(debugText.target);
+
+        std::ostringstream ss;
+        ss << std::fixed << std::setprecision(2);
+        if (tag) {
+            ss << "Entity: " << tag->tag << "\n";
+        }
+        ss << "Pos: (" << targetTransform.position.x << ", "
+           << targetTransform.position.y << ", "
+           << targetTransform.position.z << ")\n";
+        ss << "Rot: (" << targetTransform.rotation.x << ", "
+           << targetTransform.rotation.y << ", "
+           << targetTransform.rotation.z << ")\n";
+        ss << "Scl: (" << targetTransform.scale.x << ", "
+           << targetTransform.scale.y << ", "
+           << targetTransform.scale.z << ")";
+
+        text.text = ss.str();
     }
 }
