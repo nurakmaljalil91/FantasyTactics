@@ -223,8 +223,8 @@ void PlayScene::initialize() {
     playerGrid.x = 2;
     playerGrid.z = 2;
     playerPosition = gridToWorldTop(playerGrid.x, playerGrid.z);
-    playerRotation = cbit::Vector3{0.0f, 0.0f, 0.0f};
-    playerScale = cbit::Vector3{1.f, 1.f, 1.f};
+    playerRotation = cbit::Vector3{-260.0f, -190.0f, 0.0f};
+    playerScale = cbit::Vector3{0.6f, 0.6f, 0.6f};
 
     constexpr float axisLength = 0.6f;
     constexpr float axisThickness = 0.04f;
