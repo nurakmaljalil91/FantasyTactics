@@ -24,10 +24,11 @@ void cbit::EntityComponentSystem::setWindow(GLFWwindow *window) {
 cbit::EntityComponentSystem::~EntityComponentSystem() = default;
 
 void cbit::EntityComponentSystem::update(const float deltaTime) {
-    _uiSystem.update(deltaTime);
     for (const auto &system: _customSystems) {
         system->update(_registry, deltaTime);
     }
+    _animationSystem.update(_registry, deltaTime);
+    _uiSystem.update(deltaTime);
 }
 
 void cbit::EntityComponentSystem::render() {

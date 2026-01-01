@@ -43,6 +43,7 @@ namespace cbit {
         GLFWwindow *_window{nullptr};
         entt::registry &_registry;
         ShaderProgram _shader;
+        ShaderProgram _skinnedShader;
         std::unordered_map<std::string, std::unique_ptr<ShaderProgram> > _shaderCache;
         std::unordered_map<std::string, Texture> _textures;
     };

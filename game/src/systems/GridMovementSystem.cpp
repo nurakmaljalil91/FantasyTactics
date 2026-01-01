@@ -44,11 +44,32 @@ void GridMovementSystem::update(entt::registry &registry, float deltaTime) {
         directionX -= 1;
     }
 
+    const bool wantsJump = cbit::Input::isKeyPressed(cbit::Keyboard::Space);
+    const bool isMoving = directionX != 0 || directionZ != 0;
+
     const auto view = registry.view<GridMovementComponent, cbit::TransformComponent>();
 
     for (const auto entity: view) {
         auto &gridMovement = view.get<GridMovementComponent>(entity);
         auto &transform = view.get<cbit::TransformComponent>(entity);
+        auto *animatorComponent = registry.try_get<cbit::AnimatorComponent>(entity);
+
+        if (animatorComponent && animatorComponent->autoState) {
+            auto setClip = [&](const std::string &name, bool loop) {
+                if (animatorComponent->clips.find(name) != animatorComponent->clips.end()) {
+                    animatorComponent->activeClip = name;
+                    animatorComponent->loop = loop;
+                }
+            };
+
+            if (wantsJump) {
+                setClip("jump", false);
+            } else if (animatorComponent->activeClip == "jump" && animatorComponent->animator.isFinished()) {
+                setClip(isMoving ? "run" : "idle", true);
+            } else if (animatorComponent->activeClip != "jump") {
+                setClip(isMoving ? "run" : "idle", true);
+            }
+        }
 
         if (!gridMovement.hasBaseRotation) {
             gridMovement.baseRotation = transform.rotation;
@@ -96,5 +117,3 @@ void GridMovementSystem::update(entt::registry &registry, float deltaTime) {
     }
 
 }
-
-

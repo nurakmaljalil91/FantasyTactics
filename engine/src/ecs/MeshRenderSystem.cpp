@@ -9,6 +9,8 @@
 #include "MeshRenderSystem.h"
 
 #include "Components.h"
+#include <algorithm>
+#include <vector>
 #include "utilities/Logger.h"
 #include "glm/ext/matrix_clip_space.hpp"
 #include "glm/ext/matrix_transform.hpp"
@@ -16,6 +18,7 @@
 cbit::MeshRenderSystem::MeshRenderSystem(entt::registry &registry) : _registry(registry) {
     // Constructor implementation can be added here if needed
     _shader.loadShaders("resources/shaders/default.vert", "resources/shaders/default.frag");
+    _skinnedShader.loadShaders("resources/shaders/skinned.vert", "resources/shaders/default.frag");
 }
 
 void cbit::MeshRenderSystem::setWindow(GLFWwindow *window) {
@@ -138,11 +141,15 @@ void cbit::MeshRenderSystem::render() {
 
     ShaderProgram *currentShader = nullptr;
 
-    auto applyShaderForEntity = [&](entt::entity entity) -> ShaderProgram * {
+    auto applyShaderForEntity = [&](entt::entity entity, ShaderProgram *fallbackShader) -> ShaderProgram * {
         const auto *shaderOverride = _registry.try_get<ShaderOverrideComponent>(entity);
         const std::string vertexPath = shaderOverride ? shaderOverride->vertexShaderPath : "";
         const std::string fragmentPath = shaderOverride ? shaderOverride->fragmentShaderPath : "";
-        ShaderProgram *shader = _getShader(vertexPath, fragmentPath);
+        ShaderProgram *shader = fallbackShader;
+
+        if (!vertexPath.empty() && !fragmentPath.empty()) {
+            shader = _getShader(vertexPath, fragmentPath);
+        }
 
         if (shader != currentShader) {
             shader->use();
@@ -215,7 +222,7 @@ void cbit::MeshRenderSystem::render() {
 
         for (const auto entity: skyView) {
             auto [skybox, quad, transform] = skyView.get<SkyboxComponent, QuadComponent, TransformComponent>(entity);
-            ShaderProgram *shader = applyShaderForEntity(entity);
+            ShaderProgram *shader = applyShaderForEntity(entity, &_shader);
 
             if (shader->hasUniform("uInvViewRot")) {
                 shader->setUniform("uInvViewRot", invViewRot);
@@ -232,7 +239,7 @@ void cbit::MeshRenderSystem::render() {
     const auto cubeView = _registry.view<CubeComponent, TransformComponent>();
     for (const auto entity: cubeView) {
         auto [cube, transform] = cubeView.get<CubeComponent, TransformComponent>(entity);
-        ShaderProgram *shader = applyShaderForEntity(entity);
+        ShaderProgram *shader = applyShaderForEntity(entity, &_shader);
 
         glm::mat4 model = buildModelMatrix(transform);
         if (shader->hasUniform("uModel")) {
@@ -255,7 +262,7 @@ void cbit::MeshRenderSystem::render() {
     const auto circleView = _registry.view<CircleComponent, TransformComponent>();
     for (const auto entity: circleView) {
         auto [circle, transform] = circleView.get<CircleComponent, TransformComponent>(entity);
-        ShaderProgram *shader = applyShaderForEntity(entity);
+        ShaderProgram *shader = applyShaderForEntity(entity, &_shader);
 
         glm::mat4 model = buildModelMatrix(transform);
         if (shader->hasUniform("uModel")) {
@@ -278,7 +285,7 @@ void cbit::MeshRenderSystem::render() {
     const auto quadView = _registry.view<QuadComponent, TransformComponent>();
     for (const auto entity: quadView) {
         auto [quad, transform] = quadView.get<QuadComponent, TransformComponent>(entity);
-        ShaderProgram *shader = applyShaderForEntity(entity);
+        ShaderProgram *shader = applyShaderForEntity(entity, &_shader);
 
         glm::mat4 model = buildModelMatrix(transform);
         if (shader->hasUniform("uModel")) {
@@ -301,7 +308,7 @@ void cbit::MeshRenderSystem::render() {
     const auto sphereView = _registry.view<SphereComponent, TransformComponent>();
     for (const auto entity: sphereView) {
         auto [sphere, transform] = sphereView.get<SphereComponent, TransformComponent>(entity);
-        ShaderProgram *shader = applyShaderForEntity(entity);
+        ShaderProgram *shader = applyShaderForEntity(entity, &_shader);
 
         glm::mat4 model = buildModelMatrix(transform);
         if (shader->hasUniform("uModel")) {
@@ -324,7 +331,7 @@ void cbit::MeshRenderSystem::render() {
     const auto ellipsoidView = _registry.view<EllipsoidComponent, TransformComponent>();
     for (const auto entity: ellipsoidView) {
         auto [ellipsoid, transform] = ellipsoidView.get<EllipsoidComponent, TransformComponent>(entity);
-        ShaderProgram *shader = applyShaderForEntity(entity);
+        ShaderProgram *shader = applyShaderForEntity(entity, &_shader);
 
         glm::mat4 model = buildModelMatrix(transform);
         if (shader->hasUniform("uModel")) {
@@ -347,7 +354,7 @@ void cbit::MeshRenderSystem::render() {
     const auto meshView = _registry.view<MeshComponent, TransformComponent>();
     for (const auto entity: meshView) {
         auto [meshComponent, transform] = meshView.get<MeshComponent, TransformComponent>(entity);
-        ShaderProgram *shader = applyShaderForEntity(entity);
+        ShaderProgram *shader = applyShaderForEntity(entity, &_shader);
 
         glm::mat4 model = buildModelMatrix(transform);
         if (shader->hasUniform("uModel")) {
@@ -365,5 +372,60 @@ void cbit::MeshRenderSystem::render() {
 
         applyTextureForEntity(shader, entity);
         meshComponent.mesh.draw();
+    }
+
+    const auto skinnedView = _registry.view<SkinnedMeshComponent, TransformComponent>();
+    for (const auto entity: skinnedView) {
+        auto [skinnedMesh, transform] = skinnedView.get<SkinnedMeshComponent, TransformComponent>(entity);
+        const auto *animatorComponent = _registry.try_get<AnimatorComponent>(entity);
+        const bool useSkinning = animatorComponent && !animatorComponent->activeClip.empty();
+        ShaderProgram *shader = applyShaderForEntity(entity, useSkinning ? &_skinnedShader : &_shader);
+
+        Logger::log()->info("Skinned render entity {} vertices={} indices={} bones={} useSkinning={}",
+                            static_cast<int>(entity),
+                            skinnedMesh.mesh.getVertexCount(),
+                            skinnedMesh.mesh.getIndexCount(),
+                            skinnedMesh.mesh.getBoneCount(),
+                            useSkinning ? 1 : 0);
+
+        glm::mat4 model = buildModelMatrix(transform);
+        if (shader->hasUniform("uModel")) {
+            shader->setUniform("uModel", model);
+        }
+
+        if (shader->hasUniform("baseColor")) {
+            const auto *baseColor = _registry.try_get<BaseColorComponent>(entity);
+            if (baseColor) {
+                shader->setUniform("baseColor", baseColor->color.toGLM());
+            } else {
+                shader->setUniform("baseColor", glm::vec3(0.83f, 0.83f, 0.83f));
+            }
+        }
+
+        applyTextureForEntity(shader, entity);
+
+        if (shader->hasUniform("uUseSkinning")) {
+            shader->setUniform("uUseSkinning", useSkinning ? 1 : 0);
+        }
+
+        const size_t boneCount = skinnedMesh.mesh.getBoneCount();
+        if (boneCount > 0 && shader->hasUniform("uBones[0]")) {
+            const auto *animatorComponent = _registry.try_get<AnimatorComponent>(entity);
+            const auto *boneMatrices = animatorComponent ? &animatorComponent->animator.getFinalBoneMatrices() : nullptr;
+            std::vector<glm::mat4> identityMatrices;
+
+            if (!boneMatrices || boneMatrices->size() < boneCount) {
+                identityMatrices.assign(boneCount, glm::mat4(1.0f));
+                boneMatrices = &identityMatrices;
+            }
+
+            const size_t maxCount = std::min(boneCount, boneMatrices->size());
+            for (size_t i = 0; i < maxCount; ++i) {
+                const std::string uniformName = "uBones[" + std::to_string(i) + "]";
+                shader->setUniform(uniformName.c_str(), (*boneMatrices)[i]);
+            }
+        }
+
+        skinnedMesh.mesh.draw();
     }
 }

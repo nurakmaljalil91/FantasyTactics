@@ -9,6 +9,7 @@ add_library(engine
         # ecs
         src/ecs/EntityComponentSystem.cpp
         src/ecs/GameObject.cpp
+        src/ecs/AnimationSystem.cpp
         src/ecs/MeshRenderSystem.cpp
         src/ecs/MeshRenderSystem.h
         src/ecs/UISystem.cpp
@@ -25,7 +26,12 @@ add_library(engine
         src/graphics/meshes/Ellipsoid.cpp
         src/graphics/meshes/Mesh.cpp
         src/graphics/meshes/Quad.cpp
+        src/graphics/meshes/SkinnedMesh.cpp
         src/graphics/meshes/Sphere.cpp
+
+        # animation
+        src/graphics/animation/AnimationClip.cpp
+        src/graphics/animation/Animator.cpp
 
         # renderers
         src/graphics/renderers/ShaderProgram.cpp

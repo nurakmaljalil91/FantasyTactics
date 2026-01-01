@@ -10,6 +10,7 @@
 #define CBIT_ENTITYCOMPONENTSYSTEM_H
 
 #include "ISystem.h"
+#include "AnimationSystem.h"
 #include "MeshRenderSystem.h"
 #include "UISystem.h"
 #include "entt/entt.hpp"
@@ -213,6 +214,7 @@ namespace cbit {
 
         std::vector<std::unique_ptr<ISystem> > _customSystems;
         UISystem _uiSystem{_window, _registry};
+        AnimationSystem _animationSystem{};
         MeshRenderSystem _meshRenderSystem{_registry};
     };
 }

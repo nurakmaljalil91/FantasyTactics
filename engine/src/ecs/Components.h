@@ -11,13 +11,17 @@
 #define CBIT_COMPONENTS_H
 
 #include <string>
+#include <unordered_map>
 #include "entt/entt.hpp"
 #include "graphics/meshes/Circle.h"
 #include "graphics/meshes/Cube.h"
 #include "graphics/meshes/Ellipsoid.h"
 #include "graphics/meshes/Mesh.h"
 #include "graphics/meshes/Quad.h"
+#include "graphics/meshes/SkinnedMesh.h"
 #include "graphics/meshes/Sphere.h"
+#include "graphics/animation/AnimationClip.h"
+#include "graphics/animation/Animator.h"
 #include "math/Color.h"
 #include "math/Vector2.h"
 #include "math/Vector3.h"
@@ -285,6 +289,36 @@ namespace cbit {
             : path(meshPath) {
             mesh.loadFromFile(meshPath);
         }
+    };
+
+    /**
+     * @struct SkinnedMeshComponent
+     * @brief  Mesh component for storing a skinned mesh loaded from file.
+     */
+    struct SkinnedMeshComponent {
+        SkinnedMesh mesh;
+        std::string path;
+
+        SkinnedMeshComponent() = default;
+
+        explicit SkinnedMeshComponent(const std::string &meshPath)
+            : path(meshPath) {
+            mesh.loadFromFile(meshPath);
+        }
+    };
+
+    /**
+     * @struct AnimatorComponent
+     * @brief  Animator component storing animation clips and playback state.
+     */
+    struct AnimatorComponent {
+        std::unordered_map<std::string, AnimationClip> clips;
+        std::string activeClip;
+        std::string previousClip;
+        float playbackSpeed = 1.0f;
+        bool loop = true;
+        bool autoState = true;
+        Animator animator;
     };
 
 #pragma endregion MeshComponents

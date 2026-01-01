@@ -7,6 +7,7 @@ layout(location = 2) in vec2 aTexCoord;
 out vec3 Normal;
 out vec3 FragPos;
 out vec2 TexCoords;
+out float vHasWeights;
 
 uniform mat4 uModel;
 uniform mat4 uView;
@@ -20,6 +21,7 @@ void main()
 
     // pass tex coords to fragment shader
     TexCoords = aTexCoord;
+    vHasWeights = 0.0;
 
     gl_Position = uProjection * uView * vec4(FragPos, 1.0);
 }
