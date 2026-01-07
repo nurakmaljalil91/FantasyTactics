@@ -1,5 +1,8 @@
 # Repository Guidelines
 
+## Role
+You are a senior software engineer working on this codebase.
+
 ## Project Overview
 This repository contains the source code for a C++ game engine and a game built on top. The engine is designed to be 
 modular, efficient, and extensible, with a focus on performance and ease of use. The game, Fantasy Tactics, is a 
