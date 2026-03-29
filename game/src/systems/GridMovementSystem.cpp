@@ -10,6 +10,7 @@
 
 #include "core/Input.h"
 #include "ecs/Components.h"
+#include "TurnControlSystem.h"
 #include <cmath>
 
 namespace {
@@ -82,12 +83,17 @@ void GridMovementSystem::update(entt::registry &registry, float deltaTime) {
     const bool wantsJump = cbit::Input::isKeyPressed(cbit::Keyboard::Space);
     const bool isMoving = directionX != 0 || directionZ != 0;
 
-    const auto view = registry.view<GridMovementComponent, cbit::TransformComponent>();
+    const auto view = registry.view<GridMovementComponent, TurnControlComponent, cbit::TransformComponent>();
 
     for (const auto entity: view) {
         auto &gridMovement = view.get<GridMovementComponent>(entity);
+        auto &turnControl = view.get<TurnControlComponent>(entity);
         auto &transform = view.get<cbit::TransformComponent>(entity);
         auto *animatorComponent = registry.try_get<cbit::AnimatorComponent>(entity);
+
+        if (!turnControl.canMove) {
+            continue;
+        }
 
         if (animatorComponent && animatorComponent->autoState) {
             auto setClip = [&](const std::string &name, bool loop) {

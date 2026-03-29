@@ -18,6 +18,7 @@
 
 #include "../systems/DebugTransformSystem.h"
 #include "../systems/GridMovementSystem.h"
+#include "../systems/TurnControlSystem.h"
 
 namespace {
     constexpr int kGridWidth = 8;
@@ -28,6 +29,8 @@ namespace {
     constexpr auto kFoxTexturePath = "assets/animations/low-poly-fox/texture.png";
     constexpr auto kFoxClipName = "fox_idle";
     constexpr float kFoxHeightOffset = 0.0f;
+    constexpr int kPlayerTurnSlot = 0;
+    constexpr int kEnemyTurnSlot = 1;
 
     const int kHeightMap[kGridHeight][kGridWidth] = {
         {0, 0, 0, 0, 0, 0, 0, 0},
@@ -188,6 +191,7 @@ namespace {
 
 void PlayScene::initialize() {
     setBackgroundColor(cbit::Color{0.53f, 0.81f, 0.92f, 1.0f});
+    getWorld().addSystem<TurnControlSystem>();
     getWorld().addSystem<GridMovementSystem>(
         [](const int x, const int z) { return gridToWorldTop(x, z); }, kGridWidth, kGridHeight);
     getWorld().addSystem<DebugTransformSystem>();
@@ -250,6 +254,7 @@ void PlayScene::initialize() {
     auto player = getWorld().createGameObject("player")
             .addComponent<cbit::TransformComponent>()
             .addComponent<GridMovementComponent>()
+            .addComponent<TurnControlComponent>(TurnControlComponent{kPlayerTurnSlot, "Player", true})
             .addComponent<cbit::SkinnedMeshComponent>(kFoxMeshPath)
             .addComponent<cbit::TextureComponent>(kFoxTexturePath, false)
             .addComponent<cbit::ModelOffsetComponent>(cbit::Vector3{0.0f, 0.0f, 0.0f},
@@ -309,15 +314,37 @@ void PlayScene::initialize() {
             .addComponent<cbit::UITextComponent>("Transform:", 0.3f, cbit::Color::Black)
             .addComponent<DebugTransformTextComponent>(DebugTransformTextComponent{player.getEntity()});
 
+    getWorld().createGameObject("turn_status_text")
+            .addComponent<cbit::UIAnchorComponent>(
+                cbit::UIAnchor::TopLeft,
+                cbit::Vector2(16.0f, -16.0f),
+                cbit::Vector2(280.0f, 40.0f),
+                55, true, false)
+            .addComponent<cbit::UITextComponent>("Current Turn: Player", 0.35f, cbit::Color::Black)
+            .addComponent<TurnStatusTextComponent>(TurnStatusTextComponent{"Current Turn: "});
+
+    getWorld().createGameObject("turn_help_text")
+            .addComponent<cbit::UIAnchorComponent>(
+                cbit::UIAnchor::TopLeft,
+                cbit::Vector2(16.0f, -52.0f),
+                cbit::Vector2(340.0f, 40.0f),
+                55, true, false)
+            .addComponent<cbit::UITextComponent>("H: Previous Unit  L: Next Unit", 0.28f, cbit::Color::Black);
+
     auto enemy = getWorld().createGameObject("enemy")
             .addComponent<cbit::TransformComponent>()
+            .addComponent<GridMovementComponent>()
+            .addComponent<TurnControlComponent>(TurnControlComponent{kEnemyTurnSlot, "Enemy", false})
             .addComponent<cbit::MeshComponent>("assets/models/characterMedium.fbx")
             .addComponent<cbit::TextureComponent>("assets/textures/criminalMaleA.png");
 
     auto &[enemyPosition, enemyRotation, enemyScale] = enemy.getComponent<cbit::TransformComponent>();
-    auto &enemyGrid = enemy.getComponent<cbit::TransformComponent>();
+    auto &enemyGrid = enemy.getComponent<GridMovementComponent>();
     constexpr auto enemyGridX = 5;
     constexpr auto enemyGridZ = 2;
+    enemyGrid.x = enemyGridX;
+    enemyGrid.z = enemyGridZ;
+    enemyGrid.turnAxis = GridTurnAxis::Y;
     enemyPosition = gridToWorldTop(enemyGridX, enemyGridZ);
     enemyRotation = cbit::Vector3{-260.0f, -190.0f, 0.0f};
     enemyScale = cbit::Vector3{0.6f, 0.6f, 0.6f};

@@ -16,5 +16,6 @@ Use gameplay_system_designer with implement-scene-feature to move tile selection
 
 - For shader work:
 
-```aiignoreUse shader_author with write-opengl-shader to create a tile hover highlight shader for the isometric grid.
+```aiignore
+Use shader_author with write-opengl-shader to create a tile hover highlight shader for the isometric grid.
 ```

@@ -7,6 +7,8 @@
 - Added `ModelOffsetComponent` in [engine/src/ecs/Components.h](/C:/Users/User/Developments/FantasyTactics/engine/src/ecs/Components.h) to support per-entity render-time mesh calibration without polluting gameplay transforms.
 - Added per-entity texture flip control to `TextureComponent` for assets that should not use the engine's default vertical flip path.
 - Extended `GridMovementComponent` with configurable turn-axis and persistent position offset data for model-specific movement alignment.
+- Added `TurnControlSystem` and `TurnControlComponent` in [game/src/systems/TurnControlSystem.h](/C:/Users/User/Developments/FantasyTactics/game/src/systems/TurnControlSystem.h) and [game/src/systems/TurnControlSystem.cpp](/C:/Users/User/Developments/FantasyTactics/game/src/systems/TurnControlSystem.cpp) to manage which unit is currently allowed to move.
+- Added a `PlayScene` turn-status UI label and control hint text so the active unit is visible on screen during play.
 
 ### Changed
 - Integrated the low-poly fox as the `PlayScene` player character in [game/src/scenes/PlayScene.cpp](/C:/Users/User/Developments/FantasyTactics/game/src/scenes/PlayScene.cpp).
@@ -22,6 +24,9 @@
 - Updated texture loading so vertical image flipping is selected per asset instead of globally for all textures.
 - Configured the fox texture to load with vertical flip disabled to better match the GLB UV layout.
 - Updated [AGENTS.md](/C:/Users/User/Developments/FantasyTactics/AGENTS.md) so build instructions match the CLion-managed CMake and Ninja toolchain used in this repository.
+- Updated `PlayScene` so both the player and enemy participate in the turn order and can be cycled with keyboard input.
+- Updated turn controls so `H` selects the previous controllable unit and `L` selects the next controllable unit instead of hard-switching to fixed characters.
+- Updated `GridMovementSystem` so only the currently active turn-controlled unit responds to movement input.
 
 ### Fixed
 - Fixed the fox animation setup so `GridMovementSystem` no longer overrides the active clip with missing state names.

@@ -13,6 +13,8 @@ add_executable(FantasyTactics
         src/systems/DebugTransformSystem.h
         src/systems/GridMovementSystem.cpp
         src/systems/GridMovementSystem.h
+        src/systems/TurnControlSystem.cpp
+        src/systems/TurnControlSystem.h
         src/scenes/MeshScene.cpp
         src/scenes/MeshScene.h
 )
