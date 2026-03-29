@@ -29,6 +29,10 @@ namespace {
     constexpr auto kFoxTexturePath = "assets/animations/low-poly-fox/texture.png";
     constexpr auto kFoxClipName = "fox_idle";
     constexpr float kFoxHeightOffset = 0.0f;
+    constexpr auto kPlayerMeshPath = "assets/animations/low-poly-character/idle.glb";
+    constexpr auto kPlayerIdleClipName = "idle";
+    constexpr auto kPlayerWalkingClipName = "walking";
+    constexpr float kPlayerHeightOffset = 0.0f;
     constexpr int kPlayerTurnSlot = 0;
     constexpr int kEnemyTurnSlot = 1;
 
@@ -187,6 +191,35 @@ namespace {
         animator.autoState = false;
         animator.playbackSpeed = 1.0f;
     }
+
+    void configureAnimatedPlayer(cbit::GameObject &player, const int gridX, const int gridZ) {
+        auto &transform = player.getComponent<cbit::TransformComponent>();
+        auto &gridMovement = player.getComponent<GridMovementComponent>();
+        auto &animator = player.getComponent<cbit::AnimatorComponent>();
+
+        gridMovement.x = gridX;
+        gridMovement.z = gridZ;
+        gridMovement.positionOffset = cbit::Vector3{0.0f, kPlayerHeightOffset, 0.0f};
+        gridMovement.turnAxis = GridTurnAxis::Y;
+
+        transform.position = addVector3(
+            gridToWorldTop(gridMovement.x, gridMovement.z),
+            gridMovement.positionOffset);
+        transform.rotation = cbit::Vector3{0.0f, 0.0f, 0.0f};
+        transform.scale = cbit::Vector3{0.25f, 0.25f, 0.25f};
+
+        animator.clips.emplace(
+            kPlayerIdleClipName,
+            cbit::AnimationClip(kPlayerIdleClipName, "assets/animations/low-poly-character/idle.glb"));
+        animator.clips.emplace(
+            kPlayerWalkingClipName,
+            cbit::AnimationClip(kPlayerWalkingClipName, "assets/animations/low-poly-character/walking.glb"));
+        animator.activeClip = kPlayerIdleClipName;
+        animator.previousClip.clear();
+        animator.loop = true;
+        animator.autoState = true;
+        animator.playbackSpeed = 1.0f;
+    }
 }
 
 void PlayScene::initialize() {
@@ -251,10 +284,10 @@ void PlayScene::initialize() {
         }
     }
 
-    auto player = getWorld().createGameObject("player")
+    auto enemy = getWorld().createGameObject("enemy")
             .addComponent<cbit::TransformComponent>()
             .addComponent<GridMovementComponent>()
-            .addComponent<TurnControlComponent>(TurnControlComponent{kPlayerTurnSlot, "Player", true})
+            .addComponent<TurnControlComponent>(TurnControlComponent{kPlayerTurnSlot, "Enemy", true})
             .addComponent<cbit::SkinnedMeshComponent>(kFoxMeshPath)
             .addComponent<cbit::TextureComponent>(kFoxTexturePath, false)
             .addComponent<cbit::ModelOffsetComponent>(cbit::Vector3{0.0f, 0.0f, 0.0f},
@@ -262,7 +295,7 @@ void PlayScene::initialize() {
                                                       cbit::Vector3{1.0f, 1.0f, 1.0f})
             .addComponent<cbit::AnimatorComponent>();
 
-    configureAnimatedFox(player, 2, 2);
+    configureAnimatedFox(enemy, 2, 2);
 
     constexpr float axisLength = 0.6f;
     constexpr float axisThickness = 0.04f;
@@ -278,7 +311,7 @@ void PlayScene::initialize() {
                 .addComponent<cbit::BaseColorComponent>();
 
         auto &follow = axis.getComponent<DebugFollowComponent>();
-        follow.target = player.getEntity();
+        follow.target = enemy.getEntity();
         follow.positionOffset = offset;
         follow.scale = scale;
         follow.followRotation = true;
@@ -312,7 +345,7 @@ void PlayScene::initialize() {
                 cbit::Vector2(320.0f, 90.0f),
                 50, true, false)
             .addComponent<cbit::UITextComponent>("Transform:", 0.3f, cbit::Color::Black)
-            .addComponent<DebugTransformTextComponent>(DebugTransformTextComponent{player.getEntity()});
+            .addComponent<DebugTransformTextComponent>(DebugTransformTextComponent{enemy.getEntity()});
 
     getWorld().createGameObject("turn_status_text")
             .addComponent<cbit::UIAnchorComponent>(
@@ -320,7 +353,7 @@ void PlayScene::initialize() {
                 cbit::Vector2(16.0f, -16.0f),
                 cbit::Vector2(280.0f, 40.0f),
                 55, true, false)
-            .addComponent<cbit::UITextComponent>("Current Turn: Player", 0.35f, cbit::Color::Black)
+            .addComponent<cbit::UITextComponent>("Current Turn: Enemy", 0.35f, cbit::Color::Black)
             .addComponent<TurnStatusTextComponent>(TurnStatusTextComponent{"Current Turn: "});
 
     getWorld().createGameObject("turn_help_text")
@@ -331,23 +364,17 @@ void PlayScene::initialize() {
                 55, true, false)
             .addComponent<cbit::UITextComponent>("H: Previous Unit  L: Next Unit", 0.28f, cbit::Color::Black);
 
-    auto enemy = getWorld().createGameObject("enemy")
+    auto player = getWorld().createGameObject("player")
             .addComponent<cbit::TransformComponent>()
             .addComponent<GridMovementComponent>()
-            .addComponent<TurnControlComponent>(TurnControlComponent{kEnemyTurnSlot, "Enemy", false})
-            .addComponent<cbit::MeshComponent>("assets/models/characterMedium.fbx")
-            .addComponent<cbit::TextureComponent>("assets/textures/criminalMaleA.png");
+            .addComponent<TurnControlComponent>(TurnControlComponent{kEnemyTurnSlot, "Player", false})
+            .addComponent<cbit::SkinnedMeshComponent>(kPlayerMeshPath)
+            .addComponent<cbit::ModelOffsetComponent>(cbit::Vector3{0.0f, 0.55f, 0.0f},
+                                                      cbit::Vector3{-90.0f, 180.0f, 0.0f},
+                                                      cbit::Vector3{1.0f, 1.0f, 1.0f})
+            .addComponent<cbit::AnimatorComponent>();
 
-    auto &[enemyPosition, enemyRotation, enemyScale] = enemy.getComponent<cbit::TransformComponent>();
-    auto &enemyGrid = enemy.getComponent<GridMovementComponent>();
-    constexpr auto enemyGridX = 5;
-    constexpr auto enemyGridZ = 2;
-    enemyGrid.x = enemyGridX;
-    enemyGrid.z = enemyGridZ;
-    enemyGrid.turnAxis = GridTurnAxis::Y;
-    enemyPosition = gridToWorldTop(enemyGridX, enemyGridZ);
-    enemyRotation = cbit::Vector3{-260.0f, -190.0f, 0.0f};
-    enemyScale = cbit::Vector3{0.6f, 0.6f, 0.6f};
+    configureAnimatedPlayer(player, 5, 2);
 }
 
 
@@ -360,7 +387,7 @@ void PlayScene::update(const float deltaTime) {
 
     Scene::update(deltaTime);
 
-    if (auto player = getWorld().getGameObject("player"); player.getEntity() != entt::null) {
+    if (auto player = getWorld().getGameObject("enemy"); player.getEntity() != entt::null) {
         auto &transform = player.getComponent<cbit::TransformComponent>();
 
         if (cbit::Input::isKeyDown(cbit::Keyboard::Up)) {

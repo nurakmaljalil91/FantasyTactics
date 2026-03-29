@@ -14,6 +14,18 @@
 #include <cmath>
 
 namespace {
+    std::string pickClipName(
+        const cbit::AnimatorComponent &animatorComponent,
+        std::initializer_list<const char *> candidates) {
+        for (const auto *candidate: candidates) {
+            if (animatorComponent.clips.find(candidate) != animatorComponent.clips.end()) {
+                return candidate;
+            }
+        }
+
+        return {};
+    }
+
     float normalizeAngle(const float degrees) {
         float result = std::fmod(degrees + 180.0f, 360.0f);
         if (result < 0.0f) {
@@ -97,18 +109,21 @@ void GridMovementSystem::update(entt::registry &registry, float deltaTime) {
 
         if (animatorComponent && animatorComponent->autoState) {
             auto setClip = [&](const std::string &name, bool loop) {
-                if (animatorComponent->clips.find(name) != animatorComponent->clips.end()) {
+                if (!name.empty() && animatorComponent->clips.find(name) != animatorComponent->clips.end()) {
                     animatorComponent->activeClip = name;
                     animatorComponent->loop = loop;
                 }
             };
 
+            const std::string idleClip = pickClipName(*animatorComponent, {"idle"});
+            const std::string moveClip = pickClipName(*animatorComponent, {"walking", "run"});
+
             if (wantsJump) {
                 setClip("jump", false);
             } else if (animatorComponent->activeClip == "jump" && animatorComponent->animator.isFinished()) {
-                setClip(isMoving ? "run" : "idle", true);
+                setClip(isMoving ? moveClip : idleClip, true);
             } else if (animatorComponent->activeClip != "jump") {
-                setClip(isMoving ? "run" : "idle", true);
+                setClip(isMoving ? moveClip : idleClip, true);
             }
         }
 

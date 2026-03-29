@@ -9,6 +9,7 @@
 - Extended `GridMovementComponent` with configurable turn-axis and persistent position offset data for model-specific movement alignment.
 - Added `TurnControlSystem` and `TurnControlComponent` in [game/src/systems/TurnControlSystem.h](/C:/Users/User/Developments/FantasyTactics/game/src/systems/TurnControlSystem.h) and [game/src/systems/TurnControlSystem.cpp](/C:/Users/User/Developments/FantasyTactics/game/src/systems/TurnControlSystem.cpp) to manage which unit is currently allowed to move.
 - Added a `PlayScene` turn-status UI label and control hint text so the active unit is visible on screen during play.
+- Added animated player clip setup for `assets/animations/low-poly-character/idle.glb` and `assets/animations/low-poly-character/walking.glb` in [game/src/scenes/PlayScene.cpp](/C:/Users/User/Developments/FantasyTactics/game/src/scenes/PlayScene.cpp).
 
 ### Changed
 - Integrated the low-poly fox as the `PlayScene` player character in [game/src/scenes/PlayScene.cpp](/C:/Users/User/Developments/FantasyTactics/game/src/scenes/PlayScene.cpp).
@@ -27,6 +28,9 @@
 - Updated `PlayScene` so both the player and enemy participate in the turn order and can be cycled with keyboard input.
 - Updated turn controls so `H` selects the previous controllable unit and `L` selects the next controllable unit instead of hard-switching to fixed characters.
 - Updated `GridMovementSystem` so only the currently active turn-controlled unit responds to movement input.
+- Updated the `player` unit to use a skinned GLB character with automatic idle and walking state selection.
+- Updated `GridMovementSystem` animation selection so it prefers `walking` when available and falls back to legacy `run` clips for older assets.
+- Updated `PlayScene` entity naming so the fox is tagged as `enemy` and the animated humanoid unit is tagged as `player`.
 
 ### Fixed
 - Fixed the fox animation setup so `GridMovementSystem` no longer overrides the active clip with missing state names.
@@ -36,6 +40,9 @@
 - Fixed inverted fox facing by calibrating the mesh orientation instead of changing movement logic repeatedly.
 - Fixed upside-down fox rendering by correcting the GLB model offset rotation.
 - Fixed the likely fox texture orientation issue caused by unconditional texture flipping.
+- Fixed the new player character being effectively invisible by recalibrating its scale and render-time mesh offset.
+- Fixed the new player character rendering upside down by correcting its model offset rotation.
+- Fixed player tile placement drift by keeping the gameplay transform snapped to the grid and moving only the rendered mesh onto the tile top with `ModelOffsetComponent`.
 
 ### Verified
 - Verified multiple successful builds with the CLion toolchain using:
