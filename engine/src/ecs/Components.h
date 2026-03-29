@@ -63,6 +63,7 @@ namespace cbit {
      */
     struct TextureComponent {
         std::string path;
+        bool flipVertically = true;
     };
 
     /**
@@ -88,6 +89,16 @@ namespace cbit {
      */
     struct BaseColorComponent {
         Vector3 color{0.83f, 0.83f, 0.83f};
+    };
+
+    /**
+     * @struct ModelOffsetComponent
+     * @brief  Per-entity local model-space offset applied during rendering.
+     */
+    struct ModelOffsetComponent {
+        Vector3 position{0.0f, 0.0f, 0.0f};
+        Vector3 rotation{0.0f, 0.0f, 0.0f};
+        Vector3 scale{1.0f, 1.0f, 1.0f};
     };
 
 #pragma endregion GraphicsComponents

@@ -17,13 +17,21 @@
  * @struct GridMovementComponent
  * @brief  Grid movement component for tile-based movement.
  */
+enum class GridTurnAxis {
+    X,
+    Y,
+    Z
+};
+
 struct GridMovementComponent {
     int x = 0;
     int z = 0;
     float moveCooldown = 0.0f;
     cbit::Vector3 baseRotation{0.0f, 0.0f, 0.0f};
-    float targetRotationZ = 0.0f;
+    cbit::Vector3 positionOffset{0.0f, 0.0f, 0.0f};
+    float targetHeading = 0.0f;
     float turnSpeed = 540.0f;
+    GridTurnAxis turnAxis = GridTurnAxis::Z;
     bool hasBaseRotation = false;
 };
 

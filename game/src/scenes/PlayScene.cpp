@@ -24,6 +24,10 @@ namespace {
     constexpr int kGridHeight = 8;
     constexpr float kTileSize = 1.0f;
     constexpr float kTileHeight = 1.0f;
+    constexpr auto kFoxMeshPath = "assets/animations/low-poly-fox/low_poly_fox_by_pixelmannen_animated.glb";
+    constexpr auto kFoxTexturePath = "assets/animations/low-poly-fox/texture.png";
+    constexpr auto kFoxClipName = "fox_idle";
+    constexpr float kFoxHeightOffset = 0.0f;
 
     const int kHeightMap[kGridHeight][kGridWidth] = {
         {0, 0, 0, 0, 0, 0, 0, 0},
@@ -48,9 +52,9 @@ namespace {
         };
     }
 
-    bool isGridInBounds(const int x, const int z) {
-        return x >= 0 && x < kGridWidth && z >= 0 && z < kGridHeight;
-    }
+    // bool isGridInBounds(const int x, const int z) {
+    //     return x >= 0 && x < kGridWidth && z >= 0 && z < kGridHeight;
+    // }
 
     void applyShaderOverrideToTiles(cbit::EntityComponentSystem &world, const bool useCelShader) {
         for (int z = 0; z < kGridHeight; ++z) {
@@ -149,12 +153,43 @@ namespace {
         outWorld = rayOrigin + rayDirection * t;
         return true;
     }
+
+    cbit::Vector3 addVector3(const cbit::Vector3 &lhs, const cbit::Vector3 &rhs) {
+        return {
+            lhs.x + rhs.x,
+            lhs.y + rhs.y,
+            lhs.z + rhs.z
+        };
+    }
+
+    void configureAnimatedFox(cbit::GameObject &fox, const int gridX, const int gridZ) {
+        auto &transform = fox.getComponent<cbit::TransformComponent>();
+        auto &gridMovement = fox.getComponent<GridMovementComponent>();
+        auto &animator = fox.getComponent<cbit::AnimatorComponent>();
+
+        gridMovement.x = gridX;
+        gridMovement.z = gridZ;
+        gridMovement.positionOffset = cbit::Vector3{0.0f, kFoxHeightOffset, 0.0f};
+        gridMovement.turnAxis = GridTurnAxis::Y;
+        transform.position = addVector3(
+            gridToWorldTop(gridMovement.x, gridMovement.z),
+            gridMovement.positionOffset);
+        transform.rotation = cbit::Vector3{0.0f, 0.0f, 0.0f};
+        transform.scale = cbit::Vector3{0.015f, 0.015f, 0.015f};
+
+        animator.clips.emplace(kFoxClipName, cbit::AnimationClip(kFoxClipName, kFoxMeshPath));
+        animator.activeClip = kFoxClipName;
+        animator.previousClip.clear();
+        animator.loop = true;
+        animator.autoState = false;
+        animator.playbackSpeed = 1.0f;
+    }
 }
 
 void PlayScene::initialize() {
     setBackgroundColor(cbit::Color{0.53f, 0.81f, 0.92f, 1.0f});
     getWorld().addSystem<GridMovementSystem>(
-        [](int x, int z) { return gridToWorldTop(x, z); }, kGridWidth, kGridHeight);
+        [](const int x, const int z) { return gridToWorldTop(x, z); }, kGridWidth, kGridHeight);
     getWorld().addSystem<DebugTransformSystem>();
 
     auto mainCamera = getWorld().createGameObject("MainCamera")
@@ -215,16 +250,14 @@ void PlayScene::initialize() {
     auto player = getWorld().createGameObject("player")
             .addComponent<cbit::TransformComponent>()
             .addComponent<GridMovementComponent>()
-            .addComponent<cbit::MeshComponent>("assets/models/characterMedium.fbx")
-            .addComponent<cbit::TextureComponent>("assets/textures/skaterMaleA.png");
+            .addComponent<cbit::SkinnedMeshComponent>(kFoxMeshPath)
+            .addComponent<cbit::TextureComponent>(kFoxTexturePath, false)
+            .addComponent<cbit::ModelOffsetComponent>(cbit::Vector3{0.0f, 0.0f, 0.0f},
+                                                      cbit::Vector3{90.0f, 180.0f, 0.0f},
+                                                      cbit::Vector3{1.0f, 1.0f, 1.0f})
+            .addComponent<cbit::AnimatorComponent>();
 
-    auto &[playerPosition, playerRotation, playerScale] = player.getComponent<cbit::TransformComponent>();
-    auto &playerGrid = player.getComponent<GridMovementComponent>();
-    playerGrid.x = 2;
-    playerGrid.z = 2;
-    playerPosition = gridToWorldTop(playerGrid.x, playerGrid.z);
-    playerRotation = cbit::Vector3{-260.0f, -190.0f, 0.0f};
-    playerScale = cbit::Vector3{0.6f, 0.6f, 0.6f};
+    configureAnimatedFox(player, 2, 2);
 
     constexpr float axisLength = 0.6f;
     constexpr float axisThickness = 0.04f;
@@ -300,9 +333,7 @@ void PlayScene::update(const float deltaTime) {
 
     Scene::update(deltaTime);
 
-    auto player = getWorld().getGameObject("player");
-
-    if (player.getEntity() != entt::null) {
+    if (auto player = getWorld().getGameObject("player"); player.getEntity() != entt::null) {
         auto &transform = player.getComponent<cbit::TransformComponent>();
 
         if (cbit::Input::isKeyDown(cbit::Keyboard::Up)) {

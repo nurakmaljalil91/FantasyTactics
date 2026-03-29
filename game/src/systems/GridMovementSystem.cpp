@@ -28,6 +28,41 @@ namespace {
         }
         return current + (delta > 0.0f ? maxDelta : -maxDelta);
     }
+
+    float getHeadingForAxis(const cbit::Vector3 &rotation, const GridTurnAxis axis) {
+        switch (axis) {
+            case GridTurnAxis::X:
+                return rotation.x;
+            case GridTurnAxis::Y:
+                return rotation.y;
+            case GridTurnAxis::Z:
+            default:
+                return rotation.z;
+        }
+    }
+
+    void setHeadingForAxis(cbit::Vector3 &rotation, const GridTurnAxis axis, const float heading) {
+        switch (axis) {
+            case GridTurnAxis::X:
+                rotation.x = heading;
+                break;
+            case GridTurnAxis::Y:
+                rotation.y = heading;
+                break;
+            case GridTurnAxis::Z:
+            default:
+                rotation.z = heading;
+                break;
+        }
+    }
+
+    cbit::Vector3 addVector3(const cbit::Vector3 &lhs, const cbit::Vector3 &rhs) {
+        return {
+            lhs.x + rhs.x,
+            lhs.y + rhs.y,
+            lhs.z + rhs.z
+        };
+    }
 }
 
 void GridMovementSystem::update(entt::registry &registry, float deltaTime) {
@@ -73,7 +108,7 @@ void GridMovementSystem::update(entt::registry &registry, float deltaTime) {
 
         if (!gridMovement.hasBaseRotation) {
             gridMovement.baseRotation = transform.rotation;
-            gridMovement.targetRotationZ = gridMovement.baseRotation.z;
+            gridMovement.targetHeading = getHeadingForAxis(gridMovement.baseRotation, gridMovement.turnAxis);
             gridMovement.hasBaseRotation = true;
         }
 
@@ -88,16 +123,18 @@ void GridMovementSystem::update(entt::registry &registry, float deltaTime) {
             } else {
                 zOffset = 0.0f;
             }
-            gridMovement.targetRotationZ = gridMovement.baseRotation.z + zOffset;
+            gridMovement.targetHeading = getHeadingForAxis(gridMovement.baseRotation, gridMovement.turnAxis) + zOffset;
         }
 
-        const float newZRotation = moveTowardsAngle(
-            transform.rotation.z,
-            gridMovement.targetRotationZ,
+        const float currentHeading = getHeadingForAxis(transform.rotation, gridMovement.turnAxis);
+        const float newHeading = moveTowardsAngle(
+            currentHeading,
+            gridMovement.targetHeading,
             gridMovement.turnSpeed * deltaTime);
         transform.rotation.x = gridMovement.baseRotation.x;
         transform.rotation.y = gridMovement.baseRotation.y;
-        transform.rotation.z = newZRotation;
+        transform.rotation.z = gridMovement.baseRotation.z;
+        setHeadingForAxis(transform.rotation, gridMovement.turnAxis, newHeading);
 
         gridMovement.moveCooldown -= deltaTime;
         if (gridMovement.moveCooldown > 0.0f) {
@@ -110,7 +147,9 @@ void GridMovementSystem::update(entt::registry &registry, float deltaTime) {
             if (newX >= 0 && newX < _gridWidth && newZ >= 0 && newZ < _gridHeight) {
                 gridMovement.x = newX;
                 gridMovement.z = newZ;
-                transform.position = _gridToWorldFunction(gridMovement.x, gridMovement.z);
+                transform.position = addVector3(
+                    _gridToWorldFunction(gridMovement.x, gridMovement.z),
+                    gridMovement.positionOffset);
                 gridMovement.moveCooldown = 0.2f; // Cooldown time between moves
             }
         }

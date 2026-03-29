@@ -196,7 +196,7 @@ void cbit::MeshRenderSystem::render() {
         if (hasTexture && shader->hasUniform("diffuseTexture")) {
             auto [it, inserted] = _textures.try_emplace(textureComponent->path);
             if (inserted) {
-                it->second.loadTexture(textureComponent->path);
+                it->second.loadTexture(textureComponent->path, textureComponent->flipVertically);
             }
             glActiveTexture(GL_TEXTURE0);
             it->second.bind();
@@ -204,13 +204,24 @@ void cbit::MeshRenderSystem::render() {
         }
     };
 
-    auto buildModelMatrix = [](const TransformComponent &transform) {
+    auto buildModelMatrix = [&](const entt::entity entity, const TransformComponent &transform) {
         glm::mat4 model = glm::translate(glm::mat4(1.0f), transform.position.toGLM());
         const glm::vec3 rotation = transform.rotation.toGLM();
         model = glm::rotate(model, glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
         model = glm::rotate(model, glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
         model = glm::rotate(model, glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
         model = glm::scale(model, transform.scale.toGLM());
+
+        if (const auto *offset = _registry.try_get<ModelOffsetComponent>(entity)) {
+            glm::mat4 offsetMatrix = glm::translate(glm::mat4(1.0f), offset->position.toGLM());
+            const glm::vec3 offsetRotation = offset->rotation.toGLM();
+            offsetMatrix = glm::rotate(offsetMatrix, glm::radians(offsetRotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
+            offsetMatrix = glm::rotate(offsetMatrix, glm::radians(offsetRotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
+            offsetMatrix = glm::rotate(offsetMatrix, glm::radians(offsetRotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+            offsetMatrix = glm::scale(offsetMatrix, offset->scale.toGLM());
+            model *= offsetMatrix;
+        }
+
         return model;
     };
 
@@ -241,7 +252,7 @@ void cbit::MeshRenderSystem::render() {
         auto [cube, transform] = cubeView.get<CubeComponent, TransformComponent>(entity);
         ShaderProgram *shader = applyShaderForEntity(entity, &_shader);
 
-        glm::mat4 model = buildModelMatrix(transform);
+        glm::mat4 model = buildModelMatrix(entity, transform);
         if (shader->hasUniform("uModel")) {
             shader->setUniform("uModel", model);
         }
@@ -264,7 +275,7 @@ void cbit::MeshRenderSystem::render() {
         auto [circle, transform] = circleView.get<CircleComponent, TransformComponent>(entity);
         ShaderProgram *shader = applyShaderForEntity(entity, &_shader);
 
-        glm::mat4 model = buildModelMatrix(transform);
+        glm::mat4 model = buildModelMatrix(entity, transform);
         if (shader->hasUniform("uModel")) {
             shader->setUniform("uModel", model);
         }
@@ -287,7 +298,7 @@ void cbit::MeshRenderSystem::render() {
         auto [quad, transform] = quadView.get<QuadComponent, TransformComponent>(entity);
         ShaderProgram *shader = applyShaderForEntity(entity, &_shader);
 
-        glm::mat4 model = buildModelMatrix(transform);
+        glm::mat4 model = buildModelMatrix(entity, transform);
         if (shader->hasUniform("uModel")) {
             shader->setUniform("uModel", model);
         }
@@ -310,7 +321,7 @@ void cbit::MeshRenderSystem::render() {
         auto [sphere, transform] = sphereView.get<SphereComponent, TransformComponent>(entity);
         ShaderProgram *shader = applyShaderForEntity(entity, &_shader);
 
-        glm::mat4 model = buildModelMatrix(transform);
+        glm::mat4 model = buildModelMatrix(entity, transform);
         if (shader->hasUniform("uModel")) {
             shader->setUniform("uModel", model);
         }
@@ -333,7 +344,7 @@ void cbit::MeshRenderSystem::render() {
         auto [ellipsoid, transform] = ellipsoidView.get<EllipsoidComponent, TransformComponent>(entity);
         ShaderProgram *shader = applyShaderForEntity(entity, &_shader);
 
-        glm::mat4 model = buildModelMatrix(transform);
+        glm::mat4 model = buildModelMatrix(entity, transform);
         if (shader->hasUniform("uModel")) {
             shader->setUniform("uModel", model);
         }
@@ -356,7 +367,7 @@ void cbit::MeshRenderSystem::render() {
         auto [meshComponent, transform] = meshView.get<MeshComponent, TransformComponent>(entity);
         ShaderProgram *shader = applyShaderForEntity(entity, &_shader);
 
-        glm::mat4 model = buildModelMatrix(transform);
+        glm::mat4 model = buildModelMatrix(entity, transform);
         if (shader->hasUniform("uModel")) {
             shader->setUniform("uModel", model);
         }
@@ -388,7 +399,7 @@ void cbit::MeshRenderSystem::render() {
                             skinnedMesh.mesh.getBoneCount(),
                             useSkinning ? 1 : 0);
 
-        glm::mat4 model = buildModelMatrix(transform);
+        glm::mat4 model = buildModelMatrix(entity, transform);
         if (shader->hasUniform("uModel")) {
             shader->setUniform("uModel", model);
         }

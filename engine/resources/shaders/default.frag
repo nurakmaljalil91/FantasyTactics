@@ -22,10 +22,6 @@ void main()
     ? texture(diffuseTexture, TexCoords).rgb
     : baseColor;
 
-    if (vHasWeights > 0.5) {
-        color = vec3(0.2, 0.9, 0.2);
-    }
-
     // 2. normalize vectors
     vec3 N = normalize(Normal);
     vec3 L = normalize(-lightDir);

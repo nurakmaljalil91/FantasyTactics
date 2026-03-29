@@ -39,8 +39,9 @@ Primary namespace for game engine code is `cbit`.
 - `CMakeLists.txt` is the root CMake build configuration file.
 
 ## Build, Test, and Development Commands
-- `cmake -S . -B cmake-build-debug -G Ninja -DCMAKE_BUILD_TYPE=Debug` configures the build.
-- `cmake --build cmake-build-debug` builds the engine and game targets.
+- Prefer the CLion-managed CMake and Ninja binaries for local builds.
+- `C:\Users\User\AppData\Local\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=C:/Users/User/AppData/Local/Programs/CLion/bin/ninja/win/x64/ninja.exe -G Ninja -S C:\Users\User\Developments\FantasyTactics -B C:\Users\User\Developments\FantasyTactics\cmake-build-debug` configures the debug build.
+- `C:\Users\User\AppData\Local\Programs\CLion\bin\cmake\win\x64\bin\cmake.exe --build C:\Users\User\Developments\FantasyTactics\cmake-build-debug` builds the engine and game targets.
 - `cmake-build-debug\FantasyTactics.exe` runs the game executable.
 - `npm run build` and `npm run run` wrap the CMake build and run steps.
 - `doxygen Doxyfile` generates HTML docs in `docs/html`.

@@ -12,11 +12,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 
-static bool g_stbiFlipped = [](){
-    stbi_set_flip_vertically_on_load(true);
-    return true;
-}();
-
 #include "utilities/Logger.h"
 
 cbit::Texture::Texture() : _textureID(0) {
@@ -26,11 +21,12 @@ cbit::Texture::~Texture() {
     glDeleteTextures(1, &_textureID);
 }
 
-bool cbit::Texture::loadTexture(const std::string &path) {
+bool cbit::Texture::loadTexture(const std::string &path, const bool flipVertically) {
     if (_textureID == 0) {
         glGenTextures(1, &_textureID);
     }
     glBindTexture(GL_TEXTURE_2D, _textureID);
+    stbi_set_flip_vertically_on_load(flipVertically ? 1 : 0);
 
     // Set the texture wrapping/filtering options
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

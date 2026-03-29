@@ -66,7 +66,7 @@ namespace cbit {
          * @details This method uses stb_image to load the texture image and creates an OpenGL texture object.
          *          It sets the texture parameters such as wrapping and filtering options.
          */
-        bool loadTexture(const std::string &path);
+        bool loadTexture(const std::string &path, bool flipVertically = true);
 
         /**
          * Returns the OpenGL texture ID.
